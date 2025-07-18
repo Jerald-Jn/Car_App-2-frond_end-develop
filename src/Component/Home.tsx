@@ -4,14 +4,21 @@ import Header from './Header';
 import Service from './Service';
 import Footer from './Footer';
 import Menubar from './Menubar';
+// import { getCarByCarName, getCarImage, getListOfCars } from '../Api';
+// import { Car, type Cars } from '../Interface/DataModel';
+
+
 
 function Home() {
   const images = ['./src/assets/car-1.jpg', "./src/assets/car-2.jpg", './src/assets/car-3.jpg', './src/assets/car-4.jpg'
     , './src/assets/car-5.jpg', './src/assets/car-6.jpg']
+
   const [index, setIndex] = useState(0);
   const [showProducts, setShowProducts] = useState(false);
   const [showService, setShowService] = useState(false);
   const [menu, setMenu] = useState(false);
+
+
 
   useEffect(() => {
     setInterval(() => {
@@ -30,6 +37,7 @@ function Home() {
     });
   }
 
+  
   return (
     <>
     {/* Header Component */}
@@ -38,11 +46,11 @@ function Home() {
       {/* Hero section */}
       <div>
         <div className='relative'>
-          {/* <div className='bg-red-700' data-id={index}> */}
+          {
             <a href="">
               <img className='min-w-full' src={images[index]} alt="" />
             </a>
-          {/* </div> */}
+          }
           {/* Menu bar for small screen */}
           {menu && (
             <Menubar />

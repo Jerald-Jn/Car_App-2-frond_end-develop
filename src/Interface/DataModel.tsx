@@ -20,13 +20,15 @@ export const Car={
     transmission:'',
     engineCapacity:'',
     mileage:'',
-    registrationNumber:'',
+    // registrationNumber:'',
     vin:'',
     model:'',
     fuelType:'',
     price:'',
     color:'',
-    insurance:Insurance
+    carImage:'',
+    carLogo:''
+    // insurance:Insurance
 }
 
 export const User={
@@ -35,4 +37,20 @@ export const User={
     password:'',
     userInfo:UserInfo,
     car:Car
+}
+
+export interface Cars{
+    carId:'',
+    make:'',
+    year:'',
+    transmission:'',
+    engineCapacity:'',
+    mileage:'',
+    vin:'',
+    model:'',
+    fuelType:'',
+    price:'',
+    color:'',
+    carImage:'',
+    carLogo:''
 }
