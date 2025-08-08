@@ -1,19 +1,18 @@
-import { useState } from "react";
-import Header from "./Header";
-import Service from "./Service";
-import Products from "./Products";
-import Menubar from "./Menubar";
+import { useContext } from "react";
+import Header from "../header/Header";
+import Service from "../header/Service";
+import Products from "../header/Products";
+import Menubar from "../menu_bar/Menubar";
+import { CarContext } from "../context/StoreContext";
 
 function UserDetails() {
 
-    const [showProducts, setShowProducts] = useState(false);
-    const [showService, setShowService] = useState(false);
-    const [menu, setMenu] = useState(false);
+    const {showProducts, showService, menu}=useContext(CarContext);
 
     return (
         <>
             {/* Header navigation section */}
-            <Header setShowProducts={setShowProducts} setShowService={setShowService} setMenu={setMenu} menu={menu}></Header>
+            <Header ></Header>
             <div className="relative bg-blue-400">
                 <img className="bg-orange-300" src="./src/assets/car-3.jpg" alt="" />
                 {/* Menu bar for small screen */}
@@ -23,11 +22,11 @@ function UserDetails() {
                 }
                 {/* When we hover on Product is render "Products" component */}
                 {
-                    true && (<Products showProducts={showProducts} setShowProducts={setShowProducts} />)
+                    showProducts && (<Products  />)
                 }
                 {/* When we hover on Service is render "Service" component */}
                 {
-                    true && (<Service showService={showService} setShowService={setShowService} />)
+                    showService && (<Service />)
                 }
             </div>
 

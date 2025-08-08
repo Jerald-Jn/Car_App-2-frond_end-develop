@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../Api";
 import { Eye, EyeOff } from "lucide-react";
+import Menubar from "../menu_bar/Menubar";
+import Products from "../header/Products";
+import Service from "../header//Service";
+import { CarContext } from "../context/StoreContext";
 
 function Login() {
     const [userName, setUserName] = useState('');
@@ -11,6 +15,7 @@ function Login() {
     const [invalid3, setInvalid3] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const {showProducts, showService, menu}=useContext(CarContext)
 
     useEffect(() => {
         setInvalid1(false); setInvalid3(false)
@@ -44,7 +49,22 @@ function Login() {
     }
 
     return (
-        <div className="bg-[url('./src/assets/car-4.jpg')] bg-cover bg-center min-h-screen">
+        <div className="bg-[url('../src/assets/car-4.jpg')] bg-cover bg-center min-h-screen">
+            <div className="relative">
+            {/* Menu bar for small screen */}
+                        {menu && (
+                            <Menubar />
+                        )
+                        }
+                        {/* When we hover on Product is render "Products" component */}
+                        {
+                            showProducts && (<Products />)
+                        }
+                        {/* When we hover on Service is render "Service" component */}
+                        {
+                            showService && (<Service />)
+                        }
+            </div>
             <h1 className="text-white text-4xl uppercase tracking-widest font-serif text-center p-5  md:text-6xl">Toyota</h1>
             <div className="flex flex-col absolute bg-black/50 w-2/3 mx-16 h-3/5 md:w-1/5 md:h-3/5 md:right-20 top-1/4">
                 <form className="flex flex-col  md:w-4/5 md:h-4/5 mx-auto my-8 items-center"
