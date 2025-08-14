@@ -1,19 +1,32 @@
 import { createContext, useEffect, useState } from 'react';
-import type { Cars } from '../../Interface/DataModel';
+import { Order, type Cars } from '../../Interface/DataModel';
 import { getListOfCars } from '../Api';
 
 // 1. Create and export the context.
 //    Provide a default value that matches the expected shape.
-export const CarContext = createContext<any>(null);
+export const StoreContext = createContext<any>(null);
 
-export const CarContextProvider = ( props:any ) => {
+export const StoreContextProvider = (props: any) => {
+
   const [carsList, setCarsList] = useState<Cars[]>([]);
   const [showProducts, setShowProducts] = useState(false);
   const [showService, setShowService] = useState(false);
   const [menu, setMenu] = useState(false);
-
-
+  const [totals, setTotals] = useState({ subTotal: 0, tax: 0, shipping: 0, total: 0 });
+  const[customer,setCustomer]=useState(Order)
+  const [car, setCar] = useState<Cars[]>([]);
   
+
+  const getTotal = async (tempTotal:any) => {
+    const subTotal = tempTotal;
+    const tax = tempTotal * 0.1;
+    const shipping = tempTotal / 100;
+    const total = subTotal + tax + shipping;
+    setTotals((prev) => ({...prev, subTotal: subTotal, tax: tax, shipping: shipping, total: total }));
+  };
+
+
+
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -25,18 +38,21 @@ export const CarContextProvider = ( props:any ) => {
       }
     };
     fetchCars();
-  }, []); 
+  }, []);
 
   const contextValue = {
     carsList,
-    showProducts,setShowProducts,
-    showService,setShowService,
-    menu, setMenu
+    showProducts, setShowProducts,
+    showService, setShowService,
+    menu, setMenu,
+    getTotal, totals,setTotals,
+    customer,setCustomer,
+    car,setCar
   };
 
   return (
-    <CarContext.Provider value={contextValue}>
+    <StoreContext.Provider value={contextValue}>
       {props.children}
-    </CarContext.Provider>
+    </StoreContext.Provider>
   );
 };

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import Menubar from '../menu_bar/Menubar';
 import Products from '../header/Products';
 import Service from '../header/Service';
-import { CarContext } from '../context/StoreContext';
+import { StoreContext } from '../context/StoreContext';
 import type { Cars } from '../../Interface/DataModel';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ function Home() {
 
   const [index, setIndex] = useState(0);
 
-  const { carsList, showProducts, showService, menu } = useContext(CarContext);
+  const { carsList, showProducts, showService, menu } = useContext(StoreContext);
 
   useEffect(() => {
     if (carsList.length === 0) return; // don’t start until data is loaded
@@ -98,23 +98,23 @@ function Home() {
           <h1 className='text-center tracking-wide font-bold text-3xl'>Discover the <span className='text-blue-700'>TOYOTA</span> range</h1>
       </div>
 
-      {/* <!-- ✅ Grid Section - Starts Here 👇 --> */}
+      {/* <!--  Grid Section - Starts Here --> */}
       <section id="Projects"
           className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-5 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-10">
             {
             carsList.map((car: Cars) =>
-          <div className="w-72  rounded-xl duration-500 hover:scale-110 hover:shadow-2xl">
-              <Link to={`/car/${car.model}`} key={car.carId}>
+          <div key={car.carId} className="w-72 flex rounded-xl duration-500 hover:scale-110 hover:shadow-2xl">
+              <Link to={`/car/${car.model}`}  className='px-8'>
                   <img src={car.carLogo}
                           alt={car.model} className=" object-cover rounded-t-xl" />
-                  <div className="px-4 py-3 w-72">
+                  <div className="flex flex-col px-10 py-3 w-72">
                       <span className=" mr-3 uppercase">{car.make}</span>
-                      <p className="text-lg font-bold text-red-500 truncate block capitalize">{car.model}</p>
-                      <div className="flex items-center">
-                          <p className="text-lg font-semibold text-black cursor-auto my-3">&#8377;{car.price}</p>
+                      <div className="flex items-center">                           
+                          <p className="text-lg font-bold text-red-500 truncate block capitalize">{car.model}</p>
                           <p className="text-sm text-gray-600 cursor-auto ml-2 font-bold">{car.transmission.toLocaleUpperCase()}</p>
-                
                       </div>
+                      <p className="text-lg font-semibold text-black cursor-auto">&#8377;{car.price}</p>
+
                   </div>
               </Link>
           </div>

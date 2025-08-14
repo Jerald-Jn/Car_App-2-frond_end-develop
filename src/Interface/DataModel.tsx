@@ -49,8 +49,26 @@ export interface Cars{
     vin:'',
     model:'',
     fuelType:'',
-    price:'',
+    price:0,
     color:'',
     carImage:'',
     carLogo:''
+}
+
+export interface CartData{
+    id:'',
+    items:Map<String,number>
+}
+
+export const Order ={
+     id:'',
+     first_name:'',
+     last_name:'',
+     amount:'',
+     userInfo:UserInfo,
+     transactionId:'',
+     latest_charge:'',
+     status:'',
+     paymentMethod:'',
+     clientSecret:''
 }

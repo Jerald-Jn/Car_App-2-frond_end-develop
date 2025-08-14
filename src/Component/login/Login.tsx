@@ -5,7 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 import Menubar from "../menu_bar/Menubar";
 import Products from "../header/Products";
 import Service from "../header//Service";
-import { CarContext } from "../context/StoreContext";
+import { StoreContext } from "../context/StoreContext";
 
 function Login() {
     const [userName, setUserName] = useState('');
@@ -15,7 +15,7 @@ function Login() {
     const [invalid3, setInvalid3] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const {showProducts, showService, menu}=useContext(CarContext)
+    const {showProducts, showService, menu}=useContext(StoreContext)
 
     useEffect(() => {
         setInvalid1(false); setInvalid3(false)
@@ -30,11 +30,11 @@ function Login() {
         setInvalid2(password ? false : true);
         if (userName && password) {
             try {
-                const response = (await loginApi(userName, password)).data;
+                const response = (await loginApi(userName, password));
                 console.log("response data ->", response)
                 if (response) {
-                    localStorage.setItem('token', response)
-                    navigate('home')
+                    localStorage.setItem('token', ("Bearer "+response))
+                    navigate('/home')
                 }
             } catch (err) {
                 console.log('error -> ', err)

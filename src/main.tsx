@@ -2,14 +2,14 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
-import { CarContextProvider } from './Component/context/StoreContext'
+import {  StoreContextProvider } from './Component/context/StoreContext'
 
 createRoot(document.getElementById('root')!).render(
   <>
     <BrowserRouter>
-      <CarContextProvider>
+      <StoreContextProvider>
         <App></App>
-      </CarContextProvider>
+      </StoreContextProvider>
     </BrowserRouter>
   </>
 )

@@ -1,9 +1,14 @@
 import axios from "axios";
 
 const API="http://localhost:8080";
+let token=localStorage.getItem('token')
 
 // Users Api
-export const loginApi=(userName:string,password:string)=>axios.post(`${API}/login?userName=${userName}&password=${password}`);
+export const loginApi=async(userName:string,password:string)=>{
+    const response=(await axios.post(`${API}/login?userName=${userName}&password=${password}`)).data;
+    localStorage.setItem('token',"Bearer "+response)
+    return response;
+}
 
 //Car Api
 export const getListOfCars=async()=>{
@@ -24,4 +29,41 @@ export const getCarByCarName=async(model:any)=>{
     throw error;
 }
 }
-export const getCarImage=()=>{console.log(); return axios.get(`${API}/cars/getImage/Glanza`)};
+export const getCarImage=async()=>{
+    try {
+        return(await axios.get(`${API}/cars/getImage/Glanza`)).data
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const createPayment=async(customerDetail:any)=>{
+    try {
+        const response= (await axios.post(`${API}/payments/create-payment`, customerDetail )).data;
+        console.log(response);
+        return response;
+    } catch (error) {
+        
+    }
+}
+
+export const getUserCart=async()=>{
+    try {
+        const response= (await axios.get(`${API}/cart`,
+            {headers:{
+                Authorization:token
+            }})).data;
+            return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const addCart=async(model:any)=>{
+    try {
+        const response= (await axios.post(`${API}/cart/create`,{model},{headers:{ Authorization:token }})).data; 
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

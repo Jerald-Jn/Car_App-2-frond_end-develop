@@ -2,11 +2,11 @@ import { useContext } from "react";
 import Products from "../header/Products";
 import Service from "../header/Service";
 import Menubar from "../menu_bar/Menubar";
-import { CarContext } from "../context/StoreContext";
+import { StoreContext } from "../context/StoreContext";
 
 function ServicePage() {
 
-    const { showProducts, showService, menu } = useContext(CarContext);
+    const { showProducts, showService, menu } = useContext(StoreContext);
     
 
     return (

@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CarContext } from "../context/StoreContext";
+import { StoreContext } from "../context/StoreContext";
 
 function Header() {
 
-    const {setShowProducts, setShowService,setMenu, menu}=useContext(CarContext)
+    const {setShowProducts, setShowService,setMenu, menu}=useContext(StoreContext)
     const navigate=useNavigate();
 
   return (
@@ -32,24 +32,12 @@ function Header() {
               <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowProducts(true), setShowService(false) }}>
                 <a >Products</a>
               </li>
-              <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'>
-                <a   onMouseEnter={() => { setShowProducts(false), setShowService(false) }}>Visual Showroom</a>
-              </li>
               <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'
                 onMouseEnter={() => { setShowService(true), setShowProducts(false) }}>
                 <a >Service</a>
               </li>
-              <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'>
-                <a   onMouseEnter={() => { setShowService(false), setShowProducts(false) }}>T-Care</a>
-              </li>
-              <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'>
-                <a  >Used Cars</a>
-              </li>
-              <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'>
-                <a  >Mobility</a>
-              </li>
-              <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'>
-                <a  >Buy Online</a></li>
+              <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowService(false), setShowProducts(false) }}>
+                <Link to={'/explore'}  >Buy Online</Link></li>
               <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'>
                 <a  >Toyota India</a>
               </li>
@@ -66,7 +54,7 @@ function Header() {
               </svg>
             </Link>
           </div>
-          <Link to={'/feedback'} className='w-10'>
+          <Link to={'/contact'} className='w-10'>
             <img className='w-6 md:w-7 h-5 md:h-7 hover:cursor-pointer' src="../src/assets/call-logo.png" alt="" />
           </Link>
         </div>

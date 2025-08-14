@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { CarContext } from "../context/StoreContext";
+import { StoreContext } from "../context/StoreContext";
 import type { Cars } from "../../Interface/DataModel";
 import { Link } from "react-router-dom";
 
 function Products() {
 
-    const { carsList, setShowProducts, showProducts } = useContext(CarContext);
+    const { carsList, setShowProducts, showProducts } = useContext(StoreContext);
 
     return (
         <>

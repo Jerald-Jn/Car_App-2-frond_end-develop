@@ -3,11 +3,11 @@ import Header from "../header/Header";
 import Service from "../header/Service";
 import Products from "../header/Products";
 import Menubar from "../menu_bar/Menubar";
-import { CarContext } from "../context/StoreContext";
+import { StoreContext } from "../context/StoreContext";
 
 function UserDetails() {
 
-    const {showProducts, showService, menu}=useContext(CarContext);
+    const {showProducts, showService, menu}=useContext(StoreContext);
 
     return (
         <>
