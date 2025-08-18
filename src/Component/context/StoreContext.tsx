@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { Payment, type Cars } from '../../Interface/DataModel';
+import { PaymentRequest, type Cars } from '../../Interface/DataModel';
 import { getListOfCars } from '../../Api';
 
 // 1. Create and export the context.
@@ -13,16 +13,23 @@ export const StoreContextProvider = (props: any) => {
   const [showService, setShowService] = useState(false);
   const [menu, setMenu] = useState(false);
   const [totals, setTotals] = useState({ subTotal: 0, tax: 0, shipping: 0, total: 0 });
-  const[customer,setCustomer]=useState(Payment)
+  const[customer,setCustomer]=useState(PaymentRequest)
   const [car, setCar] = useState<Cars[]>([]);
   
 
-  const getTotal = async (tempTotal:any) => {
-    const subTotal = tempTotal;
-    const tax = tempTotal * 0.1;
-    const shipping = tempTotal / 100;
-    const total = subTotal + tax + shipping;
-    setTotals((prev) => ({...prev, subTotal: subTotal, tax: tax, shipping: shipping, total: total }));
+  const getTotal = async (cartDetails:any) => {
+    let tempTotal=0;
+    let subTotal =0;
+    for (let key in cartDetails) {
+			let item=cartDetails[key];
+			tempTotal=tempTotal+item.price*item.quantity;
+			
+		}
+    subTotal =subTotal+ tempTotal;
+    let tax = Math.ceil(tempTotal * 0.1);
+    const shipping = Math.ceil(tempTotal / 100);
+    const totals = Math.ceil(subTotal + tax + shipping);
+    setTotals((prev) => ({...prev, subTotal: subTotal, tax: tax, shipping: shipping, total: totals }));
   };
 
 

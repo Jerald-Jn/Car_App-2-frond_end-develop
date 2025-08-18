@@ -2,7 +2,7 @@ export const UserInfo = {
     phoneNo: '',
     email: '',
     pincode: '',
-    city:'',
+    city: '',
     state: '',
     address: ''
 }
@@ -57,30 +57,38 @@ export interface Cars {
 }
 
 export interface CartData {
-    id: '',
-    items: { [key: string]: CartItem }; // use object instead of Map
+    items: {
+        [key: string]: {
+            model: '',
+            imageUrl: '',
+            price: 0,
+            quantity: 0
+        }
+    };
 }
 
-export interface CartItem {
-    model:'',
-    imageUrl: '',
-    price: 0,
-    quantity: 0
+
+export const PaymentDetails = {
+    transcationId: '',
+    amount: 0,
+    userInfo: UserInfo,
+    latest_charge: '',
+    status: '',
+    paymentMethod: ''
 }
 
-export const PaymentDetails={
-    transcationId:'',
-    amount:0,
-    userInfo:UserInfo,
-    latest_charge:'',
-    status:'',
-    paymentMethod:''
-}
-
-export const Payment = {
+export const PaymentRequest = {
     id: '',
     firstName: '',
     lastName: '',
-    paymentDetails:PaymentDetails
+    amount: 0,
+    userInfo: UserInfo,
+}
+
+export const Payment_Resp = {
+    id: '',
+    firstName: '',
+    lastName: '',
+    paymentDetails: PaymentDetails,
 }
 

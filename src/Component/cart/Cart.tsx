@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { type Cars, type CartData } from "../../Interface/DataModel";
 import { getUserCart } from "../../Api";
+import { type CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
 import Service from "../header/Service";
@@ -10,46 +10,24 @@ import Menubar from "../menu_bar/Menubar";
 function Cart() {
 
 	const navigate = useNavigate();
-	const [cart, setCart] = useState<CartData>();
-	const { totals, getTotal, menu, showProducts, showService, carsList, car,setCar } = useContext(StoreContext)
-	const [parsedItems, setParsedItems] = useState<{ carId: string; quantity: number }[]>([]);
-
-	const getCart = async () => {
-		const response = await getUserCart();
-		console.log(response)
-		setCart(response);
-		getCartDetails(response);
-		console.log(response)
-	}
-
-	const getCartDetails = (response: CartData) => {
-		const items = Object.entries(response.items).map(([key, quantity]) => {
-			const { carId } = JSON.parse(key);
-			return { carId, quantity };
-		});
-
-		setParsedItems(items);
-
-		// Filter cars that are in the cart
-		setCar(
-			carsList.filter((car: Cars) =>
-				items.some(item => item.carId === car.model)
-			)
-		);
-	};
+	const [cart, setCart] = useState<CartData["items"]>({});
+	const { totals, getTotal, menu, showProducts, showService } = useContext(StoreContext)
 
 	useEffect(() => {
+		const getCart = async () => {
+			const response = await getUserCart();
+			console.log(response.items)
+			await getTotal(response.items);
+			setCart(response.items);
+			console.log(response)
+		}
 		getCart();
-		const total = parsedItems.reduce((sum, ci) => {
-			const carItem = carsList.find((c: Cars) => c.model === ci.carId);
-			return carItem ? sum + carItem.price * ci.quantity : sum;
-		}, 0);
-		getTotal(total);
 	}, []);
 
 
 	return (
 		<>
+
 			<div className="relative">
 				{menu && (
 					<Menubar />
@@ -63,7 +41,7 @@ function Cart() {
 				{
 					showService && (<Service />)
 				}
-				<div key={cart?.id} className="bg-gray-100 h-screen py-8">
+				<div className="bg-gray-100 h-screen py-8">
 					<div className="container mx-auto px-4">
 						<h1 className="text-2xl font-semibold mb-4">Shopping Cart</h1>
 						<div className="flex flex-col md:flex-row gap-4">
@@ -80,24 +58,21 @@ function Cart() {
 										</thead>
 										<tbody>
 											{
-												car.map((item:Cars) => {
-													const matchedCartItem = parsedItems.find(ci => ci.carId === item.model);
-													return (
-														<tr key={item.carId} className="flex-col  justify-evenly">
-															<td className="py-4 flex-col justify-center items-center">
-																<img className="h-16 w-24 -ml-3" src={item?.carLogo} alt={item?.model} />
-																<span className="font-semibold ml-1">{item?.model}</span>
-															</td>
-															<td className="py-4">&#8377;{item?.price}</td>
-															<td className="py-4">{matchedCartItem?.quantity ?? 0}</td>
-															<td className="py-4">{(matchedCartItem?.quantity ?? 0) * item.price}</td>
-														</tr>);
-												}
-												)
+												cart && Object.entries(cart).map(([id, item]) => (
 
+													<tr key={id} className="flex-col  justify-evenly">
+														<td className="py-4 flex-col justify-center items-center">
+															<img className="h-16 w-24 -ml-3" src={item.imageUrl} alt={item?.model} />
+															<span className="font-semibold ml-1">{item?.model}</span>
+														</td>
+														<td className="py-4">&#8377;{item?.price}</td>
+														<td className="py-4">{item.quantity}</td>
+														<td className="py-4">{item.price * item.quantity}</td>
+													</tr>
+												))
 											}
 
-											{/* <!-- More product rows --> */}
+
 										</tbody>
 									</table>
 								</div>

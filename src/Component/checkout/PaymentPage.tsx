@@ -17,10 +17,10 @@ export default function PaymentPage() {
       console.log('customerDetail -> ',customer)
       
 
-      const secret = await createPayment(customer);
-      console.log('client secret -> ',secret.clientSecret)
+      const secret:any = await createPayment(customer);
+      console.log('client secret -> ',secret.paymentDetails[0])
       
-      setClientSecret(secret.clientSecret);
+      setClientSecret(secret);
     }
     initPayment();
   }, [totals.total]);

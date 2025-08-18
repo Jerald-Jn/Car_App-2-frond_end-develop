@@ -5,14 +5,14 @@ import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
 import Service from "../header/Service";
 import Menubar from "../menu_bar/Menubar";
-import { addCart } from "../../Api";
+import { addCartApi } from "../../Api";
 
 function Explore() {
     const { carsList, menu, showProducts, showService } = useContext(StoreContext);
-    const [cart, setCart] = useState<CartData>({ id: "", items: {} });
+    let token=localStorage.getItem('token')
+    const [cart, setCart] = useState<CartData>({ items: {} });
     const navigate = useNavigate();
     let updateCart: CartData = {
-        id: "",
         items: {}
     };
 
@@ -20,12 +20,10 @@ function Explore() {
 
         setCart((prev: any) => {
             const existingItem = prev.items[car.carId];
-            console.log(car)
+            console.log("existingItem -> ", existingItem)
             updateCart = {
                 ...prev,
-                id: prev.id || car.carId, // keep existing id or set first one
                 items: {
-                    ...prev.items,
                     [car.carId]: {
                         model: car.model,
                         imageUrl: car.carLogo,
@@ -42,10 +40,21 @@ function Explore() {
     }
 
     useEffect(() => {
-        if (cart) {
-            const res=addCart(cart);
-            console.log("Cart synced:", res);
+        if (cart?.items && Object.keys(cart.items).length > 0) {
+            console.log(cart)
+            const addCart = async () => {
+                try {
+                    const response = await addCartApi(cart);
+                    console.log("Cart synced:", response);
+                    response ? navigate('/cart') : navigate('/explore')
+                } catch (error) {
+                    throw error;  
+                }
+
+            }
+            addCart();
         }
+        console.log("cart")
     }, [cart]);
 
 
@@ -64,16 +73,19 @@ function Explore() {
                 {
                     showService && (<Service />)
                 }
+                {
+                    !token && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, Please login</h1>
+                }
                 <div key={carsList} className="grid-cols-1 grid md:grid-cols-4 mx-10 my-10">
                     {
                         carsList.map((car: Cars) => (
                             <div key={car.carId} className="my-5 mx-2 scale-90 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full5 *
-                                    hover:scale-110  hover:shadow-2xl hover:rounded-2xl hover:border-2 duration-1000">
+                                    hover:scale-105  hover:shadow-2xl hover:rounded-2xl hover:border-2 duration-1000">
                                 <div className="relative">
                                     <img src={car.carImage} alt="Product image" className="w-full h-64 object-cover object-center" />
                                     <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
                                     <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200">
-                                        <svg className="w-4 h- text-center text-blue-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.7 4C18.87 4 21 6.98 21 9.76C21 15.39 12.16 20 12 20C11.84 20 3 15.39 3 9.76C3 6.98 5.13 4 8.3 4C10.12 4 11.31 4.91 12 5.71C12.69 4.91 13.88 4 15.7 4Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                                        <svg className="w-4 h- text-center text-blue-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.7 4C18.87 4 21 6.98 21 9.76C21 15.39 12.16 20 12 20C11.84 20 3 15.39 3 9.76C3 6.98 5.13 4 8.3 4C10.12 4 11.31 4.91 12 5.71C12.69 4.91 13.88 4 15.7 4Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
                                     </button>
                                 </div>
                                 <div className="p-4">
@@ -108,7 +120,7 @@ function Explore() {
                                     </div>
                                     <div className="flex space-x-2">
 
-                                        <button onClick={() => addToCart(car)} className="flex bg-blue-500 text-white py-2 px-4 rounded-full font-semibold hover:bg-blue-600 transition-colors duration-200">
+                                        <button disabled={!token} onClick={() => addToCart(car)} className="flex bg-blue-500 text-white py-2 px-4 rounded-full font-semibold hover:bg-blue-600 transition-colors duration-200 cursor-pointer">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24"
                                                 stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"

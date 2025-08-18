@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { CartData } from "./Interface/DataModel";
 
 const API="http://localhost:8080";
 let token=localStorage.getItem('token')
@@ -39,7 +40,11 @@ export const getCarImage=async()=>{
 
 export const createPayment=async(customerDetail:any)=>{
     try {
-        const response= (await axios.post(`${API}/payments/create-payment`, customerDetail )).data;
+        const response= (await axios.post(`${API}/payments/create-payment`, customerDetail,{
+            headers:{
+                Authorization:token
+            }
+        } )).data;
         console.log(response);
         return response;
     } catch (error) {
@@ -59,10 +64,14 @@ export const getUserCart=async()=>{
     }
 }
 
-export const addCart=async(model:any)=>{
+export const addCartApi=async(model:CartData)=>{
     try {
         console.log(model)
-        const response=(await axios.post(`${API}/cart/create`,{model},{headers:{ Authorization:'Bearer eyJhbGciOiJFUzM4NCJ9.eyJzdWIiOiJSYWplc2ggTmFpciIsImlhdCI6MTc1NTQ3NzY2OSwiZXhwIjoxNzU4MTMzODAwfQ.suEECQeHNuJKpfJa6a8fuZRtAAiKHnOdoEcgsPtysXX3EMQLL_W8W3oQ1bXWHp6gTNRL-I6urnsGaKMVYe5LTqv2X8kx87exOMYttPLCE52umhgHT24lg4DhqLw8C-31' }})).data; 
+        const response=(await axios.post(`${API}/cart/create`,model,{
+            headers:{ 
+                Authorization:token 
+            }
+        })).data; 
         return response;
     } catch (error) {
         throw error;
