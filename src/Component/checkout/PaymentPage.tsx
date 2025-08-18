@@ -1,7 +1,7 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useContext, useEffect, useState } from "react";
-import { createPayment } from "../Api";
+import { createPayment } from "../../Api";
 import { StoreContext } from "../context/StoreContext";
 import CheckoutForm from "./CheckoutForm";
 

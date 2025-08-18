@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { type Cars, type CartData } from "../../Interface/DataModel";
-import { getUserCart } from "../Api";
+import { getUserCart } from "../../Api";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
 import Service from "../header/Service";
@@ -16,6 +16,7 @@ function Cart() {
 
 	const getCart = async () => {
 		const response = await getUserCart();
+		console.log(response)
 		setCart(response);
 		getCartDetails(response);
 		console.log(response)
@@ -38,7 +39,7 @@ function Cart() {
 	};
 
 	useEffect(() => {
-		getCart()
+		getCart();
 		const total = parsedItems.reduce((sum, ci) => {
 			const carItem = carsList.find((c: Cars) => c.model === ci.carId);
 			return carItem ? sum + carItem.price * ci.quantity : sum;

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { getCarByCarName } from "../Api";
+import { getCarByCarName } from "../../Api";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Cars } from "../../Interface/DataModel";
 import { StoreContext } from "../context/StoreContext";

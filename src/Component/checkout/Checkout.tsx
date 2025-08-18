@@ -42,7 +42,7 @@ function Checkout() {
                 }
 
                 {
-                    car && 
+                    true && 
                             <div className=" bg-gray-100 text-gray-900 flex justify-center">
                     <form onSubmit={(event) => { event.preventDefault(); purchase(); }}>
                         <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
@@ -54,19 +54,19 @@ function Checkout() {
                                     <div className="mb-6">
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label htmlFor="first_name" className="block text-gray-700   mb-1">First Name</label>
-                                                <input name="first_name" type="text" id="first_name" className="w-full rounded-lg py-2 px-3  border-2" value={customer.first_name} onChange={() => onChangeHandler(event)} />
+                                                <label htmlFor="firstName" className="block text-gray-700   mb-1">First Name</label>
+                                                <input name="firstName" type="text" id="firstName" className="w-full rounded-lg py-2 px-3  border-2" value={customer.firstName} onChange={() => onChangeHandler(event)} />
                                             </div>
                                             <div>
-                                                <label htmlFor="last_name" className="block text-gray-700   mb-1">Last Name</label>
-                                                <input name="last_name" type="text" id="last_name" className="w-full rounded-lg border py-2 px-3" value={customer.last_name} onChange={() => onChangeHandler(event)} />
+                                                <label htmlFor="lastName" className="block text-grlastNameay-700   mb-1">Last Name</label>
+                                                <input name="lastName" type="text" id="lastName" className="w-full rounded-lg border py-2 px-3" value={customer.lastName} onChange={() => onChangeHandler(event)} />
                                             </div>
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-4">
                                             <div>
-                                                <label htmlFor="phone_no" className="block text-gray-700   mb-1">Phone No</label>
-                                                <input name="phone_no" type="text" id="phone_no" className="w-full rounded-lg py-2 px-3  border-2" value={customer.phone_no} onChange={() => onChangeHandler(event)} />
+                                                <label htmlFor="phoneNo" className="block text-gray-700   mb-1">Phone No</label>
+                                                <input name="phoneNo" type="text" id="phoneNo" className="w-full rounded-lg py-2 px-3  border-2" value={customer.phoneNo} onChange={() => onChangeHandler(event)} />
                                             </div>
                                             <div>
                                                 <label htmlFor="last_name" className="block text-gray-700   mb-1">Email</label>

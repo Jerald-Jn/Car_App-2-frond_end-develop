@@ -61,7 +61,8 @@ export const getUserCart=async()=>{
 
 export const addCart=async(model:any)=>{
     try {
-        const response= (await axios.post(`${API}/cart/create`,{model},{headers:{ Authorization:token }})).data; 
+        console.log(model)
+        const response=(await axios.post(`${API}/cart/create`,{model},{headers:{ Authorization:'Bearer eyJhbGciOiJFUzM4NCJ9.eyJzdWIiOiJSYWplc2ggTmFpciIsImlhdCI6MTc1NTQ3NzY2OSwiZXhwIjoxNzU4MTMzODAwfQ.suEECQeHNuJKpfJa6a8fuZRtAAiKHnOdoEcgsPtysXX3EMQLL_W8W3oQ1bXWHp6gTNRL-I6urnsGaKMVYe5LTqv2X8kx87exOMYttPLCE52umhgHT24lg4DhqLw8C-31' }})).data; 
         return response;
     } catch (error) {
         throw error;

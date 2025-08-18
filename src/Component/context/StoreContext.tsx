@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
-import { Order, type Cars } from '../../Interface/DataModel';
-import { getListOfCars } from '../Api';
+import { Payment, type Cars } from '../../Interface/DataModel';
+import { getListOfCars } from '../../Api';
 
 // 1. Create and export the context.
 //    Provide a default value that matches the expected shape.
@@ -13,7 +13,7 @@ export const StoreContextProvider = (props: any) => {
   const [showService, setShowService] = useState(false);
   const [menu, setMenu] = useState(false);
   const [totals, setTotals] = useState({ subTotal: 0, tax: 0, shipping: 0, total: 0 });
-  const[customer,setCustomer]=useState(Order)
+  const[customer,setCustomer]=useState(Payment)
   const [car, setCar] = useState<Cars[]>([]);
   
 
