@@ -9,18 +9,13 @@ const stripePromise = loadStripe("pk_test_51RvD1GBhApNxar7JthXCqUYG2p6SCSFQtmmzT
 
 export default function PaymentPage() {
   
-  const { totals, customer, clientSecret, setClientSecret } = useContext(StoreContext);
+  const { totals, customer, clientSecret,setClientSecret } = useContext(StoreContext);
 
   useEffect(() => {
     async function initPayment() {
-
-      console.log('customerDetail -> ',customer)
-      
-
-      const secret:any = await createPayment(customer);
-      console.log('client secret -> ',secret)
-      
-      setClientSecret(secret);
+      const response:any = await createPayment(customer);
+      console.log('client secret -> ',response)
+      setClientSecret(response)
     }
     initPayment();
   }, [totals.total]);

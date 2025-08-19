@@ -11,14 +11,20 @@ function Cart() {
 
 	const navigate = useNavigate();
 	const [cart, setCart] = useState<CartData["items"]>({});
+	const [loading,setLoading]=useState(false);
 	const { totals, getTotal, menu, showProducts, showService } = useContext(StoreContext)
 
 	useEffect(() => {
 		const getCart = async () => {
 			const response = await getUserCart();
-			console.log(response.items)
+			console.log(Object.keys(response.items).length)
 			await getTotal(response.items);
 			setCart(response.items);
+			if(Object.keys(response.items).length!==0){
+				setLoading(true);
+			}else{
+				setLoading(false)
+			}
 			console.log(response)
 		}
 		getCart();
@@ -43,8 +49,11 @@ function Cart() {
 				}
 				<div className="bg-gray-100 h-screen py-8">
 					<div className="container mx-auto px-4">
-						<h1 className="text-2xl font-semibold mb-4">Shopping Cart</h1>
-						<div className="flex flex-col md:flex-row gap-4">
+						<h1 className={`text-2xl font-semibold mb-4 ${loading?'text-left':'text-center text-3xl'}`}>Shopping Cart</h1>
+						{
+							loading?
+							
+								<div className="flex flex-col md:flex-row gap-4">
 							<div className="md:w-3/4">
 								<div className="bg-white rounded-lg shadow-md p-6 mb-4">
 									<table className="w-full flex-col justify-evenly">
@@ -58,8 +67,8 @@ function Cart() {
 										</thead>
 										<tbody>
 											{
-												cart && Object.entries(cart).map(([id, item]) => (
-
+												loading && cart && Object.entries(cart).map(([id, item]) => (
+													
 													<tr key={id} className="flex-col  justify-evenly">
 														<td className="py-4 flex-col justify-center items-center">
 															<img className="h-16 w-24 -ml-3" src={item.imageUrl} alt={item?.model} />
@@ -101,6 +110,10 @@ function Cart() {
 								</div>
 							</div>
 						</div>
+							:
+							<h1 className="text-center text-2xl font-semibold text-red-500">Cart empty</h1>
+						}
+						
 					</div>
 				</div>
 			</div>

@@ -114,8 +114,8 @@ function Checkout() {
                                                     <input required name="state" type="text" id="state" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.state} onChange={handleUserInfoChange} />
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="zip" className="block text-gray-700   mb-1">ZIP Code</label>
-                                                    <input required name="zip" type="text" id="zip" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.pincode} onChange={handleUserInfoChange} />
+                                                    <label htmlFor="pincode" className="block text-gray-700   mb-1">ZIP Code</label>
+                                                    <input required name="pincode" type="text" id="pincode" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.pincode} onChange={handleUserInfoChange} />
                                                 </div>
                                             </div>
                                         </div>

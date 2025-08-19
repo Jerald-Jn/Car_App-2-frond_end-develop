@@ -7,8 +7,8 @@ export default function CheckoutForm() {
   const [loading, setLoading] = useState(false);
 
 
-  async function handleSubmit(e:any) {
-    e.preventDefault();
+  async function handleSubmit(event:any) {
+    event.preventDefault();
     if (!stripe || !elements) return;
 
     setLoading(true);

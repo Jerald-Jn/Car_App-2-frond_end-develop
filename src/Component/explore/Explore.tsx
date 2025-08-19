@@ -109,10 +109,6 @@ function Explore() {
                                     </div>
                                     <p className="text-gray-600 text-sm mb-4">A stylish and practical hatchback with a premium feel, known for fuel efficiency, comfort, and Toyota’s reliability.</p>
                                     <div className="flex items-center justify-between mb-4">
-                                        {/* <div className="flex items-center">
-                                                <i className="fas fa-truck text-blue-500 mr-2"></i>
-                                                <span className="text-sm text-gray-600">Free Shipping</span>
-                                            </div> */}
                                         <div className="flex items-center">
                                             <i className="fas fa-clock text-blue-500 mr-2"></i>
                                             <span className="text-sm text-gray-600">In Stock</span>
