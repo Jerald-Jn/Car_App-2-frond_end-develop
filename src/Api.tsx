@@ -77,3 +77,30 @@ export const addCartApi=async(model:CartData)=>{
         throw error;
     }
 }
+
+export const verifyPayment=async(clientSecret:any)=>{
+    try {
+        const response = (await axios.get(`${API}/payments/verify-payment/${clientSecret}`,{
+            headers:{
+                Authorization:token
+            }
+        })).data;
+        console.log(response);
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const clearCart=async()=>{
+    try {
+        const response = (await axios.delete(`${API}/cart/clear-cart`,{
+            headers:{
+            Authorization:token
+        }})).data
+        console.log(response)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

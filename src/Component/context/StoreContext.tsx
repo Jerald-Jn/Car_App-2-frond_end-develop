@@ -15,6 +15,7 @@ export const StoreContextProvider = (props: any) => {
   const [totals, setTotals] = useState({ subTotal: 0, tax: 0, shipping: 0, total: 0 });
   const[customer,setCustomer]=useState(PaymentRequest)
   const [car, setCar] = useState<Cars[]>([]);
+  const [clientSecret, setClientSecret] = useState("");
   
 
   const getTotal = async (cartDetails:any) => {
@@ -54,7 +55,8 @@ export const StoreContextProvider = (props: any) => {
     menu, setMenu,
     getTotal, totals,setTotals,
     customer,setCustomer,
-    car,setCar
+    car,setCar,
+    clientSecret,setClientSecret
   };
 
   return (
