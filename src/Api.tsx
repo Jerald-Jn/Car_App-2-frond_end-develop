@@ -113,3 +113,13 @@ export const clearCart=async()=>{
         throw error;
     }
 }
+
+export const userRegister=async(registerData:any)=>{
+    try {
+        const response=(await axios.post(`${API}/user/add`,registerData)).data;
+        console.log(response,registerData);
+        return response;
+    } catch (error) {
+        
+    }
+}

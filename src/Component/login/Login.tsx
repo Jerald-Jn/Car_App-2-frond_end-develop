@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { loginApi } from "../../Api";
 import { Eye, EyeOff } from "lucide-react";
 import Menubar from "../menu_bar/Menubar";
@@ -16,6 +16,11 @@ function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const {showProducts, showService, menu}=useContext(StoreContext)
+    const inputRef=useRef<HTMLInputElement>(null)
+
+    useEffect(()=>{
+        inputRef.current?.focus();
+    },[])
 
     useEffect(() => {
         setInvalid1(false); setInvalid3(false)
@@ -79,6 +84,7 @@ function Login() {
                     <div className="flex flex-col space-y-2 my-3 md:mt-4 items-center">
                         <label className="text-white" htmlFor="userName">Username</label>
                         <input
+                            ref={inputRef}
                             className="bg-white/80 p-0.5 text-center rounded-lg"
                             type="text"
                             id="userName"
@@ -102,7 +108,7 @@ function Login() {
                     </div>
                     <button type="submit" className="bg-blue-500 rounded-lg p-1 my-8 md:my-10 hover:bg-green-500 text-white">Login</button>
                     <p className="text-white text-center md:-my-1 tracking-wider">New Register?
-                        <a className="text-blue-500 ml-0.5 cursor-pointer hover:text-green-500">Sign in</a>
+                        <Link to={'/register'} className="text-blue-500 ml-0.5 cursor-pointer hover:text-green-500">Sign in</Link>
                     </p>
                 </form>
             </div>

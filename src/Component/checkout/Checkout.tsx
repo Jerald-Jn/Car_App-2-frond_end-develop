@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
@@ -10,17 +10,9 @@ function Checkout() {
 
     const { showService, showProducts, menu, totals, customer, setCustomer, car, getTotal } = useContext(StoreContext);
     const navigate = useNavigate();
+    const inputRef=useRef<HTMLInputElement>(null);
 
     function onChangeHandler(event: any) {
-        const { name, value } = event.target;
-        setCustomer((pre: any) => (
-            {
-                ...pre, [name]: value, 
-                amount: totals.total,
-            }));
-    }
-
-    function handleUserInfoChange(event: any) {
         const { name, value } = event.target;
         setCustomer((pre: any) => (
             {
@@ -35,6 +27,7 @@ function Checkout() {
 
     function purchase() {
         if (customer) {
+            setCustomer((pre:any)=>({...pre,amount:totals.total}))
             console.log("customer -> ", customer)
             navigate('/paymentPage')
         }
@@ -47,6 +40,7 @@ function Checkout() {
             getTotal(response.items);
         }
         cartItems();
+        inputRef.current?.focus();
     }, []);
 
 
@@ -68,7 +62,7 @@ function Checkout() {
 
                 {
                     true &&
-                    <div className=" bg-gray-100 text-gray-900 flex justify-center">
+                    <div className=" bg-gray-100 text-gray-900 flex justify-center min-h-screen ">
                         <form onSubmit={(event) => { event.preventDefault(); purchase(); }}>
                             <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
                                 <div className="w-3/5 p-6 -mt-2 h-fit sm:p-12">
@@ -80,7 +74,7 @@ function Checkout() {
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
                                                     <label htmlFor="firstName" className="block text-gray-700   mb-1">First Name</label>
-                                                    <input required name="firstName" type="text" id="firstName" className="w-full rounded-lg py-2 px-3  border-2" value={customer.firstName} onChange={onChangeHandler} />
+                                                    <input ref={inputRef} required name="firstName" type="text" id="firstName" className="w-full rounded-lg py-2 px-3  border-2" value={customer.firstName} onChange={onChangeHandler} />
                                                 </div>
                                                 <div>
                                                     <label htmlFor="lastName" className="block text-grlastNameay-700   mb-1">Last Name</label>
@@ -91,31 +85,31 @@ function Checkout() {
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
                                                     <label htmlFor="phoneNo" className="block text-gray-700   mb-1">Phone No</label>
-                                                    <input required name="phoneNo" type="text" id="phoneNo" className="w-full rounded-lg py-2 px-3  border-2" value={customer.phoneNo} onChange={handleUserInfoChange} />
+                                                    <input required name="phoneNo" type="text" id="phoneNo" className="w-full rounded-lg py-2 px-3  border-2" value={customer.phoneNo} onChange={onChangeHandler} />
                                                 </div>
                                                 <div>
                                                     <label htmlFor="email" className="block text-gray-700   mb-1">Email</label>
-                                                    <input required name="email" type="email" id="email" className="w-full rounded-lg border py-2 px-3" value={customer.email} onChange={handleUserInfoChange} />
+                                                    <input required name="email" type="email" id="email" className="w-full rounded-lg border py-2 px-3" value={customer.email} onChange={onChangeHandler} />
                                                 </div>
                                             </div>
                                             <div className="mt-4">
                                                 <label htmlFor="address" className="block text-gray-700   mb-1">Address</label>
-                                                <textarea required name="address" id="address" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.address} onChange={handleUserInfoChange} />
+                                                <textarea required name="address" id="address" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.address} onChange={onChangeHandler} />
                                             </div>
 
                                             <div className="mt-4">
                                                 <label htmlFor="city" className="block text-gray-700   mb-1">City</label>
-                                                <input required name="city" type="text" id="city" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.city} onChange={handleUserInfoChange} />
+                                                <input required name="city" type="text" id="city" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.city} onChange={onChangeHandler} />
                                             </div>
 
                                             <div className="grid grid-cols-2 gap-4 mt-4">
                                                 <div>
                                                     <label htmlFor="state" className="block text-gray-700   mb-1">State</label>
-                                                    <input required name="state" type="text" id="state" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.state} onChange={handleUserInfoChange} />
+                                                    <input required name="state" type="text" id="state" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.state} onChange={onChangeHandler} />
                                                 </div>
                                                 <div>
-                                                    <label htmlFor="pincode" className="block text-gray-700   mb-1">ZIP Code</label>
-                                                    <input required name="pincode" type="text" id="pincode" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.pincode} onChange={handleUserInfoChange} />
+                                                    <label htmlFor="pincode" className="block text-gray-700   mb-1">Pin Code</label>
+                                                    <input required name="pincode" type="text" id="pincode" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.pincode} onChange={onChangeHandler} />
                                                 </div>
                                             </div>
                                         </div>

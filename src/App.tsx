@@ -12,6 +12,7 @@ import Home from './Component/home/Home';
 import Login from './Component/login/Login';
 import ServicePage from './Component/servicePage/ServicePage';
 import UserDetails from './Component/userDetails/UserDetails';
+import { Register } from './Component/register/Register';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Header></Header>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/" element={<Home />}></Route>
         <Route path="/home" element={<Home />}></Route>
         <Route path='/userdetails' element={<UserDetails />}></Route>

@@ -1,4 +1,6 @@
 export const UserInfo = {
+    firstName: '',
+    lastName: '',
     phoneNo: '',
     email: '',
     pincode: '',
@@ -7,36 +9,36 @@ export const UserInfo = {
     address: ''
 }
 
-export const Insurance = {
-    insuranceExpiryDate: '',
-    issueDate: '',
-    typeOfInsurance: ''
-}
+// export const Insurance = {
+//     insuranceExpiryDate: '',
+//     issueDate: '',
+//     typeOfInsurance: ''
+// }
 
-export const Car = {
-    carId: '',
-    make: '',
-    year: '',
-    transmission: '',
-    engineCapacity: '',
-    mileage: '',
-    // registrationNumber:'',
-    vin: '',
-    model: '',
-    fuelType: '',
-    price: '',
-    color: '',
-    carImage: '',
-    carLogo: ''
-    // insurance:Insurance
-}
+// export const Car = {
+//     carId: '',
+//     make: '',
+//     year: '',
+//     transmission: '',
+//     engineCapacity: '',
+//     mileage: '',
+//     // registrationNumber:'',
+//     vin: '',
+//     model: '',
+//     fuelType: '',
+//     price: '',
+//     color: '',
+//     carImage: '',
+//     carLogo: ''
+//     // insurance:Insurance
+// }
 
 export const User = {
     userId: '',
     userName: '',
     password: '',
     userInfo: UserInfo,
-    car: Car
+    // car: Car
 }
 
 export interface Cars {
@@ -78,17 +80,12 @@ export const PaymentDetails = {
 }
 
 export const PaymentRequest = {
-    id: '',
-    firstName: '',
-    lastName: '',
     amount: 0,
     userInfo: UserInfo,
 }
 
 export const Payment_Resp = {
     id: '',
-    firstName: '',
-    lastName: '',
     paymentDetails: PaymentDetails,
 }
 

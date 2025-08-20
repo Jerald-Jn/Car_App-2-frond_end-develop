@@ -1,11 +1,33 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
+import { getUserCart } from "../../Api";
+import type { CartData } from "../../Interface/DataModel";
 
 function Header() {
 
   const { setShowProducts, setShowService, setMenu, menu } = useContext(StoreContext)
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const getCart = async () => {
+      const response = await getUserCart();
+      console.log(Object.keys(response.items).length)
+      let tempCount = Object.keys(response.items).length;
+      if (tempCount !== 0) {
+        let tempItems: CartData["items"] = response.items;
+        tempCount=Object.values(tempItems).reduce((acc, item) => acc + item.quantity, 0);
+        setCount(tempCount);
+        setLoading(true);
+      } else {
+        setLoading(false)
+      }
+      console.log(response)
+    }
+    getCart();
+  }, [navigate])
 
   return (
     <>
@@ -44,22 +66,23 @@ function Header() {
               </ul>
             </div>
 
-            <div className="flex flex-row w-[20rem] gap-x-5">
+            <div className="flex flex-row md:w-[20rem] gap-x-4 w-[8rem] items-center">
               <Link to={'/cart'} className=''>
-                <svg className="w-12 h-8 hover:cursor-pointer md:-mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="md:w-12 md:h-8 w-7 hover:cursor-pointer md:-mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="9" cy="21" r="1"></circle>
                   <circle cx="20" cy="21" r="1"></circle>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
+                {loading && <span className="cart-count ">{count}</span>}
               </Link>
-              <Link to={{pathname: '/login'}}>
-                <svg className="w-12 h-8 hover:cursor-pointer md:-mb-2" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <Link to={{ pathname: '/login' }}>
+                <svg className="md:w-12 md:h-8 w-7 hover:cursor-pointer md:-mb-2" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5 5.5C5 4.11929 6.11929 3 7.5 3C8.88071 3 10 4.11929 10 5.5C10 6.88071 8.88071 8 7.5 8C6.11929 8 5 6.88071 5 5.5Z" fill="#000000" />
                   <path fillRule="evenodd" clipRule="evenodd" d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0ZM1 7.5C1 3.91015 3.91015 1 7.5 1C11.0899 1 14 3.91015 14 7.5C14 9.34956 13.2275 11.0187 11.9875 12.2024C11.8365 10.4086 10.3328 9 8.5 9H6.5C4.66724 9 3.16345 10.4086 3.01247 12.2024C1.77251 11.0187 1 9.34956 1 7.5Z" fill="#000000" />
                 </svg>
               </Link>
               <Link to={'/contact'} className='w-10'>
-                <img className='w-6 md:w-7 h-5 md:h-7 hover:cursor-pointer' src="../src/assets/call-logo.png" alt="" />
+                <img className='md:w-12 md:h-8 w-7 hover:cursor-pointer' src="../src/assets/call-logo.png" alt="" />
               </Link>
             </div>
           </div>

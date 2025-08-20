@@ -36,7 +36,6 @@ function Explore() {
             console.log(updateCart);
             return updateCart;
         });
-        return updateCart;
     }
 
     useEffect(() => {
@@ -60,7 +59,9 @@ function Explore() {
 
     return (
         <>
-            <div className="relative">
+        <div>
+            { 
+            <div className="relative -top-5 z-50">
                 {menu && (
                     <Menubar />
                 )
@@ -76,11 +77,13 @@ function Explore() {
                 {
                     !token && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, Please login</h1>
                 }
-                <div key={carsList} className="grid-cols-1 grid md:grid-cols-4 mx-10 my-10">
+            </div>
+            }
+                <div key={carsList} className="grid-cols-1 grid md:grid-cols-4 md:mx-10 mx-auto">
                     {
                         carsList.map((car: Cars) => (
-                            <div key={car.carId} className="my-5 mx-2 scale-90 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full5 *
-                                    hover:scale-105  hover:shadow-2xl hover:rounded-2xl hover:border-2 duration-1000">
+                            <div key={car.carId} className="my-5 mx-2 scale-95 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full *
+                                    hover:scale-100  hover:shadow-2xl hover:rounded-2xl hover:border-2 duration-1000">
                                 <div className="relative">
                                     <img src={car.carImage} alt="Product image" className="w-full h-64 object-cover object-center" />
                                     <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { getCarByCarName } from "../../Api";
-import { useNavigate, useParams } from "react-router-dom";
-import type { Cars } from "../../Interface/DataModel";
+import { addCartApi, getCarByCarName } from "../../Api";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import type { Cars, CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../context/StoreContext";
 import Menubar from "../menu_bar/Menubar";
 import Products from "../header/Products";
@@ -11,8 +11,13 @@ function Car() {
 
     const { menu, showProducts, showService } = useContext(StoreContext);
     const [car, setCar] = useState<Cars>();
+    const [cart, setCart] = useState<CartData>({ items: {} });
+    let token = localStorage.getItem('token')
+    let updateCart: CartData = {
+        items: {}
+    };
     const { id } = useParams();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         getImage(id);
@@ -22,6 +27,47 @@ function Car() {
         const tempCar = await (await getCarByCarName(model));
         setCar(tempCar[0])
     }
+
+    function addToCart(car: Cars) {
+
+        setCart((prev: any) => {
+            const existingItem = prev.items[car.carId];
+            console.log("existingItem -> ", existingItem)
+            updateCart = {
+                ...prev,
+                items: {
+                    [car.carId]: {
+                        model: car.model,
+                        imageUrl: car.carLogo,
+                        price: car.price,
+                        quantity: existingItem ? existingItem.quantity + 1 : 1,
+                    },
+                },
+            };
+
+            console.log(updateCart);
+            return updateCart;
+        });
+    }
+
+    useEffect(() => {
+        if (cart?.items && Object.keys(cart.items).length > 0) {
+            console.log(cart)
+            const addCart = async () => {
+                try {
+                    const response = await addCartApi(cart);
+                    console.log("Cart synced:", response);
+                    response ? navigate('/cart') : navigate('/explore')
+                } catch (error) {
+                    throw error;
+                }
+
+            }
+            addCart();
+        }
+        console.log("cart")
+    }, [updateCart]);
+
 
     return (
         <>
@@ -43,9 +89,9 @@ function Car() {
                             showService && (<Service />)
                         }
 
-                        <div className=" py-8">
-                            <div className="max-w-6xl md:mx-24 px-4 sm:px-6 lg:px-1">
-                                <div className="flex flex-col md:flex-row md:-mx-4 duration-1000 hover:scale-105 ">
+                        <div className=" md:py-8 mb-16 mt-5">
+                            <div className="max-w-6xl md:mx-24 px-5 sm:px-6 lg:px-1">
+                                <div className="flex flex-col md:flex-row md:-mx-4 duration-1000 md:hover:scale-105 ">
                                     <div className="md:flex-1">
                                         <div className="h-[460px] rounded-lg bg-gray-300  mb-4">
                                             <img className="w-full h-full object-cover object-center " src={car.carImage} alt={car.model} />
@@ -94,15 +140,26 @@ function Car() {
                                                 sagittis mauris blandit. Morbi fermentum libero vel nisl suscipit, nec tincidunt mi consectetur.
                                             </p>
                                         </div>
-                                        <button onClick={()=>navigate(`/cart/${car.model}`)}
-                                            className="md:my-10 py-2 px-4 bg-blue-500 text-white rounded hover:bg-red-600/80 active:bg-blue-700 disabled:opacity-50 mt-4 w-full flex items-center justify-center">
-                                            Add to order
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24"
-                                                stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                            </svg>
-                                        </button>
+                                        {
+                                            token &&
+                                            <button onClick={() => addToCart(car)}
+                                                className="md:my-10 py-2 px-4 bg-blue-500 text-white rounded hover:bg-red-600/80 active:bg-blue-700 disabled:opacity-50 mt-4 w-full flex items-center justify-center">
+                                                Add to order
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                </svg>
+                                            </button>
+                                        }
+                                        {
+                                            !token && 
+                                            <div className="flex gap-5">
+                                                <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, Please login</h1>
+                                                <Link to={{ pathname: '/login' }} className="text-center mt-5 font-semibold text-2xl text-blue-500">Login</Link>
+                                            </div>
+                                        }
+
                                     </div>
                                 </div>
 

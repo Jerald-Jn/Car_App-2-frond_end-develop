@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.cart-count {
+            position: absolute;
+            top:16px;
+            right:13.8rem;
+            background-color: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+@media (max-width: 768px) {
+  .cart-count {
+    right: 6.6rem;   /* adjust for mobile */
+    top: 11.2px;
+    width: 15px;
+    height: 15px;
+    font-size: 10px;
+  }
+}
