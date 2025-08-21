@@ -10,7 +10,7 @@ function Products() {
     return (
         <>
             {
-                showProducts &&
+                true &&
                 (
                     <div className="hidden md:block absolute transform top-0 bg-white w-full"
                         onMouseEnter={() => { setShowProducts(true) }}

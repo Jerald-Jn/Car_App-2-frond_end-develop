@@ -3,8 +3,8 @@
 @tailwind utilities;
 .cart-count {
             position: absolute;
-            top:16px;
-            right:13.8rem;
+            top:20px;
+            right:15.3rem;
             background-color: #ff6b6b;
             color: white;
             border-radius: 50%;

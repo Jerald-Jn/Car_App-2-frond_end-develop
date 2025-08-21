@@ -61,7 +61,7 @@ function Explore() {
         <>
         <div>
             { 
-            <div className="relative -top-5 z-50">
+            <div className="relative z-50">
                 {menu && (
                     <Menubar />
                 )

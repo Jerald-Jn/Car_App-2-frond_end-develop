@@ -6,10 +6,11 @@ import type { CartData } from "../../Interface/DataModel";
 
 function Header() {
 
-  const { setShowProducts, setShowService, setMenu, menu } = useContext(StoreContext)
+  const { setShowProducts, setShowService, setMenu, menu,totals } = useContext(StoreContext)
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
+  const clientSecret=localStorage.getItem('clientSecret');
 
   useEffect(() => {
     const getCart = async () => {
@@ -27,7 +28,7 @@ function Header() {
       console.log(response)
     }
     getCart();
-  }, [navigate])
+  }, [navigate,totals,clientSecret])
 
   return (
     <>
@@ -35,6 +36,13 @@ function Header() {
       <header className='bg-white border-b-2 border-black/10' onMouseEnter={() => { setShowProducts(false), setShowService(false) }}>
         <nav className=''>
           <div className='flex flex-row justify-between mt-0.5 p-2 md:ml-5 md:p-5'>
+            <button onClick={()=>navigate(-1)}
+          className="inline-flex items-center border-2 border-black px-0.5 py-0.5 rounded-md text-black hover:bg-indigo-50 relative -translate-x-5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18">
+            </path>
+          </svg>
+        </button>
             <svg className="block md:hidden -mx-2 h-8 w-1/6 cursor-pointer"
               onClick={() => { setMenu(!menu) }}
               viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -85,6 +93,13 @@ function Header() {
                 <img className='md:w-12 md:h-8 w-7 hover:cursor-pointer' src="../src/assets/call-logo.png" alt="" />
               </Link>
             </div>
+            <button onClick={()=>navigate(+1)}
+          className="inline-flex items-center border-2 border-black px-0.5 py-0.5 rounded-md text-black hover:bg-indigo-50">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+            </path>
+          </svg>
+        </button>
           </div>
         </nav>
       </header>

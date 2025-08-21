@@ -1,14 +1,12 @@
 // Success.tsx
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { clearCart, verifyPayment } from "../../Api";
-import { useNavigate } from "react-router-dom";
 
 export default function Success() {
   const location = useLocation();
   const navigate=useNavigate();
 
-  // const {clientSecret}=useContext(StoreContext);
   
   // Stripe might append ?payment_intent=pi_123&payment_intent_client_secret=...
   const query = new URLSearchParams(location.search);

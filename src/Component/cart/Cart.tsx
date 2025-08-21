@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserCart } from "../../Api";
+import { addCartApi, deleteItemApi, getUserCart, removeCart } from "../../Api";
 import { type CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
@@ -10,24 +10,67 @@ import Menubar from "../menu_bar/Menubar";
 function Cart() {
 
 	const navigate = useNavigate();
-	const [cart, setCart] = useState<CartData["items"]>({});
+	const [cart, setCart] = useState<CartData>({ items: {} });
 	const [loading, setLoading] = useState(false);
 	const { totals, getTotal, menu, showProducts, showService } = useContext(StoreContext)
 	const focusElement = useRef<HTMLButtonElement>(null)
 
-	useEffect(() => {
-		const getCart = async () => {
-			const response = await getUserCart();
-			console.log(Object.keys(response.items).length)
-			await getTotal(response.items);
-			setCart(response.items);
-			if (Object.keys(response.items).length !== 0) {
-				setLoading(true);
-			} else {
-				setLoading(false)
+	async function increaseCart(carId: any) {
+		setCart((pre: any) => {
+			console.log(pre)
+			const existingItem = pre[carId];
+			console.log(existingItem)
+			const updateCart = {
+				items: {
+					...pre.items,
+					[carId]: {
+						quantity: existingItem ? existingItem.quantity + 1 : 1,
+					}
+				}
 			}
-			console.log(response)
+
+			const updatedCart = async () => {
+				const respone: any = (await addCartApi(updateCart));
+				console.log(respone)
+				if (respone.items) {
+					await getCart();
+				}
+			}
+			updatedCart();
+
+			return updateCart;
+		})
+	}
+
+	async function decreaseCart(carId: any) {
+		const response: any = await removeCart(carId);
+		console.log("remove cart -> " + response.items)
+		if (response.items) {
+			getCart();
 		}
+	}
+
+	async function deleteItem(carId: any) {
+		const respone: any = await deleteItemApi(carId);
+		if (respone == 200) {
+			getCart();
+		}
+	}
+
+	const getCart = async () => {
+		const response = await getUserCart();
+		console.log(Object.keys(response.items).length)
+		await getTotal(response.items);
+		setCart(response.items);
+		if (Object.keys(response.items).length !== 0) {
+			setLoading(true);
+		} else {
+			setLoading(false)
+		}
+		console.log(response)
+	}
+
+	useEffect(() => {
 		getCart();
 		focusElement.current?.focus();
 	}, []);
@@ -37,18 +80,20 @@ function Cart() {
 		<>
 
 			<div className="relative">
-				{menu && (
-					<Menubar />
-				)
-				}
-				{/* When we hover on Product is render "Products" component */}
-				{
-					showProducts && (<Products />)
-				}
-				{/* When we hover on Service is render "Service" component */}
-				{
-					showService && (<Service />)
-				}
+				<div className="relative -top-5">
+					{menu && (
+						<Menubar />
+					)
+					}
+					{/* When we hover on Product is render "Products" component */}
+					{
+						showProducts && (<Products />)
+					}
+					{/* When we hover on Service is render "Service" component */}
+					{
+						showService && (<Service />)
+					}
+				</div>
 				<div className=" md:h-screen md:py-8 my-5 min-h-screen">
 					<div className="container mx-auto px-4">
 						<h1 className={`text-2xl font-semibold mb-4 ${loading ? 'text-left' : 'text-center text-3xl'}`}>Shopping Cart</h1>
@@ -58,29 +103,76 @@ function Cart() {
 								<div className="flex flex-col md:flex-row gap-4">
 									<div className="md:w-3/4">
 										<div className="bg-white/10 rounded-lg shadow-2xl p-6 mb-4">
-											<table className="w-full flex-col justify-evenly">
+											<table className="w-full flex-col justify-evenly ">
 												<thead className="border-b-2 border-y-black/50">
-													<tr className="flex-col justify-evenly">
-														<th className="text-left font-semibold">Product</th>
-														<th className="text-left font-semibold">Price</th>
-														<th className="text-left font-semibold">Quantity</th>
-														<th className="text-left font-semibold">Total</th>
-														
+													<tr className="flex-col md:justify-evenly  ">
+														<th className="text-left font-semibold px-2 ">Product</th>
+														<th className="text-left font-semibold px-2">Price</th>
+														<th className="text-left font-semibold px-2">Quantity</th>
+														<th className="text-left font-semibold px-2">Total</th>
+
 													</tr>
 												</thead>
 												<tbody>
 													{
 														loading && cart && Object.entries(cart).map(([id, item]) => (
 															<>
-															<tr key={id} className="flex-col  justify-evenly border-b-2">
-																<td className="py-4 flex-col justify-center items-center">
-																	<img className="h-16 w-24 -ml-3" src={item.imageUrl} alt={item?.model} />
-																	<span className="font-semibold ml-1">{item?.model}</span>
-																</td>
-																<td className="py-4">&#8377;{item?.price}</td>
-																<td className="py-4">{item.quantity}</td>
-																<td className="py-4">{item.price * item.quantity}</td>
-															</tr>
+																<tr key={id} className="flex-col items-center  justify-evenly border-b-2 ">
+																	<td className="py-4 flex-col justify-center items-center">
+																		<img className="h-16 w-24 -ml-3" src={item.imageUrl} alt={item?.model} />
+																		<span className="font-semibold ml-1">{item?.model}</span>
+																	</td>
+																	<td className="py-4">&#8377;{item?.price}</td>
+
+																	<td className="flex flex-col md:flex-row md:translate-y-11 translate-y-6 md:w-1/2 items-center">
+																		{item.quantity > 0 && (
+																			<button
+																				className="border hover:bg-black/20 rounded-md mx-2"
+																				onClick={() => increaseCart(id)}
+																			>
+																				<svg className="md:h-6 h-5" viewBox="0 0 24 24" fill="none">
+																					<path d="M12 6V18" stroke="#000" strokeLinecap="round" strokeLinejoin="round" />
+																					<path d="M6 12H18" stroke="#000" strokeLinecap="round" strokeLinejoin="round" />
+																				</svg>
+																			</button>
+																		)}
+
+																		{/* Quantity value → use span, not <td> */}
+																		<span className="px-2">{item.quantity}</span>
+
+																		{item.quantity > 1 && (
+																			<button
+																				className="border hover:bg-black/20 rounded-md mx-2"
+																				onClick={() => decreaseCart(id)}
+																			>
+																				<svg className="md:h-6 h-5" viewBox="0 0 24 24" fill="none">
+																					<path d="M6 12H18" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+																				</svg>
+																			</button>
+																		)}
+																	</td>
+
+
+																	{/* Price */}
+																	<td className="md:py-4">{item.price * item.quantity}</td>
+
+																	{/* Delete button */}
+																	<td>
+																		<button
+																			className="hover:bg-black/20 rounded-md p-0.5"
+																			onClick={() => deleteItem(id)}
+																		>
+																			<svg className="h-6" viewBox="0 0 24 24" fill="none">
+																				<path d="M10 12V17" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+																				<path d="M14 12V17" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+																				<path d="M4 7H20" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+																				<path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+																				<path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+																			</svg>
+																		</button>
+																	</td>
+																</tr>
+
 															</>
 														))
 													}

@@ -123,3 +123,22 @@ export const userRegister=async(registerData:any)=>{
         
     }
 }
+
+export const removeCart=async(carId:any)=>{
+    const respone=(await (axios.delete(`${API}/cart/remove/${carId}`,{
+        headers:{
+            Authorization:loadToken()
+        }
+    }))).data
+    console.log(respone);
+    return respone;
+}
+
+export const deleteItemApi=async(carId:any)=>{
+    const respone=(await (axios.delete(`${API}/cart/delete/${carId}`,{
+        headers:{
+            Authorization:loadToken()
+        }
+    }))).status;
+    return respone;
+}

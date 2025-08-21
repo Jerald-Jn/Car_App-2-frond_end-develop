@@ -58,7 +58,7 @@ export interface Cars {
     carLogo: ''
 }
 
-export interface CartData {
+export interface  CartData{
     items: {
         [key: string]: {
             model: '',
@@ -88,4 +88,3 @@ export const Payment_Resp = {
     id: '',
     paymentDetails: PaymentDetails,
 }
-
