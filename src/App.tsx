@@ -13,41 +13,50 @@ import Login from './Component/login/Login';
 import ServicePage from './Component/servicePage/ServicePage';
 import UserDetails from './Component/userDetails/UserDetails';
 import { Register } from './Component/register/Register';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
+import { StoreContext } from './Component/context/StoreContext';
+import { About } from './Component/about/About';
 
 function App() {
 
+  const { carsList } = useContext(StoreContext);
   let token = localStorage.getItem('token');
   const navigate = useNavigate();
 
+
   useEffect(() => {
     token = localStorage.getItem('token');
-  }, [navigate])
+  }, [navigate, carsList])
 
   return (
     <>
-      {/* Header Component */}
-      <Header></Header>
-      
-      <Routes>
-        
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/home" element={<Home />}></Route>
-        <Route path='/userdetails' element={<UserDetails />}></Route>
-        <Route path='/car/:id' element={<Car></Car>}></Route>
-        <Route path='/cart' element={token ? <Cart /> : <Login />} />
-        <Route path='/service' element={<ServicePage></ServicePage>}></Route>
-        <Route path='/contact' element={<Contact />} ></Route>
-        <Route path='/explore' element={<Explore />}></Route>
-        <Route path='/checkout' element={token ? <Checkout /> : <Login />} ></Route>
-        <Route path='/payment-success' element={token ? <Success /> : <Login />}></Route>
-        <Route path='/paymentPage' element={token ? <PaymentPage /> : <Login />}></Route>
-      </Routes>
-      
-      {/* Footer Section */}
-      <Footer />
+    <div className='dark:text-white dark:bg-black/80'>
+      {
+        carsList.length > 0 ?
+          <>
+            <Header></Header>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/" element={<Home />}></Route>
+              <Route path="/home" element={<Home />}></Route>
+              <Route path="/about" element={<About />} />
+              <Route path='/userdetails' element={<UserDetails />}></Route>
+              <Route path='/car/:id' element={<Car></Car>}></Route>
+              <Route path='/cart' element={token ? <Cart /> : <Login />} />
+              <Route path='/service' element={<ServicePage></ServicePage>}></Route>
+              <Route path='/contact' element={<Contact />} ></Route>
+              <Route path='/explore' element={<Explore />}></Route>
+              <Route path='/checkout' element={token ? <Checkout /> : <Login />} ></Route>
+              <Route path='/payment-success' element={token ? <Success /> : <Login />}></Route>
+              <Route path='/paymentPage' element={token ? <PaymentPage /> : <Login />}></Route>
+            </Routes>
+
+            {/* Footer Section */}
+            <Footer />
+          </> : <h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>Not Fount 404</h1>
+      }
+      </div>
     </>
   );
 }

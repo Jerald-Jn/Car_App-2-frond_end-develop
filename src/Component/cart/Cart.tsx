@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { addCartApi, deleteItemApi, getUserCart, removeCart } from "../../Api";
+import { deleteItemApi, getUserCart, IncreaseItemApi, removeCart } from "../../Api";
 import { type CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
@@ -16,30 +16,11 @@ function Cart() {
 	const focusElement = useRef<HTMLButtonElement>(null)
 
 	async function increaseCart(carId: any) {
-		setCart((pre: any) => {
-			console.log(pre)
-			const existingItem = pre[carId];
-			console.log(existingItem)
-			const updateCart = {
-				items: {
-					...pre.items,
-					[carId]: {
-						quantity: existingItem ? existingItem.quantity + 1 : 1,
-					}
-				}
-			}
-
-			const updatedCart = async () => {
-				const respone: any = (await addCartApi(updateCart));
-				console.log(respone)
-				if (respone.items) {
-					await getCart();
-				}
-			}
-			updatedCart();
-
-			return updateCart;
-		})
+		const response: any = await IncreaseItemApi(carId);
+		console.log("remove cart -> " + response.items)
+		if (response.items) {
+			getCart();
+		}
 	}
 
 	async function decreaseCart(carId: any) {
@@ -80,7 +61,7 @@ function Cart() {
 		<>
 
 			<div className="relative">
-				<div className="relative -top-5">
+				<div className="relative -top-5 z-10">
 					{menu && (
 						<Menubar />
 					)
@@ -103,8 +84,8 @@ function Cart() {
 								<div className="flex flex-col md:flex-row gap-4">
 									<div className="md:w-3/4">
 										<div className="bg-white/10 rounded-lg shadow-2xl p-6 mb-4">
-											<table className="w-full flex-col justify-evenly ">
-												<thead className="border-b-2 border-y-black/50">
+											<table className="w-full flex-col justify-evenly dark:text-white/80">
+												<thead className="border-b-2 border-y-black/50 dark:border-y-white/60">
 													<tr className="flex-col md:justify-evenly  ">
 														<th className="text-left font-semibold px-2 ">Product</th>
 														<th className="text-left font-semibold px-2">Price</th>
@@ -116,18 +97,19 @@ function Cart() {
 												<tbody>
 													{
 														loading && cart && Object.entries(cart).map(([id, item]) => (
-															<>
-																<tr key={id} className="flex-col items-center  justify-evenly border-b-2 ">
-																	<td className="py-4 flex-col justify-center items-center">
-																		<img className="h-16 w-24 -ml-3" src={item.imageUrl} alt={item?.model} />
+																<tr key={id} className={`flex-col items-center  justify-evenly`}>
+																	<td className="py-4 flex-col justify-center items-center ">
+																		<img className="h-16 w-24 -ml-3 mix-blend-multiply brightness-110 contrast-100" src={item.imageUrl} alt={item?.model} />
 																		<span className="font-semibold ml-1">{item?.model}</span>
 																	</td>
 																	<td className="py-4">&#8377;{item?.price}</td>
 
 																	<td className="flex flex-col md:flex-row md:translate-y-11 translate-y-6 md:w-1/2 items-center">
+
+																	{/* Increase Quantity */}
 																		{item.quantity > 0 && (
 																			<button
-																				className="border hover:bg-black/20 rounded-md mx-2"
+																				className="border hover:bg-black/20 rounded-md mx-2 dark:border-white/60"
 																				onClick={() => increaseCart(id)}
 																			>
 																				<svg className="md:h-6 h-5" viewBox="0 0 24 24" fill="none">
@@ -137,12 +119,12 @@ function Cart() {
 																			</button>
 																		)}
 
-																		{/* Quantity value → use span, not <td> */}
+																		{/* Decrease Quantity */}
 																		<span className="px-2">{item.quantity}</span>
 
 																		{item.quantity > 1 && (
 																			<button
-																				className="border hover:bg-black/20 rounded-md mx-2"
+																				className="border hover:bg-black/20 rounded-md mx-2 dark:border-white/60"
 																				onClick={() => decreaseCart(id)}
 																			>
 																				<svg className="md:h-6 h-5" viewBox="0 0 24 24" fill="none">
@@ -172,8 +154,6 @@ function Cart() {
 																		</button>
 																	</td>
 																</tr>
-
-															</>
 														))
 													}
 
@@ -183,8 +163,8 @@ function Cart() {
 										</div>
 									</div>
 									<div className="md:w-1/4">
-										<div className="bg-white/10 rounded-lg shadow-2xl p-6">
-											<h2 className="text-lg font-semibold mb-4 border-b-2 border-y-black/50">Summary</h2>
+										<div className="bg-white/10 rounded-lg shadow-2xl p-6 dark:text-white/80">
+											<h2 className="text-lg font-semibold mb-4 border-b-2 border-y-black/50 dark:border-y-white/50">Summary</h2>
 											<div className="flex justify-between mb-2 ">
 												<span>Subtotal</span>
 												<span>{totals.subTotal}</span>

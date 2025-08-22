@@ -142,3 +142,13 @@ export const deleteItemApi=async(carId:any)=>{
     }))).status;
     return respone;
 }
+
+export const IncreaseItemApi=async(carId:any)=>{
+    const respone=(await (axios.get(`${API}/cart/increase/${carId}`,{
+        headers:{
+            Authorization:loadToken()
+        }
+    }))).data;
+    console.log("increase cart -> ",respone)
+    return respone;
+}

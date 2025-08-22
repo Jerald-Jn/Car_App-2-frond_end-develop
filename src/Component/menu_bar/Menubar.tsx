@@ -8,7 +8,7 @@ function Menubar() {
           <li><Link to={'/explore'}>Products</Link></li>
           <li><Link to={'/service'}>Service</Link></li>
           <li><Link to={'/explore'}>Buy Online</Link></li>
-          <li><Link to={'/home'}>Toyota India</Link></li>
+          <li><Link to={'/about'}>About Me</Link></li>
         </ul>
       </div>
     </>
