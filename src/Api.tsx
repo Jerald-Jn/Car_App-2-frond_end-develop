@@ -4,13 +4,13 @@ import type { CartData } from "./Interface/DataModel";
 const API="http://localhost:8080";
 
 const loadToken=()=>{
-    return localStorage.getItem('token')
+    return sessionStorage.getItem('token')
 }
 
 // Users Api
 export const loginApi=async(userName:string,password:string)=>{
     const response=(await axios.post(`${API}/login?userName=${userName}&password=${password}`)).data;
-    localStorage.setItem('token',"Bearer "+response)
+    sessionStorage.setItem('token',"Bearer "+response)
     return response;
 }
 
@@ -31,6 +31,7 @@ export const getCarByCarName=async(model:any)=>{
             Authorization:loadToken()
         }
     })).data;
+    console.log(response)
     return response;
 } catch (error) {
     console.error(error)
@@ -53,7 +54,7 @@ export const createPayment=async(customerDetail:any)=>{
             }
         } )).data;
         console.log(response);
-        localStorage.setItem('clientSecret',response);
+        sessionStorage.setItem('clientSecret',response);
         return response;
     } catch (error) {
         

@@ -1,31 +1,31 @@
+import { useContext, useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
+import { About } from './Component/about/About';
 import Car from './Component/car/Car';
 import Cart from './Component/cart/Cart';
 import Checkout from './Component/checkout/Checkout';
 import PaymentPage from './Component/checkout/PaymentPage';
 import Success from './Component/checkout/Success';
 import Contact from './Component/contact/Contact';
+import { StoreContext } from './Component/context/StoreContext';
 import Explore from './Component/explore/Explore';
 import Footer from './Component/footer/Footer';
 import Header from './Component/header/Header';
 import Home from './Component/home/Home';
 import Login from './Component/login/Login';
+import { Register } from './Component/register/Register';
 import ServicePage from './Component/servicePage/ServicePage';
 import UserDetails from './Component/userDetails/UserDetails';
-import { Register } from './Component/register/Register';
-import { useContext, useEffect } from 'react';
-import { StoreContext } from './Component/context/StoreContext';
-import { About } from './Component/about/About';
 
 function App() {
 
   const { carsList } = useContext(StoreContext);
-  let token = localStorage.getItem('token');
+  let token = sessionStorage.getItem('token');
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    token = localStorage.getItem('token');
+    token = sessionStorage.getItem('token');
   }, [navigate, carsList])
 
   return (

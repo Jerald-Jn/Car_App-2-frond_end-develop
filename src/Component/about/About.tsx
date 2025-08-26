@@ -63,11 +63,6 @@ export function About() {
                                         Remote</li>
                                 </ul>
                             </div>
-
-                            {/* <div className="flex gap-4 justify-center sm:justify-start">
-                                <button className="px-4 sm:px-6 py-2 bg-rose-600 rounded-full text-white font-bold">Download CV</button>
-                                <button className="px-4 sm:px-6 py-2 bg-rose-600 rounded-full text-white font-bold">Hire me</button>
-                            </div> */}
                         </div>
 
                         <div className="w-full flex flex-col gap-2">
@@ -80,43 +75,17 @@ export function About() {
                                 <span>Docker Desktop</span>
                                 <span>Stripe</span>
                             </div>
-
-
-                            {/* <div className="flex flex-col gap-2">
-                                <div className="w-full flex justify-between font-semibold">
-                                    <span>PHP/Laravel</span>
-                                    <span>80 %</span>
-                                </div>
-
-                                <div className="w-full bg-gray-300 rounded-full">
-                                    <div className="w-[80%] h-2 bg-rose-500 rounded-full"></div>
-                                </div>
+                        </div>
+                        <div className="w-full flex flex-col gap-2">
+                            <h1 className="text-base font-semibold uppercase text-blue-500">Tools & Technologies:</h1>
+                            <div className="flex flex-col gap-2 font-semibold">
+                                <span>Frontend: <span className="text-red-500">React.js, HTML5, CSS3, Tailwind.CSS</span></span>
+                                <span>Backend: <span className="text-red-500">Spring Boot (Java), REST APIs</span></span>
+                                <span>Database: <span className="text-red-500">MongoDB</span></span>
+                                <span>Authentication: <span className="text-red-500">JWT</span></span>
+                                <span>Cloud: <span className="text-red-500">Cloudinary</span></span>
+                                <span>Payment Gateway: <span className="text-red-500">Stripe</span></span>
                             </div>
-
-
-                            <div className="flex flex-col gap-2">
-                                <div className="w-full flex justify-between font-semibold">
-                                    <span>Vue/Nuxt</span>
-                                    <span>85 %</span>
-                                </div>
-
-                                <div className="w-full bg-gray-300 rounded-full">
-                                    <div className="w-[85%] h-2 bg-rose-500 rounded-full"></div>
-                                </div>
-                            </div>
-
-
-                            <div className="flex flex-col gap-2">
-                                <div className="w-full flex justify-between font-semibold">
-                                    <span>Nestjs</span>
-                                    <span>70 %</span>
-                                </div>
-
-                                <div className="w-full bg-gray-300 rounded-full">
-                                    <div className="w-[70%] h-2 bg-rose-500 rounded-full"></div>
-                                </div>
-                            </div> */}
-
                         </div>
                     </div>
                 </div>

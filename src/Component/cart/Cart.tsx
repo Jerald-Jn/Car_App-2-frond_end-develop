@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteItemApi, getUserCart, IncreaseItemApi, removeCart } from "../../Api";
 import { type CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../context/StoreContext";
@@ -13,7 +13,7 @@ function Cart() {
 	const [cart, setCart] = useState<CartData>({ items: {} });
 	const [loading, setLoading] = useState(false);
 	const { totals, getTotal, menu, showProducts, showService } = useContext(StoreContext)
-	const focusElement = useRef<HTMLButtonElement>(null)
+	const focusElement = useRef<HTMLHeadingElement>(null)
 
 	async function increaseCart(carId: any) {
 		const response: any = await IncreaseItemApi(carId);
@@ -77,7 +77,7 @@ function Cart() {
 				</div>
 				<div className=" md:h-screen md:py-8 my-5 min-h-screen">
 					<div className="container mx-auto px-4">
-						<h1 className={`text-2xl font-semibold mb-4 ${loading ? 'text-left' : 'text-center text-3xl'}`}>Shopping Cart</h1>
+						<h1 ref={focusElement} className={`text-2xl font-semibold mb-4 ${loading ? 'text-left' : 'text-center text-3xl'}`}>Shopping Cart</h1>
 						{
 							loading ?
 
@@ -182,12 +182,15 @@ function Cart() {
 												<span className="font-semibold">Total</span>
 												<span className="font-semibold">{totals.total}</span>
 											</div>
-											<button ref={focusElement} onClick={() => navigate(`/checkout`)} className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
+											<button  onClick={() => navigate(`/checkout`)} className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">Checkout</button>
 										</div>
 									</div>
 								</div>
 								:
-								<h1 className="text-center text-2xl font-semibold text-red-500">Cart empty</h1>
+								<div className="flex flex-col justify-center items-center">
+								<h1 className=" text-2xl font-semibold text-red-500">Cart empty</h1>
+								<Link className="underline text-blue-500" to={'/explore'}>Explore</Link>
+								</div>
 						}
 
 					</div>

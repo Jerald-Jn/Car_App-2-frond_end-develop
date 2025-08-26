@@ -55,7 +55,8 @@ export interface Cars {
     price: 0,
     color: '',
     carImage: '',
-    carLogo: ''
+    carLogo: '',
+    images:any
 }
 
 export interface  CartData{

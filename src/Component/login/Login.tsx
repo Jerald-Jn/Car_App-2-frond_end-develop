@@ -38,7 +38,7 @@ function Login() {
                 const response = (await loginApi(userName, password));
                 console.log("response data ->", response)
                 if (response) {
-                    localStorage.setItem('token', ("Bearer "+response))
+                    sessionStorage.setItem('token', ("Bearer "+response))
                     navigate('/home')
                 }
             } catch (err) {

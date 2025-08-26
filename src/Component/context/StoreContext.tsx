@@ -8,7 +8,7 @@ export const StoreContext = createContext<any>(null);
 
 export const StoreContextProvider = (props: any) => {
 
-  const [carsList, setCarsList] = useState<Cars[]>([]);
+  const [carsList, setCarsList] = useState<any[]>([]);
   const [showProducts, setShowProducts] = useState(false);
   const [showService, setShowService] = useState(false);
   const [menu, setMenu] = useState(false);
@@ -16,6 +16,8 @@ export const StoreContextProvider = (props: any) => {
   const[customer,setCustomer]=useState(PaymentRequest)
   const [car, setCar] = useState<Cars[]>([]);
   const [clientSecret, setClientSecret] = useState("");
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
   
 
   const getTotal = async (cartDetails:any) => {
@@ -40,6 +42,7 @@ export const StoreContextProvider = (props: any) => {
       try {
         const listOfCars = await getListOfCars();
         console.log(listOfCars)
+        console.log(listOfCars[0].images)
         setCarsList(listOfCars);
       } catch (error) {
         console.error('Failed to fetch cars:', error);
@@ -56,7 +59,9 @@ export const StoreContextProvider = (props: any) => {
     getTotal, totals,setTotals,
     customer,setCustomer,
     car,setCar,
-    clientSecret,setClientSecret
+    clientSecret,setClientSecret,
+    count,setCount,
+    loading,setLoading
   };
 
   return (

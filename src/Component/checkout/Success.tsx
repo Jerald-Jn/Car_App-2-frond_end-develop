@@ -1,11 +1,14 @@
 // Success.tsx
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { clearCart, verifyPayment } from "../../Api";
+import { StoreContext } from "../context/StoreContext";
 
 export default function Success() {
+
+  const {setCount,setLoading}=useContext(StoreContext);
   const location = useLocation();
-  const navigate=useNavigate();
+  // const navigate=useNavigate();
 
   
   // Stripe might append ?payment_intent=pi_123&payment_intent_client_secret=...
@@ -13,18 +16,21 @@ export default function Success() {
   const paymentIntentId = query.get("payment_intent");
   
   useEffect(()=>{
-    const verify=async()=>{
-      const clientSecret=localStorage.getItem('clientSecret')
+    verify(); 
+  },[])
+
+  const verify=async()=>{
+      const clientSecret=sessionStorage.getItem('clientSecret')
       if(!clientSecret) return;
       const response = await verifyPayment(clientSecret);
-      console.log("verify response -> ", response, clientSecret);
     if(response!==undefined){
       const res=clearCart();
       console.log(res);
+      setCount(0);
+      setLoading(false);
     }
     }
-    verify(); 
-  },[navigate])
+      
 
   return (
     <div className=" text-center h-[480px] p-10">

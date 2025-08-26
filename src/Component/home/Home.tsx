@@ -87,7 +87,7 @@ function Home() {
       {/*Banner Section */}
       <div>
         <a  >
-          <img src="./src/assets/banner.jpg" alt="" />
+          <img src="./src/assets/car pic/banner.jpg" alt="" />
         </a>
       </div>
 
@@ -100,15 +100,14 @@ function Home() {
           className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-5 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-10">
             {
             carsList.map((car: Cars) =>
-          <div key={car.carId} className="w-72 flex rounded-xl duration-500 hover:scale-110 hover:shadow-2xl bg-white/80 ">
+          <div key={car.carId} className="w-60 flex rounded-xl duration-500 hover:scale-110 hover:shadow-2xl bg-white/80">
               <Link to={`/car/${car.model}`}  className='px-8'>
                   <img src={car.carLogo}
                           alt={car.model} className=" object-cover rounded-t-xl mix-blend-multiply" />
                   <div className="flex flex-col px-10 py-3 w-72">
                       <span className=" mr-3 uppercase">{car.make}</span>
                       <div className="flex items-center">                           
-                          <p className="text-lg font-bold text-red-500 truncate block capitalize">{car.model}</p>
-                          <p className="text-sm text-gray-600 cursor-auto ml-2 font-bold">{car.transmission.toLocaleUpperCase()}</p>
+                          <p className="text-base font-bold text-red-500 truncate block capitalize">{car.model}</p>
                       </div>
                       <p className="text-lg font-semibold text-black cursor-auto">&#8377;{car.price}</p>
 
