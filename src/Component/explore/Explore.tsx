@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { type Cars, type CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
@@ -75,7 +75,8 @@ function Explore() {
                     showService && (<Service />)
                 }
                 {
-                    !token && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, Please login</h1>
+                    !token && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, 
+                    <Link to={'/login'}>Please login</Link></h1>
                 }
             </div>
             }
@@ -83,7 +84,7 @@ function Explore() {
                     {
                         carsList.map((car: Cars) => (
                             <div key={car.carId} className="my-5 mx-2 scale-95 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full *
-                                    hover:scale-100  hover:shadow-2xl hover:rounded-2xl hover:border-2 duration-1000 dark:text-white dark:bg-black/30">
+                                    hover:scale-100  hover:shadow-2xl hover:rounded-2xl hover:border-2 duration-300 dark:text-white dark:bg-black/30">
                                 <div className="relative">
                                     <img src={car.carImage} alt="Product image" className="w-full h-64 object-cover object-center" />
                                     <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>

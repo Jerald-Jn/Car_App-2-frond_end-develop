@@ -15,7 +15,6 @@ export const StoreContextProvider = (props: any) => {
   const [totals, setTotals] = useState({ subTotal: 0, tax: 0, shipping: 0, total: 0 });
   const[customer,setCustomer]=useState(PaymentRequest)
   const [car, setCar] = useState<Cars[]>([]);
-  const [clientSecret, setClientSecret] = useState("");
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   
@@ -59,7 +58,6 @@ export const StoreContextProvider = (props: any) => {
     getTotal, totals,setTotals,
     customer,setCustomer,
     car,setCar,
-    clientSecret,setClientSecret,
     count,setCount,
     loading,setLoading
   };

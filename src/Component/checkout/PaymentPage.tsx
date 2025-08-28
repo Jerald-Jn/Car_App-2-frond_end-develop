@@ -1,6 +1,6 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { createPayment } from "../../Api";
 import { StoreContext } from "../context/StoreContext";
 import CheckoutForm from "./CheckoutForm";
@@ -9,7 +9,8 @@ const stripePromise = loadStripe("pk_test_51RvD1GBhApNxar7JthXCqUYG2p6SCSFQtmmzT
 
 export default function PaymentPage() {
   
-  const { totals, customer, clientSecret,setClientSecret } = useContext(StoreContext);
+  const { totals, customer } = useContext(StoreContext);
+  const [clientSecret,setClientSecret]=useState('')
 
   useEffect(() => {
     async function initPayment() {

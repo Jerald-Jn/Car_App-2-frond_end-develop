@@ -108,32 +108,32 @@ export function Register() {
                 }
 
             </div>
-            <div className="max-w-lg mx-auto  bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col items-center my-10">
+            <div className="max-w-lg mx-auto  bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col items-center my-10 dark:bg-white/30 dark:text-black">
                 <h1 className="text-xl font-bold text-center mb-8">Welcome to Toyota</h1>
                 <form className="w-full flex flex-col gap-4" onSubmit={() => { event?.preventDefault(), register() }}>
                     <div className="flex items-start flex-col justify-start">
-                        <label htmlFor="firstName" className="text-sm text-black mr-2">First Name:</label>
+                        <label htmlFor="firstName" className="text-sm text-black mr-2 dark:text-white">First Name:</label>
                         {invalid1 && <span className="text-red-500 text-sm mx-auto">First Name required</span>}
                         <input type="text" id="firstName" name="firstName" ref={inputRef}
-                            className="w-full px-3 bg-white/80 py-2 rounded-md border focus" value={formData.userInfo.firstName} onChange={(event) => onchangeHandlerForUserInfo(event)} />
+                            className="w-full px-3 bg-white/80 py-2 rounded-md border focus " value={formData.userInfo.firstName} onChange={(event) => onchangeHandlerForUserInfo(event)} />
                     </div>
 
-                    <div className="flex items-start flex-col justify-start">
-                        <label htmlFor="lastName" className="text-sm text-black mr-2">Last Name:</label>
+                    <div className="flex items-start flex-col justify-start ">
+                        <label htmlFor="lastName" className="text-sm text-black mr-2 dark:text-white">Last Name:</label>
                         {invalid2 && <span className="text-red-500 text-sm mx-auto">Last Name required</span>}
                         <input type="text" id="lastName" name="lastName"
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.userInfo.lastName} onChange={(event) => onchangeHandlerForUserInfo(event)} />
                     </div>
 
-                    <div className="flex items-start flex-col justify-start">
-                        <label htmlFor="userName" className="text-sm text-black mr-2">Username:</label>
+                    <div className="flex items-start flex-col justify-start ">
+                        <label htmlFor="userName" className="text-sm text-black mr-2 dark:text-white">Username:</label>
                         {invalid3 && <span className="text-red-500 text-sm mx-auto">userName required</span>}
                         <input type="text" id="userName" name="userName"
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.userName} onChange={(event) => onchangeHandler(event)} />
                     </div>
 
                     <div className="flex items-start flex-col justify-start">
-                        <label htmlFor="email" className="text-sm text-black mr-2">Email:</label>
+                        <label htmlFor="email" className="text-sm text-black mr-2 dark:text-white">Email:</label>
                         {invalid4 && <span className="text-red-500 text-sm mx-auto">Email required</span>}
                         {invalid8 && <span className="text-red-500 text-sm mx-auto">Email id should be like @gmail.com required</span>}
                         <input type="email" id="email" name="email"
@@ -141,14 +141,14 @@ export function Register() {
                     </div>
 
                     <div className="flex items-start flex-col justify-start">
-                        <label htmlFor="password" className="text-sm text-black mr-2">Password:</label>
+                        <label htmlFor="password" className="text-sm text-black mr-2 dark:text-white">Password:</label>
                         {invalid5 && <span className="text-red-500 text-sm mx-auto">Password required</span>}
                         <input type="password" id="password" name="password"
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.password} onChange={(event) => onchangeHandler(event)} />
                     </div>
 
                     <div className="flex items-start flex-col justify-start">
-                        <label htmlFor="confirmPassword" className="text-sm text-black mr-2">Confirm Password:</label>
+                        <label htmlFor="confirmPassword" className="text-sm text-black mr-2 dark:text-white">Confirm Password:</label>
                         {invalid6 && <span className="text-red-500 text-sm mx-auto">Confirm Password required</span>}
                         {invalid7 && <span className="text-red-500 text-sm mx-auto">Password not match</span>}
                         <input type="password" id="confirmPassword" name="confirmPassword"
@@ -159,8 +159,8 @@ export function Register() {
                 </form>
 
                 <div className="mt-4 text-center">
-                    <span className="text-sm text-red-400">Already have an account? </span>
-                    <Link to={'/login'} className="text-blue-500 hover:text-blue-600">Login</Link>
+                    <span className="text-sm text-red-500 dark:text-red-800">Already have an account? </span>
+                    <Link to={'/login'} className="text-blue-500 hover:text-blue-600 dark:text-green-500">Login</Link>
                 </div>
             </div >
         </div>
