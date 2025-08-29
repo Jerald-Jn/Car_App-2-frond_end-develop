@@ -65,7 +65,7 @@ function Footer() {
                                 <li><Link to={'/'} className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Home</Link></li>
                                 {/* <li><Link to={'/about'} className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">About Us</Link></li> */}
                                 <li><Link to={'/service'} className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Services</Link></li>
-                                <li><Link to={'/exsplore'}className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Explore</Link></li>
+                                <li><Link to={'/explore'}className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Explore</Link></li>
                                 <li><Link to={'/contact'} className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block">Contact</Link></li>
                             </ul>
                         </div>
