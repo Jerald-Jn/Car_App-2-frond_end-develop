@@ -15,7 +15,6 @@ import Home from './Component/home/Home';
 import Login from './Component/login/Login';
 import { Register } from './Component/register/Register';
 import ServicePage from './Component/servicePage/ServicePage';
-import UserDetails from './Component/userDetails/UserDetails';
 
 function App() {
 
@@ -32,7 +31,7 @@ function App() {
     <>
     <div className='dark:text-white dark:bg-black/80'>
       {
-        carsList.length > 0 ?
+        true ?
           <>
             <Header></Header>
             <Routes>
@@ -41,7 +40,6 @@ function App() {
               <Route path="/" element={<Home />}></Route>
               <Route path="/home" element={<Home />}></Route>
               <Route path="/about" element={<About />} />
-              <Route path='/userdetails' element={<UserDetails />}></Route>
               <Route path='/car/:id' element={<Car></Car>}></Route>
               <Route path='/cart' element={token ? <Cart /> : <Login />} />
               <Route path='/service' element={<ServicePage></ServicePage>}></Route>

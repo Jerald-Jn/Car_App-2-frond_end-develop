@@ -1,15 +1,14 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userRegister } from "../../Api";
-import Menubar from "../menu_bar/Menubar";
-import Products from "../header/Products";
-import Service from "../header/Service";
 import { StoreContext } from "../context/StoreContext";
+import Products from "../header/Products";
+import Menubar from "../menu_bar/Menubar";
 
 export function Register() {
 
     const inputRef = useRef<HTMLInputElement>(null);
-    const { menu, showProducts, showService } = useContext(StoreContext);
+    const { menu, showProducts, setMenu } = useContext(StoreContext);
     const [formData, setFormData] = useState({
         userName: '', password: '', userInfo: {
             firstName: '', lastName: '', email: ''
@@ -25,10 +24,11 @@ export function Register() {
     const [invalid7, setInvalid7] = useState(false);
     const [invalid8, setInvalid8] = useState(false);
     const navigate = useNavigate();
+    const [loading,setLoading]=useState(false)
 
     useEffect(() => {
-        // focus input when component mounts
         inputRef.current?.focus();
+        setMenu(false)
     }, []);
 
     const onchangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +52,8 @@ export function Register() {
     }
 
     useEffect(() => {
-        setInvalid1(false); setInvalid2(false); setInvalid3(false); setInvalid4(false); setInvalid5(false); setInvalid6(false); setInvalid7(false)
+        setInvalid1(false); setInvalid2(false); setInvalid3(false); setInvalid4(false); 
+        setInvalid5(false); setInvalid6(false); setInvalid7(false); setInvalid8(false); setLoading(false)
     }, [formData])
 
     const register = async () => {
@@ -79,7 +80,12 @@ export function Register() {
                 console.log('correct')
                 const response = await userRegister(formData);
                 console.log(response);
-                return navigate('/login')
+                if(response){
+                    return navigate('/login')
+                }else{
+                    setLoading(true)
+                    return
+                }
             }
             console.log('wrong')
             return;
@@ -102,15 +108,11 @@ export function Register() {
                 {
                     showProducts && (<Products />)
                 }
-                {/* When we hover on Service is render "Service" component */}
-                {
-                    showService && (<Service />)
-                }
-
             </div>
             <div className="max-w-lg mx-auto  bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col items-center my-10 dark:bg-white/30 dark:text-black">
                 <h1 className="text-xl font-bold text-center mb-8">Welcome to Toyota</h1>
                 <form className="w-full flex flex-col gap-4" onSubmit={() => { event?.preventDefault(), register() }}>
+                    { loading && <span className="text-red-600 text-center text-xl">Please regiter correctly</span>}
                     <div className="flex items-start flex-col justify-start">
                         <label htmlFor="firstName" className="text-sm text-black mr-2 dark:text-white">First Name:</label>
                         {invalid1 && <span className="text-red-500 text-sm mx-auto">First Name required</span>}

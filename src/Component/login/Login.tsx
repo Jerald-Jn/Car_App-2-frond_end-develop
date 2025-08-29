@@ -1,11 +1,10 @@
+import { Eye, EyeOff } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginApi } from "../../Api";
-import { Eye, EyeOff } from "lucide-react";
-import Menubar from "../menu_bar/Menubar";
-import Products from "../header/Products";
-import Service from "../header//Service";
 import { StoreContext } from "../context/StoreContext";
+import Products from "../header/Products";
+import Menubar from "../menu_bar/Menubar";
 
 function Login() {
     const [userName, setUserName] = useState('');
@@ -15,11 +14,12 @@ function Login() {
     const [invalid3, setInvalid3] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const {showProducts, showService, menu}=useContext(StoreContext)
+    const {showProducts, setMenu, menu}=useContext(StoreContext)
     const inputRef=useRef<HTMLInputElement>(null)
 
     useEffect(()=>{
         inputRef.current?.focus();
+        setMenu(false)
     },[])
 
     useEffect(() => {
@@ -64,10 +64,6 @@ function Login() {
                         {/* When we hover on Product is render "Products" component */}
                         {
                             showProducts && (<Products />)
-                        }
-                        {/* When we hover on Service is render "Service" component */}
-                        {
-                            showService && (<Service />)
                         }
             </div>
             <h1 className="text-white text-4xl uppercase tracking-widest font-serif text-center p-5  md:text-6xl">Toyota</h1>

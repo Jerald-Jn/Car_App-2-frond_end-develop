@@ -1,10 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
-import Menubar from '../menu_bar/Menubar';
-import Products from '../header/Products';
-import Service from '../header/Service';
-import { StoreContext } from '../context/StoreContext';
-import type { Cars } from '../../Interface/DataModel';
 import { Link } from 'react-router-dom';
+import type { Cars } from '../../Interface/DataModel';
+import { StoreContext } from '../context/StoreContext';
+import Products from '../header/Products';
+import Menubar from '../menu_bar/Menubar';
 
 
 
@@ -12,7 +11,7 @@ function Home() {
 
   const [index, setIndex] = useState(0);
 
-  const { carsList, showProducts, showService, menu } = useContext(StoreContext);
+  const { carsList, showProducts, setMenu, menu } = useContext(StoreContext);
 
   useEffect(() => {
     if (carsList.length === 0) return; // don’t start until data is loaded
@@ -39,6 +38,10 @@ function Home() {
     });
   }
 
+  useEffect(() => {
+    setMenu(false)
+  }, [])
+
   return (
     <>
 
@@ -63,10 +66,6 @@ function Home() {
           {/* When we hover on Product is render "Products" component */}
           {
             showProducts && (<Products/>)
-          }
-          {/* When we hover on Service is render "Service" component */}
-          {
-            showService && (<Service />)
           }
 
           {/* Change Image use Previos button */}

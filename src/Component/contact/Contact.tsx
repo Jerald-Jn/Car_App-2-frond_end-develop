@@ -1,12 +1,16 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { StoreContext } from "../context/StoreContext";
-import Menubar from "../menu_bar/Menubar";
 import Products from "../header/Products";
-import Service from "../header/Service";
+import Menubar from "../menu_bar/Menubar";
 
 
 function Contact() {
-    const { showProducts, showService, menu } = useContext(StoreContext);
+    const { showProducts, menu, setMenu } = useContext(StoreContext);
+
+    useEffect(()=>{
+            setMenu(false)
+        },[])
+
     return (
         <>
             <div className="relative">
@@ -17,10 +21,6 @@ function Contact() {
                 {/* When we hover on Product is render "Products" component */}
                 {
                     showProducts && (<Products />)
-                }
-                {/* When we hover on Service is render "Service" component */}
-                {
-                    showService && (<Service />)
                 }
 
                 <div className="max-w-screen-lg mx-auto p-5 dark:text-white">

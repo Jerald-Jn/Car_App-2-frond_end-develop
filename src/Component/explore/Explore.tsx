@@ -1,14 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { addCartApi } from "../../Api";
 import { type Cars, type CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
-import Service from "../header/Service";
 import Menubar from "../menu_bar/Menubar";
-import { addCartApi } from "../../Api";
 
 function Explore() {
-    const { carsList, menu, showProducts, showService } = useContext(StoreContext);
+    const { carsList, menu, showProducts, setMenu } = useContext(StoreContext);
     let token=sessionStorage.getItem('token')
     const [cart, setCart] = useState<CartData>({ items: {} });
     const navigate = useNavigate();
@@ -56,6 +55,9 @@ function Explore() {
         console.log("cart")
     }, [cart]);
 
+    useEffect(()=>{
+        setMenu(false)
+    },[])
 
     return (
         <>
@@ -70,10 +72,6 @@ function Explore() {
                 {
                     showProducts && (<Products />)
                 }
-                {/* When we hover on Service is render "Service" component */}
-                {
-                    showService && (<Service />)
-                }
                 {
                     !token && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, 
                     <Link to={'/login'}>Please login</Link></h1>
@@ -83,14 +81,11 @@ function Explore() {
                 <div key={carsList} className="grid-cols-1 grid md:grid-cols-4 md:mx-10 mx-auto">
                     {
                         carsList.map((car: Cars) => (
-                            <div key={car.carId} className="my-5 mx-2 scale-95 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full *
+                            <div key={car.carId} className="my-5 md:mx-2 scale-95 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full *
                                     hover:scale-100  hover:shadow-2xl hover:rounded-2xl hover:border-2 duration-300 dark:text-white dark:bg-black/30">
                                 <div className="relative">
                                     <img src={car.carImage} alt="Product image" className="w-full h-64 object-cover object-center" />
                                     <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
-                                    {/* <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition-colors duration-200">
-                                        <svg className="w-4 h- text-center text-blue-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.7 4C18.87 4 21 6.98 21 9.76C21 15.39 12.16 20 12 20C11.84 20 3 15.39 3 9.76C3 6.98 5.13 4 8.3 4C10.12 4 11.31 4.91 12 5.71C12.69 4.91 13.88 4 15.7 4Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
-                                    </button> */}
                                 </div>
                                 <div className="p-4 ">
                                     <div className="flex justify-between items-start mb-2">
@@ -100,8 +95,10 @@ function Explore() {
                                         </div>
                                     </div>
                                     <div className="py-2">
-                                        <p className="text-lg font-bold text-green-600">${car.price}</p>
-                                        <p className="text-sm text-gray-500 line-through dark:text-white">${car.price * 100}</p>
+                                        <p className="text-lg font-bold text-green-600">
+                                            <span className="text-black/50 text-base">$</span>{car.price}</p>
+                                        <p className="text-sm text-gray-500 line-through dark:text-white">
+                                            <span className="text-black/50 text-sm">$</span>{car.price * 100}</p>
                                     </div>
                                     <div className="flex-col flex  mb-2">
                                         <div>

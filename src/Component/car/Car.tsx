@@ -9,7 +9,7 @@ import Service from "../header/Service";
 
 function Car() {
 
-    const { menu, showProducts, showService } = useContext(StoreContext);
+    const { menu, showProducts, showService, setMenu } = useContext(StoreContext);
     const [car, setCar] = useState<Cars>();
     const [cart, setCart] = useState<CartData>({ items: {} });
     let token = sessionStorage.getItem('token')
@@ -26,7 +26,12 @@ function Car() {
 
     useEffect(() => {
         getImage(id);
+        setMenu(false)
     }, [id]);
+    
+    useEffect(()=>{
+        setMenu(false)
+    },[])
 
     async function getImage(model: string | any) {
         const tempCar = await (await getCarByCarName(model));
@@ -221,8 +226,8 @@ function Car() {
                                 <h2 className="text-3xl font-bold mb-2">{car.model}</h2>
                                 <p className="text-red-600 text-2xl mb-4">{car.make}</p>
                                 <div className="mb-4">
-                                    <span className="text-2xl font-bold mr-2">&#8377;{car.price}</span>
-                                    <span className="text-gray-500 line-through">&#8377;{car.price * 1.5}</span>
+                                    <span className="text-2xl font-bold mr-2"><span className="text-black/80 text-2xl font-bold">$</span> {car.price}</span>
+                                    <span className="text-gray-500 line-through"><span className="text-black/80 text-sm font-bold">$</span>{car.price * 1.5}</span>
                                 </div>
                                 <div className="flex items-center mb-4">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"

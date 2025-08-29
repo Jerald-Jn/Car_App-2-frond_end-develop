@@ -1,23 +1,22 @@
 import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { getUserCart } from "../../Api";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
-import Service from "../header/Service";
 import Menubar from "../menu_bar/Menubar";
-import { getUserCart } from "../../Api";
 
 function Checkout() {
 
-    const { showService, showProducts, menu, totals, customer, setCustomer, car, getTotal } = useContext(StoreContext);
+    const { showProducts, menu, totals, customer, setCustomer, car, getTotal, setMenu } = useContext(StoreContext);
     const navigate = useNavigate();
-    const inputRef=useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     function onChangeHandler(event: any) {
         const { name, value } = event.target;
         setCustomer((pre: any) => (
             {
                 ...pre,
-                    userInfo: {
+                userInfo: {
                     ...pre.userInfo,
                     [name]: value
                 }
@@ -27,13 +26,14 @@ function Checkout() {
 
     function purchase() {
         if (customer) {
-            setCustomer((pre:any)=>({...pre,amount:totals.total}))
+            setCustomer((pre: any) => ({ ...pre, amount: totals.total }))
             console.log("customer -> ", customer)
             navigate('/paymentPage')
         }
     }
 
     useEffect(() => {
+        setMenu(false)
         console.log(car)
         const cartItems = async () => {
             const response = await getUserCart();
@@ -55,23 +55,19 @@ function Checkout() {
                 {
                     showProducts && (<Products />)
                 }
-                {/* When we hover on Service is render "Service" component */}
-                {
-                    showService && (<Service />)
-                }
 
                 {
                     true &&
-                    <div className=" bg-gray-100 text-gray-900 flex justify-center min-h-screen ">
-                        <form onSubmit={(event) => { event.preventDefault(); purchase(); }}>
-                            <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
-                                <div className="w-3/5 p-6 -mt-2 h-fit sm:p-12">
+                    <div className=" bg-gray-100 text-gray-900 flex justify-center min-h-screen md:w-full ">
+                        <form onSubmit={(event) => { event.preventDefault(); purchase(); }} className="min-h-lvh m-5">
+                            <div className="md:max-w-screen-xl bg-white shadow sm:rounded-lg flex justify-center  md:flex-row flex-col">
+                                <div className="md:w-3/5 p-6 -mt-2 h-fit sm:p-12">
                                     <div className="bg-white/50 p-5 rounded-lg shadow-md border-2">
 
                                         <h1 className="text-2xl font-bold text-gray-800   mb-3">Shipping Address</h1>
 
                                         <div className="mb-6">
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid md:grid-cols-2 gap-4">
                                                 <div>
                                                     <label htmlFor="firstName" className="block text-gray-700   mb-1">First Name</label>
                                                     <input ref={inputRef} required name="firstName" type="text" id="firstName" className="w-full rounded-lg py-2 px-3  border-2" value={customer.firstName} onChange={onChangeHandler} />
@@ -82,7 +78,7 @@ function Checkout() {
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid md:grid-cols-2 gap-4">
                                                 <div>
                                                     <label htmlFor="phoneNo" className="block text-gray-700   mb-1">Phone No</label>
                                                     <input required name="phoneNo" type="text" id="phoneNo" className="w-full rounded-lg py-2 px-3  border-2" value={customer.phoneNo} onChange={onChangeHandler} />
@@ -102,7 +98,7 @@ function Checkout() {
                                                 <input required name="city" type="text" id="city" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.city} onChange={onChangeHandler} />
                                             </div>
 
-                                            <div className="grid grid-cols-2 gap-4 mt-4">
+                                            <div className="grid md:grid-cols-2 gap-4 mt-4">
                                                 <div>
                                                     <label htmlFor="state" className="block text-gray-700   mb-1">State</label>
                                                     <input required name="state" type="text" id="state" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.state} onChange={onChangeHandler} />
@@ -116,19 +112,10 @@ function Checkout() {
                                     </div>
 
                                 </div>
-                                <div className="flex-1 bg-red-200 text-center hidden lg:flex">
+                                <div className="flex-1 bg-red-200 text-center lg:flex">
                                     <div className="m-12 xl:m-16 bg-contain bg-center bg-no-repeat">
                                         <h2 className="text-2xl font-bold text-gray-800 text-center">Checkout</h2>
                                         <p className="text-gray-500 text-center mt-1 text-lg">Complete your purchase</p>
-
-
-                                        {/* <div className="mt-6 flex flex-row items-center space-x-4">
-                                        <img src={car?.carLogo} alt={car?.model} className="w-20 h-20 rounded-lg shadow object-center" />
-                                        <div className=" gap-5 items-center">
-                                            <h3 className="text-lg font-semibold text-gray-800">{car?.model}-{car?.year}-Model</h3>
-                                        </div>
-                                    </div> */}
-
                                         <div className="mt-6 space-y-3">
                                             <div className="flex justify-between font-semibold">
                                                 <span>Subtotal</span>
@@ -157,8 +144,6 @@ function Checkout() {
                         </form>
                     </div>
                 }
-
-
 
             </div>
         </>

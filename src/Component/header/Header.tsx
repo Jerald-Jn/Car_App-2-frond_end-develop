@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 import { getUserCart } from "../../Api";
@@ -8,6 +8,7 @@ function Header() {
 
   const { setShowProducts, setShowService, setMenu, menu, totals,setCount,count, setLoading,loading} = useContext(StoreContext)
   const navigate = useNavigate();
+  const focusElement = useRef<HTMLDivElement>(null)
   
   const clientSecret = sessionStorage.getItem('clientSecret');
   const [backgroundcolor,setBackgroundColor]=useState(false);
@@ -29,12 +30,19 @@ function Header() {
     getCart();
   }, [navigate, totals, clientSecret])
 
+  useEffect(() => {
+		if (focusElement.current) {
+			focusElement.current.scrollIntoView({ behavior: "smooth", block: "start" });
+		}
+	}, [navigate]);
+
+
   return (
     <>
       {/* Header Section with navigation bar */}
       <header className='bg-white border-b-2 border-black/10 dark:bg-white dark:text-black' onMouseEnter={() => { setShowProducts(false), setShowService(false) }}>
         <nav className=''>
-          <div className='flex flex-row justify-between mt-0.5 p-2 md:ml-5 md:p-5'>
+          <div ref={focusElement} className='flex flex-row justify-between mt-0.5 p-2 md:ml-5 md:p-5'>
             <button onClick={() => navigate(-1)}
               className="inline-flex items-center border-2 border-black px-0.5 py-0.5 rounded-md text-black hover:bg-indigo-50 relative md:-translate-x-5">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
@@ -73,14 +81,14 @@ function Header() {
               </ul>
             </div>
 
-            <div className="flex flex-row md:w-[20rem] gap-x-4 w-[10rem] items-center">
-              <button className="rounded-md w-5 h-6" onClick={() =>{
+            <div className="flex flex-row md:w-[20rem] md:gap-x-4 gap-x-2 justify-evenly w-[10rem] items-center ">
+              <button className="rounded-md w-8 h-6 ml-3" onClick={() =>{
                 document.documentElement.classList.toggle("dark")
                 setBackgroundColor(!backgroundcolor);
               }
               }>{
                 backgroundcolor?
-                <svg className="w-5" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                <svg className="w-6 ml-2 md:mt-1" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                    viewBox="0 0 292.548 292.548"
                   xmlSpace="preserve">
                   <g>
@@ -102,7 +110,7 @@ function Header() {
 		c3.987,0,7.224-3.23,7.224-7.224C292.548,142.833,289.312,139.606,285.324,139.606z"/>
                   </g>
                 </svg>
-                :<svg className='w-5' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                :<svg className='w-6 ml-2 md:mt-1' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <g>
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z" />
@@ -112,7 +120,7 @@ function Header() {
               </button>
 
               <Link to={'/cart'} className=''>
-                <svg className="md:w-12 md:h-8 w-7 hover:cursor-pointer md:-mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="md:w-12 md:h-8 w-6 hover:cursor-pointer md:-mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="9" cy="21" r="1"></circle>
                   <circle cx="20" cy="21" r="1"></circle>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -120,13 +128,13 @@ function Header() {
                 {loading && <span className="cart-count ">{count}</span>}
               </Link>
               <Link to={{ pathname: '/login' }}>
-                <svg className="md:w-12 md:h-8 w-7 hover:cursor-pointer md:-mb-2" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg className="md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5 5.5C5 4.11929 6.11929 3 7.5 3C8.88071 3 10 4.11929 10 5.5C10 6.88071 8.88071 8 7.5 8C6.11929 8 5 6.88071 5 5.5Z" fill="#000000" />
                   <path fillRule="evenodd" clipRule="evenodd" d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0ZM1 7.5C1 3.91015 3.91015 1 7.5 1C11.0899 1 14 3.91015 14 7.5C14 9.34956 13.2275 11.0187 11.9875 12.2024C11.8365 10.4086 10.3328 9 8.5 9H6.5C4.66724 9 3.16345 10.4086 3.01247 12.2024C1.77251 11.0187 1 9.34956 1 7.5Z" fill="#000000" />
                 </svg>
               </Link>
-              <Link to={'/contact'} className='w-10'>
-                <img className='md:w-12 md:h-8 w-7 hover:cursor-pointer' src="../src/assets/carPic/call-logo.png" alt="" />
+              <Link to={'/contact'} className='w-10 md:mr-3'>
+                <img className='md:w-10 md:h-7 w-6 hover:cursor-pointer' src="../src/assets/carPic/call-logo.png" alt="" />
               </Link>
             </div>
             <button onClick={() => navigate(+1)}

@@ -1,13 +1,15 @@
-import { useContext } from "react";
-import Products from "../header/Products";
-import Service from "../header/Service";
-import Menubar from "../menu_bar/Menubar";
+import { useContext, useEffect } from "react";
 import { StoreContext } from "../context/StoreContext";
+import Products from "../header/Products";
+import Menubar from "../menu_bar/Menubar";
 
 function ServicePage() {
 
-    const { showProducts, showService, menu } = useContext(StoreContext);
+    const { showProducts, setMenu, menu } = useContext(StoreContext);
     
+    useEffect(()=>{
+                setMenu(false)
+            },[])
 
     return (
         <>
@@ -19,10 +21,6 @@ function ServicePage() {
           {/* When we hover on Product is render "Products" component */}
           {
             showProducts && (<Products/>)
-          }
-          {/* When we hover on Service is render "Service" component */}
-          {
-            showService && (<Service />)
           }
         </div>
             <div className="container my-40  mx-auto max-w-5xl flex gap-12 flex-wrap items-start justify-center md:justify-between ">

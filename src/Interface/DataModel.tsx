@@ -9,36 +9,11 @@ export const UserInfo = {
     address: ''
 }
 
-// export const Insurance = {
-//     insuranceExpiryDate: '',
-//     issueDate: '',
-//     typeOfInsurance: ''
-// }
-
-// export const Car = {
-//     carId: '',
-//     make: '',
-//     year: '',
-//     transmission: '',
-//     engineCapacity: '',
-//     mileage: '',
-//     // registrationNumber:'',
-//     vin: '',
-//     model: '',
-//     fuelType: '',
-//     price: '',
-//     color: '',
-//     carImage: '',
-//     carLogo: ''
-//     // insurance:Insurance
-// }
-
 export const User = {
     userId: '',
     userName: '',
     password: '',
     userInfo: UserInfo,
-    // car: Car
 }
 
 export interface Cars {
