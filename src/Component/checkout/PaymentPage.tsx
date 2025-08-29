@@ -5,7 +5,7 @@ import { createPayment } from "../../Api";
 import { StoreContext } from "../context/StoreContext";
 import CheckoutForm from "./CheckoutForm";
 
-const stripePromise = loadStripe("pk_test_51RvD1GBhApNxar7JthXCqUYG2p6SCSFQtmmzTox2eVubm0Ef5KqDJ0Roe6O2JJA0mvb1ge1WPY1f1f31ULmgJWXN00K5VsxePb");
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC);
 
 export default function PaymentPage() {
   

@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { CartData } from "./Interface/DataModel";
 
-const API="http://localhost:8080";
+const API=import.meta.env.VITE_API;
 
 const loadToken=()=>{
     return sessionStorage.getItem('token')
