@@ -7,7 +7,7 @@ import CheckoutForm from "./CheckoutForm";
 import Menubar from "../menu_bar/Menubar";
 import Products from "../header/Products";
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export default function PaymentPage() {
   

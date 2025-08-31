@@ -12,6 +12,9 @@ function Cart() {
 	const [cart, setCart] = useState<CartData>({ items: {} });
 	const [loading, setLoading] = useState(false);
 	const { totals, getTotal, menu, showProducts, setMenu } = useContext(StoreContext)
+	const [deletePop, setDeletePop] = useState(false);
+	const [confirmDelete, setConfirmDelete] = useState(false);
+	const [tempCarId, setTempCarId] = useState("");
 
 	async function increaseCart(carId: any) {
 		const response: any = await IncreaseItemApi(carId);
@@ -30,10 +33,19 @@ function Cart() {
 	}
 
 	async function deleteItem(carId: any) {
-		const respone: any = await deleteItemApi(carId);
+		setDeletePop(true);
+		console.log(confirmDelete)
+		setTempCarId(carId);
+		return;
+	}
+
+	async function deleteItemConfirm() {
+		setDeletePop(false)
+		const respone: any = await deleteItemApi(tempCarId);
 		if (respone == 200) {
 			getCart();
 		}
+		return;
 	}
 
 	const getCart = async () => {
@@ -57,8 +69,36 @@ function Cart() {
 
 	return (
 		<>
+			{deletePop && (
+				<div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+					<div className="bg-white w-[24rem] h-[8rem] px-10 py-5 rounded-2xl border shadow-lg">
+						<p className="text-xl">Are you sure you want to delete?</p>
+						<div className="mt-4 flex justify-end gap-4">
+							<button
+								className="bg-gray-400 hover:bg-gray-500 text-white rounded-md px-4 py-1"
+								onClick={() => {
+									setDeletePop(false);
+									setConfirmDelete(false);
+								}}
+							>
+								Close
+							</button>
+							<button
+								className="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-1"
+								onClick={() => {
+									deleteItemConfirm();
+									setDeletePop(false);
+								}}
+							>
+								Sure
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 
-			<div className="relative">
+
+			<div className={`relative`}>
 				<div className="relative -top-5 z-10">
 					{menu && (
 						<Menubar />
@@ -69,7 +109,8 @@ function Cart() {
 						showProducts && (<Products />)
 					}
 				</div>
-				<div className=" md:h-screen md:py-8 my-5 min-h-screen">
+
+				<div className=" md:h-screen md:py-8 my-5 min-h-screen ">
 					<div className="container mx-auto px-4">
 						<h1 className={`text-2xl font-semibold mb-4 
 							${loading ? 'text-left' : 'text-center text-3xl'}`}>Shopping Cart</h1>

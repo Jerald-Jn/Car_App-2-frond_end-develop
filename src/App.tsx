@@ -31,7 +31,7 @@ function App() {
     <>
     <div className='dark:text-white dark:bg-black/80'>
       {
-        true ?
+        carsList.length>0 ?
           <>
             <Header></Header>
             <Routes>

@@ -52,7 +52,7 @@ export function About() {
                                         Ariyalur</li>
                             </ul>
 
-                            <ul className="w-full text-gray-900 dark:text-gray-200 font-serif">
+                            <ul className="w-full text-gray-900 dark:text-gray-200">
                                     <li className="py-2 border-b border-gray-200 dark:border-gray-600"><span className="font-bold">Email :</span>
                                     <a href="mailto:jjerald2000@gmail.com" className="text-red-500 underline"> jjerald2000@gmail.com</a>
                                 </li>
