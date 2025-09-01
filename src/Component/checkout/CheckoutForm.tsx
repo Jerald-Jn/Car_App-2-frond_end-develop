@@ -20,7 +20,7 @@ export default function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "https://car-application-production.up.railway.app/payment-success",
+        return_url: "https://benevolent-cassata-8c8a31.netlify.app/payment-success",
       },
     });
 
