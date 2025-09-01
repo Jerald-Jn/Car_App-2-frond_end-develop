@@ -6,12 +6,12 @@ import type { CartData } from "../../Interface/DataModel";
 
 function Header() {
 
-  const { setShowProducts, setShowService, setMenu, menu, totals,setCount,count, setLoading,loading} = useContext(StoreContext)
+  const { setShowProducts, setMenu, menu, totals, setCount, count, setLoading, loading } = useContext(StoreContext)
   const navigate = useNavigate();
   const focusElement = useRef<HTMLDivElement>(null)
-  
-  const clientSecret = sessionStorage.getItem('clientSecret');
-  const [backgroundcolor,setBackgroundColor]=useState(false);
+
+  const clientSecret = localStorage.getItem('clientSecret');
+  const [backgroundcolor, setBackgroundColor] = useState(false);
 
   useEffect(() => {
     const getCart = async () => {
@@ -31,25 +31,25 @@ function Header() {
   }, [navigate, totals, clientSecret])
 
   useEffect(() => {
-		if (focusElement.current) {
-			focusElement.current.scrollIntoView({ behavior: "smooth", block: "start" });
-		}
-	}, [navigate]);
+    if (focusElement.current) {
+      focusElement.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [navigate]);
 
 
   return (
     <>
       {/* Header Section with navigation bar */}
-      <header className='bg-white border-b-2 border-black/10 dark:bg-white dark:text-black' onMouseEnter={() => { setShowProducts(false), setShowService(false) }}>
+      <header className='bg-white border-b-2 border-black/10 dark:bg-white dark:text-black' onMouseEnter={() => { setShowProducts(false) }}>
         <nav className=''>
           <div ref={focusElement} className='flex flex-row justify-between mt-0.5 p-2 md:ml-5 md:p-5'>
-            <button onClick={() => navigate(-1)}
+            {/* <button onClick={() => navigate(-1)}
               className="inline-flex items-center border-2 border-black px-0.5 py-0.5 rounded-md text-black hover:bg-indigo-50 relative md:-translate-x-5">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18">
                 </path>
               </svg>
-            </button>
+            </button> */}
             <svg className="block md:hidden h-8 w-[2rem] cursor-pointer"
               onClick={() => { setMenu(!menu) }}
               viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -66,33 +66,33 @@ function Header() {
 
             <div className='hidden md:block w-full pl-2'>
               <ul className='flex flex-row gap-5 items-center uppercase text-xs font-bold md:mt-3'>
-                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowProducts(true), setShowService(false) }}>
+                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowProducts(true) }}>
                   <a >Products</a>
                 </li>
                 <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'
                   onMouseEnter={() => { setShowProducts(false) }}>
                   <Link to={'/service'} >Service</Link>
                 </li>
-                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowService(false), setShowProducts(false) }}>
+                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowProducts(false) }}>
                   <Link to={'/explore'}  >Buy Online</Link></li>
-                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'>
+                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowProducts(false) }}>
                   <Link to={'/about'}  >About me</Link>
                 </li>
               </ul>
             </div>
 
             <div className="flex flex-row md:w-[20rem] md:gap-x-4 gap-x-2 justify-evenly w-[10rem] items-center ">
-              <button className="rounded-md w-8 h-6 ml-3" onClick={() =>{
+              <button className="rounded-md w-8 h-6 ml-3" onClick={() => {
                 document.documentElement.classList.toggle("dark")
                 setBackgroundColor(!backgroundcolor);
               }
               }>{
-                backgroundcolor?
-                <svg className="w-6 ml-2 md:mt-1" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
-                   viewBox="0 0 292.548 292.548"
-                  xmlSpace="preserve">
-                  <g>
-                    <path d="M221.253,146.83c0,39.842-32.396,72.231-72.223,72.231c-39.839,0-72.238-32.401-72.238-72.231
+                  backgroundcolor ?
+                    <svg className="w-6 ml-2 md:mt-1" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                      viewBox="0 0 292.548 292.548"
+                      xmlSpace="preserve">
+                      <g>
+                        <path d="M221.253,146.83c0,39.842-32.396,72.231-72.223,72.231c-39.839,0-72.238-32.401-72.238-72.231
 		c0-39.833,32.405-72.231,72.238-72.231C188.851,74.598,221.253,107.002,221.253,146.83z M149.03,47.105
 		c3.984,0,7.221-3.239,7.221-7.224V9.776c0-3.996-3.23-7.224-7.221-7.224c-3.996,0-7.23,3.233-7.23,7.224v30.105
 		C141.8,43.866,145.028,47.105,149.03,47.105z M220.917,83.821c1.849,0,3.698-0.703,5.104-2.114l25.881-25.875
@@ -108,14 +108,14 @@ function Header() {
 		H7.218c-3.99,0-7.218,3.228-7.218,7.224c0,3.993,3.233,7.224,7.218,7.224h32.51C43.718,154.053,46.96,150.823,46.96,146.83z
 		 M285.324,139.606h-38.527c-3.987,0-7.218,3.228-7.218,7.224c0,3.993,3.23,7.224,7.218,7.224h38.527
 		c3.987,0,7.224-3.23,7.224-7.224C292.548,142.833,289.312,139.606,285.324,139.606z"/>
-                  </g>
-                </svg>
-                :<svg className='w-6 ml-2 md:mt-1' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <g>
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z" />
-                  </g>
-                </svg>
+                      </g>
+                    </svg>
+                    : <svg className='w-6 ml-2 md:mt-1' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <g>
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z" />
+                      </g>
+                    </svg>
                 }
               </button>
 
@@ -134,16 +134,29 @@ function Header() {
                 </svg>
               </Link>
               <Link to={'/contact'} className='w-10 md:mr-3'>
-                <img className='md:w-10 md:h-7 w-6 hover:cursor-pointer' src="../src/assets/carPic/call-logo.png" alt="" />
+                <svg className="md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+                  <defs>
+
+                  </defs>
+                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -7319.000000)" fill="#000000">
+                      <g id="icons" transform="translate(56.000000, 160.000000)">
+                        <path d="M94,7167 L94,7169 L96,7169 C96,7167.895 95.105,7167 94,7167 M94,7163 L94,7165 C96.206,7165 98,7166.794 98,7169 L100,7169 C100,7165.686 97.314,7163 94,7163 M94,7159 L94,7161 C98.411,7161 102,7164.589 102,7169 L104,7169 C104,7163.477 99.523,7159 94,7159 M98.652,7177.234 C98.641,7177.265 98.64,7177.27 98.652,7177.234 M98.117,7174.578 C97.422,7174.204 96.719,7173.778 95.992,7173.481 C94.587,7172.908 94.682,7174.602 93.679,7175.151 C93.027,7175.508 92.107,7174.861 91.538,7174.503 C90.544,7173.877 89.663,7173.053 88.931,7172.1 C88.556,7171.613 87.728,7170.697 87.83,7170.014 C87.992,7168.93 89.274,7168.876 88.907,7167.55 C88.711,7166.84 88.36,7166.141 88.097,7165.457 C87.745,7164.54 87.6,7163.953 86.573,7164.003 C85.831,7164.039 85.339,7164.356 84.883,7164.951 C83.649,7166.558 83.835,7168.725 84.664,7170.488 C85.838,7172.983 87.85,7175.335 89.999,7176.855 C91.461,7177.889 93.387,7178.828 95.157,7178.987 C96.453,7179.104 98.266,7178.403 98.73,7176.996 C98.698,7177.094 98.667,7177.189 98.652,7177.234 C98.663,7177.199 98.687,7177.128 98.73,7176.996 C98.777,7176.854 98.8,7176.783 98.811,7176.751 C98.797,7176.793 98.765,7176.891 98.731,7176.993 C99.139,7175.753 99.189,7175.155 98.117,7174.578 M98.811,7176.751 C98.819,7176.727 98.819,7176.725 98.811,7176.751" id="call-[#191]">
+
+                        </path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
               </Link>
             </div>
-            <button onClick={() => navigate(+1)}
+            {/* <button onClick={() => navigate(+1)}
               className="inline-flex items-center border-2 border-black px-0.5 py-0.5 rounded-md text-black hover:bg-indigo-50">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
                 </path>
               </svg>
-            </button>
+            </button> */}
           </div>
         </nav>
       </header>

@@ -10,7 +10,6 @@ export default function CheckoutForm() {
   const [loading, setLoading] = useState(false);
   const { menu, showProducts, setMenu } = useContext(StoreContext)
 
-
   async function handleSubmit(event: any) {
     event.preventDefault();
     if (!stripe || !elements) return;
@@ -20,7 +19,7 @@ export default function CheckoutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "https://benevolent-cassata-8c8a31.netlify.app/payment-success",
+        return_url: "http://localhost:5173/payment-success",
       },
     });
 

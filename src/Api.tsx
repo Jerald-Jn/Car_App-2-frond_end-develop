@@ -4,13 +4,13 @@ import type { CartData } from "./Interface/DataModel";
 const API=import.meta.env.VITE_API_URL;
 
 const loadToken=()=>{
-    return sessionStorage.getItem('token')
+    return localStorage.getItem('token')
 }
 
 // Users Api
 export const loginApi=async(userName:string,password:string)=>{
     const response=(await axios.post(`${API}/login?userName=${userName}&password=${password}`)).data;
-    sessionStorage.setItem('token',"Bearer "+response)
+    localStorage.setItem('token',response)
     return response;
 }
 
@@ -28,7 +28,7 @@ export const getCarByCarName=async(model:any)=>{
     try {
     const response=(await axios.get(`${API}/cars/get/${model}`,{
         headers:{
-            Authorization:loadToken()
+            Authorization:`Bearer ${loadToken()}`
         }
     })).data;
     console.log(response)
@@ -50,11 +50,11 @@ export const createPayment=async(customerDetail:any)=>{
     try {
         const response= (await axios.post(`${API}/payments/create-payment`, customerDetail,{
             headers:{
-                Authorization:loadToken()
+                Authorization:`Bearer ${loadToken()}`
             }
         } )).data;
         console.log(response);
-        sessionStorage.setItem('clientSecret',response);
+        localStorage.setItem('clientSecret',response);
         return response;
     } catch (error) {
         
@@ -65,7 +65,7 @@ export const getUserCart=async()=>{
     try {
         const response= (await axios.get(`${API}/cart`,
             {headers:{
-                Authorization:loadToken()
+                Authorization:`Bearer ${loadToken()}`
             }})).data;
             return response;
     } catch (error) {
@@ -78,7 +78,7 @@ export const addCartApi=async(model:CartData)=>{
         console.log(model)
         const response=(await axios.post(`${API}/cart/create`,model,{
             headers:{ 
-                Authorization:loadToken() 
+                Authorization:`Bearer ${loadToken()}`
             }
         })).data; 
         return response;
@@ -92,7 +92,7 @@ export const verifyPayment=async(clientSecret:any)=>{
         console.log(clientSecret)
         const response = (await axios.get(`${API}/payments/verify-payment/${clientSecret}`,{
             headers:{
-                Authorization:loadToken()
+                Authorization:`Bearer ${loadToken()}`
             }
         })).data;
         console.log(response);
@@ -106,7 +106,7 @@ export const clearCart=async()=>{
     try {
         const response = (await axios.delete(`${API}/cart/clear-cart`,{
             headers:{
-            Authorization:loadToken()
+            Authorization:`Bearer ${loadToken()}`
         }})).data
         console.log(response)
         return response;
@@ -128,7 +128,7 @@ export const userRegister=async(registerData:any)=>{
 export const removeCart=async(carId:any)=>{
     const respone=(await (axios.delete(`${API}/cart/remove/${carId}`,{
         headers:{
-            Authorization:loadToken()
+            Authorization:`Bearer ${loadToken()}`
         }
     }))).data
     console.log(respone);
@@ -138,7 +138,7 @@ export const removeCart=async(carId:any)=>{
 export const deleteItemApi=async(carId:any)=>{
     const respone=(await (axios.delete(`${API}/cart/delete/${carId}`,{
         headers:{
-            Authorization:loadToken()
+            Authorization:`Bearer ${loadToken()}`
         }
     }))).status;
     return respone;
@@ -147,7 +147,7 @@ export const deleteItemApi=async(carId:any)=>{
 export const IncreaseItemApi=async(carId:any)=>{
     const respone=(await (axios.get(`${API}/cart/increase/${carId}`,{
         headers:{
-            Authorization:loadToken()
+            Authorization:`Bearer ${loadToken()}`
         }
     }))).data;
     console.log("increase cart -> ",respone)

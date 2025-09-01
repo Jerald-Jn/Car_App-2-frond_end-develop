@@ -8,7 +8,7 @@ import Menubar from "../menu_bar/Menubar";
 
 function Explore() {
     const { carsList, menu, showProducts, setMenu } = useContext(StoreContext);
-    let token=sessionStorage.getItem('token')
+    let token=localStorage.getItem('token')
     const [cart, setCart] = useState<CartData>({ items: {} });
     const navigate = useNavigate();
     let updateCart: CartData = {
@@ -78,13 +78,15 @@ function Explore() {
                 }
             </div>
             }
-                <div key={carsList} className="grid-cols-1 grid md:grid-cols-4 md:mx-10 mx-auto">
+                <div key={carsList} className="grid-cols-1 grid md:grid-cols-4 md:mx-10 mx-3">
                     {
                         carsList.map((car: Cars) => (
                             <div key={car.carId} className="my-5 md:mx-2 scale-95 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full *
                                     hover:scale-100  hover:shadow-2xl hover:rounded-2xl hover:border-2 duration-300 dark:text-white dark:bg-black/30">
                                 <div className="relative">
+                                    <Link to={`/car/${car.model}`}>
                                     <img src={car.carImage} alt="Product image" className="w-full h-64 object-cover object-center" />
+                                    </Link>
                                     <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
                                 </div>
                                 <div className="p-4 ">

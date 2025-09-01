@@ -11,7 +11,7 @@ function Car() {
     const { menu, showProducts, setMenu } = useContext(StoreContext);
     const [car, setCar] = useState<Cars>();
     const [cart, setCart] = useState<CartData>({ items: {} });
-    let token = sessionStorage.getItem('token')
+    let token = localStorage.getItem('token')
     let updateCart: CartData = {
         items: {}
     };
@@ -110,9 +110,11 @@ function Car() {
 
                     {
                         !token &&
-                        <div className="flex gap-5 mix-blend-multiply justify-center">
-                            <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, Please login</h1>
-                            <Link to={{ pathname: '/login' }} className="text-center mt-5 font-semibold text-2xl text-blue-500">Login</Link>
+                        <div className="flex mix-blend-multiply justify-center">
+                            <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, Please
+                                <Link to={{ pathname: '/login' }} className="text-center mt-5 font-semibold text-2xl text-blue-500"> login</Link>
+
+                            </h1>
                         </div>
                     }
                     {

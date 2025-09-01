@@ -4,7 +4,7 @@
 .cart-count {
             position: absolute;
             top:20px;
-            right:11.1rem;
+            right:9.7rem;
             background-color: #ff6b6b;
             color: white;
             border-radius: 50%;
@@ -17,7 +17,7 @@
         }
 @media (max-width: 768px) {
   .cart-count {
-    right: 7.5rem;   /* adjust for mobile */
+    right: 5.5rem;   /* adjust for mobile */
     top: 11.3px;
     width: 15px;
     height: 15px;
@@ -26,7 +26,7 @@
 }
 @media (max-width: 414px) {
   .cart-count {
-    right: 7.3rem;   /* adjust for mobile */
+    right: 5.3rem;   /* adjust for mobile */
     top: 9.5px;
     width: 15px;
     height: 15px;

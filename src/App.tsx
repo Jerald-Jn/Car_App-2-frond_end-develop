@@ -19,12 +19,12 @@ import ServicePage from './Component/servicePage/ServicePage';
 function App() {
 
   const { carsList } = useContext(StoreContext);
-  let token = sessionStorage.getItem('token');
+  let token = localStorage.getItem('token');
   const navigate = useNavigate();
 
 
   useEffect(() => {
-    token = sessionStorage.getItem('token');
+    token = localStorage.getItem('token');
   }, [navigate, carsList])
 
   return (

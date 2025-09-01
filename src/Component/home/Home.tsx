@@ -46,15 +46,15 @@ function Home() {
     <>
 
       {/* Hero section */}
-      <div>
-        <div className='relative'>
+      <div className='overflow-hidden'>
+        <div className='relative w-full h-auto'>
           {carsList.length > 0 && (
             carsList.map((car: Cars, i: number) =>
               <a
                 key={car.carId}
                 className={i === index ? 'block' : 'hidden'}
               >
-                <img className="min-w-full" src={car.carImage} alt={car.model} />
+                <img className="w-full h-auto object-cover" src={car.carImage} alt={car.model} />
               </a>
             )
           )}
@@ -68,38 +68,59 @@ function Home() {
             showProducts && (<Products/>)
           }
 
-          {/* Change Image use Previos button */}
-          <div className='hidden md:block absolute top-1/2 left-5'>
-            <button className='bg-white/50' onClick={() => changeImage('previous')}>
-              <svg className='h-20 w-15 cursor-pointer' fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M 26 6 L 6 15.21875 L 6 16.78125 L 26 26 L 26 23.84375 L 9.46875 16 L 26 8.15625 Z" /></svg>
-            </button>
-          </div>
-          {/* Change image using Next button */}
-          <div className=' hidden md:block absolute top-1/2 right-5'>
-            <button className='bg-white/50' onClick={() => changeImage('next')}>
-              <svg className='h-20 w-15 cursor-pointer' fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M 6 6 L 6 8.15625 L 22.53125 16 L 6 23.84375 L 6 26 L 26 16.78125 L 26 15.21875 Z" /></svg>
-            </button>
-          </div>
+          {/* Previous Button (only on medium+ screens) */}
+    <div className="hidden md:block absolute top-1/2 left-5 -translate-y-1/2">
+      <button
+        className="bg-white/70 rounded-full p-2 hover:bg-white"
+        onClick={() => changeImage("previous")}
+      >
+        <svg
+          className="h-10 w-10 cursor-pointer"
+          fill="#000000"
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M 26 6 L 6 15.21875 L 6 16.78125 L 26 26 L 26 23.84375 L 9.46875 16 L 26 8.15625 Z" />
+        </svg>
+      </button>
+    </div>
+
+    {/* Next Button (only on medium+ screens) */}
+    <div className="hidden md:block absolute top-1/2 right-5 -translate-y-1/2">
+      <button
+        className="bg-white/70 rounded-full p-2 hover:bg-white"
+        onClick={() => changeImage("next")}
+      >
+        <svg
+          className="h-10 w-10 cursor-pointer"
+          fill="#000000"
+          viewBox="0 0 32 32"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M 6 6 L 6 8.15625 L 22.53125 16 L 6 23.84375 L 6 26 L 26 16.78125 L 26 15.21875 Z" />
+        </svg>
+      </button>
+    </div>
         </div>
       </div>
 
       {/*Banner Section */}
       <div>
         <a  >
-          <img src="./src/assets/car pic/banner.jpg" alt="" />
+          <img src="./src/assets/carPic/banner.jpg" className="w-full h-auto object-cover" alt="" />
         </a>
       </div>
 
       <div className="text-center p-10">
-          <h1 className='text-center tracking-wide font-bold text-3xl'>Discover the <span className='text-blue-700'>TOYOTA</span> range</h1>
+          <h1 className='tracking-wide font-bold text-2xl md:text-3xl'>Discover the <span className='text-blue-700'>TOYOTA</span> range</h1>
       </div>
 
       {/* <!--  Grid Section - Starts Here --> */}
       <section id="Projects"
-          className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-5 md:grid-cols-2 justify-items-center justify-center gap-y-20 gap-x-14 mt-10 mb-10">
+          className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-y-10 gap-x-8 mt-10 mb-10 px-4">
             {
             carsList.map((car: Cars) =>
-          <div key={car.carId} className="w-60 flex rounded-xl duration-500 hover:scale-110 hover:shadow-2xl bg-white/80">
+          <div key={car.carId} className="mx-1 flex rounded-xl scale-95 duration-500 hover:scale-100 hover:shadow-2xl bg-white/80">
               <Link to={`/car/${car.model}`}  className='px-8'>
                   <img src={car.carLogo}
                           alt={car.model} className=" object-cover rounded-t-xl mix-blend-multiply" />
