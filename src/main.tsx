@@ -7,6 +7,7 @@ import {  StoreContextProvider } from './Component/context/StoreContext'
 createRoot(document.getElementById('root')!).render(
   <>
     <BrowserRouter>
+    {/* makes your global store available */}
       <StoreContextProvider>
         <App></App>
       </StoreContextProvider>

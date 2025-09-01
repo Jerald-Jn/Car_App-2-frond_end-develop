@@ -8,7 +8,8 @@ import Products from "../header/Products";
 
 export default function Success() {
 
-  const { setCount, setLoading,menu, showProducts, setMenu } = useContext(StoreContext);
+  // destructure the StoreContext variable
+  const { setCount, setLoading, menu, showProducts, setMenu } = useContext(StoreContext);
   const location = useLocation();
   const navigate = useNavigate();
   const [paymentResponse, setPaymentResponse] = useState({
@@ -19,7 +20,8 @@ export default function Success() {
   })
 
 
-  // Stripe might append ?payment_intent=pi_123&payment_intent_client_secret=...
+  // Stripe API ?payment_intent=pi_123&payment_intent_client_secret=...
+  // It means the currrent API to get query data  
   const query = new URLSearchParams(location.search);
   const paymentIntentId = query.get("payment_intent");
 
@@ -43,16 +45,16 @@ export default function Success() {
 
   return (
     <>
-     <div className="relative">
-                {menu && (
-                    <Menubar />
-                )
-                }
-                {/* When we hover on Product is render "Products" component */}
-                {
-                    showProducts && (<Products />)
-                }
-            </div>
+      <div className="relative">
+        {menu && (
+          <Menubar />
+        )
+        }
+        {/* When we hover on Product is render "Products" component */}
+        {
+          showProducts && (<Products />)
+        }
+      </div>
       <div className="min-h-full flex items-center justify-center px-4 my-8 bg-white/20">
         <div className=" bg-opacity-10 border border-white/10 border-opacity-20 rounded-3xl p-8 md:p-6 max-w-md w-full text-center shadow-2xl">
           {/* <!-- Success Icon --> */}

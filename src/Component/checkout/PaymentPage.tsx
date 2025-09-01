@@ -44,6 +44,7 @@ export default function PaymentPage() {
                 }
             </div>
       {clientSecret && (
+        // "Elements" used the stripe publishable key and what are the payment method option available
         <Elements stripe={stripePromise} options={options}>
           <CheckoutForm />
         </Elements>

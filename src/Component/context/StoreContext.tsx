@@ -2,15 +2,16 @@ import { createContext, useEffect, useState } from 'react';
 import { PaymentRequest, type Cars } from '../../Interface/DataModel';
 import { getListOfCars } from '../../Api';
 
-// 1. Create and export the context.
-//    Provide a default value that matches the expected shape.
+// Create and export the "React Context" global store, this context will be used by components to access global data
 export const StoreContext = createContext<any>(null);
 
+
+// Declare "Provider Component", it wraps the app and provides global state values to all children component via context
 export const StoreContextProvider = (props: any) => {
 
+// Declare "React State" variable and "Setter" function to update value and it's also update the "VIRTUAL DOM" 
   const [carsList, setCarsList] = useState<any[]>([]);
   const [showProducts, setShowProducts] = useState(false);
-  const [showService, setShowService] = useState(false);
   const [menu, setMenu] = useState(false);
   const [totals, setTotals] = useState({ subTotal: 0, tax: 0, shipping: 0, total: 0 });
   const[customer,setCustomer]=useState(PaymentRequest)
@@ -34,8 +35,7 @@ export const StoreContextProvider = (props: any) => {
     setTotals((prev) => ({...prev, subTotal: subTotal, tax: tax, shipping: shipping, total: totals }));
   };
 
-
-
+// useEffect runs based on dependency []
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -50,10 +50,11 @@ export const StoreContextProvider = (props: any) => {
     fetchCars();
   }, []);
 
+// Single object contains all states variable and functions
+// This will be provided globally so other components can use them with "useContext(StoreContext)"
   const contextValue = {
     carsList,
     showProducts, setShowProducts,
-    showService, setShowService,
     menu, setMenu,
     getTotal, totals,setTotals,
     customer,setCustomer,
@@ -62,6 +63,7 @@ export const StoreContextProvider = (props: any) => {
     loading,setLoading
   };
 
+// "props.children" means anything inside this provider will hava accesss the "contextValue"
   return (
     <StoreContext.Provider value={contextValue}>
       {props.children}
