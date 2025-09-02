@@ -46,7 +46,7 @@ function Home() {
     <>
 
       {/* Hero section */}
-      <div className='overflow-hidden'>
+      <div className=''>
         <div className='relative w-full h-auto'>
           {carsList.length > 0 && (
             carsList.map((car: Cars, i: number) =>

@@ -26,11 +26,7 @@ export const getListOfCars=async()=>{
 }
 export const getCarByCarName=async(model:any)=>{
     try {
-    const response=(await axios.get(`${API}/cars/get/${model}`,{
-        headers:{
-            Authorization:`Bearer ${loadToken()}`
-        }
-    })).data;
+    const response=(await axios.get(`${API}/cars/get/${model}`)).data;
     console.log(response)
     return response;
 } catch (error) {

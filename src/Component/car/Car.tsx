@@ -144,7 +144,7 @@ function Car() {
                                         <p className="text-red-600 text-2xl mb-4">{car.make}</p>
                                         <div className="mb-4">
                                             <span className="text-2xl font-bold mr-2"><span className="text-black/80 text-2xl font-bold">$</span> {car.price}</span>
-                                            <span className="text-gray-500 line-through"><span className="text-black/80 text-sm font-bold">$</span>{car.price * 1.5}</span>
+                                            <span className="text-gray-500  line-through"><span className="text-black/80 text-sm font-bold">$</span>{car.price * 1.5}</span>
                                         </div>
                                         <div className="flex items-center mb-4">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"

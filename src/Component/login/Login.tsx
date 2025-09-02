@@ -81,7 +81,7 @@ function Login() {
                         <label className="text-white" htmlFor="userName">Username</label>
                         <input
                             ref={inputRef}
-                            className="bg-white/80 p-0.5 text-center rounded-lg"
+                            className="bg-white/80 dark:text-black p-0.5 text-center rounded-lg"
                             type="text"
                             id="userName"
                             placeholder="enter username"
@@ -91,14 +91,14 @@ function Login() {
                     </div>
                     <div className="flex flex-col space-y-2 md:mt-4 items-center">
                         <label className="text-white" htmlFor="password">Password</label>
-                        <input className="bg-white/80 p-0.5 text-center rounded-lg relative"
+                        <input className="bg-white/80 dark:text-black p-0.5 text-center rounded-lg relative"
                             type={showPassword ? 'text' : 'password'}
                             id="password"
                             placeholder="******"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)} />
-                        <button type="button" onClick={viewPassword} className="absolute transform translate-x-24 translate-y-7 pr-10">
-                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        <button type="button" onClick={viewPassword} className="absolute border-none transform translate-x-24 translate-y-7 mr-10">
+                            {showPassword ? <EyeOff className="text-black" size={18} /> : <Eye className="text-black" size={18} />}
                         </button>
                         {invalid2 && (<span className="text-red-700">Please enter password</span>)}
                     </div>

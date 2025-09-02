@@ -94,13 +94,13 @@ export default function Success() {
             className="bg-green-600 bg-opacity-10 rounded-2xl p-3 mb-5 border border-white border-opacity-10"
             style={{ animationDelay: "0.4s" }}
           >
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-black text-opacity-90">Amount</span>
+            <div className="flex md:flex-row flex-col justify-between items-center mb-2">
+              <span className="text-black text-sm md:text-lg text-opacity-90">Amount</span>
               <span className="text-2xl font-bold text-black">{paymentResponse.amount}</span>
             </div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-black text-opacity-90">Transaction ID</span>
-              <span className="text-black font-mono text-sm">{paymentResponse.id}</span>
+            <div className="flex md:flex-row flex-col justify-between items-center mb-2 ">
+              <span className="text-black text-opacity-90 text-sm md:text-lg">Transaction ID</span>
+              <span className="text-black font-mono text-sm overflow-hidden">{paymentResponse.id}</span>
             </div>
           </div>
 

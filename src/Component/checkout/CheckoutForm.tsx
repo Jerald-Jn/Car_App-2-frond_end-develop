@@ -10,16 +10,18 @@ export default function CheckoutForm() {
   const [loading, setLoading] = useState(false);
   const { menu, showProducts, setMenu } = useContext(StoreContext)
 
+  const API=import.meta.env.VITE_PAYMENT_URL;
+
   async function handleSubmit(event: any) {
     event.preventDefault();
     if (!stripe || !elements) return;
-
+    console.log("URL -> ",API)
     setLoading(true);
     // It calls the "stripe" confirmPayment "API", it confirmed it return url
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:5173/payment-success",
+        return_url: `${API}/payment-success`,
       },
     });
 
