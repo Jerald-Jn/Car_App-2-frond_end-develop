@@ -71,7 +71,7 @@ function Cart() {
 		<>
 			{deletePop && (
 				<div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
-					<div className="bg-white w-[24rem] h-[8rem] px-10 py-5 rounded-2xl border shadow-lg">
+					<div className="bg-white dark:text-black w-[24rem] h-[8rem] px-10 py-5 rounded-2xl border shadow-lg">
 						<p className="text-xl">Are you sure you want to delete?</p>
 						<div className="mt-4 flex justify-end gap-4">
 							<button
@@ -117,10 +117,10 @@ function Cart() {
 						{
 							loading ?
 
-								<div className="flex flex-col md:flex-row gap-4">
+								<div className="flex flex-col md:flex-row gap-4 ">
 									<div className="md:w-3/4">
-										<div className="bg-white/10 rounded-lg shadow-2xl p-6 mb-4">
-											<table className="w-full flex-col justify-evenly dark:text-white/80">
+										<div className="bg-white/10 rounded-lg shadow-2xl p-6 mb-4 overflow-x-auto max-h-[500px]">
+											<table className="w-full flex-col justify-evenly dark:text-white/80 overflow-scroll">
 												<thead className="border-b-2 border-y-black/50 dark:border-y-white/60">
 													<tr className="flex-col md:justify-evenly  ">
 														<th className="text-left font-semibold px-2 ">Product</th>
@@ -135,7 +135,7 @@ function Cart() {
 														loading && cart && Object.entries(cart).map(([id, item]) => (
 															<tr key={id} className={`flex-col items-center  justify-evenly`}>
 																<td className="py-4 flex-col justify-center items-center ">
-																	<img className="h-16 w-24 -ml-3 mix-blend-multiply brightness-110 contrast-100" src={item.imageUrl} alt={item?.model} />
+																	<img className="h-16 w-24 -ml-3" src={item.imageUrl} alt={item?.model} />
 																	<span className="font-semibold ml-1">{item?.model}</span>
 																</td>
 																<td className="py-4"><span className="text-black/80 text-sm font-bold">$</span>{item?.price}</td>

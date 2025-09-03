@@ -108,7 +108,7 @@ export default function Success() {
           <div className="space-y-4" style={{ animationDelay: "0.6s" }}>
             <button className="w-full bg-green-300 text-purple-600 font-semibold py-2 rounded-2xl hover:bg-opacity-90 transition-all hover:bg-green-200
       duration-300 transform hover:scale-105 shadow-lg">
-              <a href={paymentResponse.receiptURL} target="_blank">Download Receipt</a>
+              <a href={paymentResponse.receiptURL} target="_blank">View Receipt</a>
             </button>
             <button className="w-full bg-transparent border-2 border-opacity-30 text-black font-semibold py-2 rounded-2xl bg-red-400
       hover:bg-red-200 transition-all duration-300 transform hover:scale-105"

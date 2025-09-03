@@ -6,7 +6,7 @@ import type { CartData } from "../../Interface/DataModel";
 
 function Header() {
 
-  const { setShowProducts, setMenu, menu, totals, setCount, count, setLoading, loading } = useContext(StoreContext)
+  const { setShowProducts, setMenu, menu, totals, setCount, count, setLoading, loading, load,setLoad } = useContext(StoreContext)
   const navigate = useNavigate();
   const focusElement = useRef<HTMLDivElement>(null)
 
@@ -14,7 +14,9 @@ function Header() {
   const [backgroundcolor, setBackgroundColor] = useState(false);
 
   useEffect(() => {
-    const getCart = async () => {
+    getCart();
+  }, [navigate, totals, clientSecret])
+   const getCart = async () => {
       const response = await getUserCart();
       let tempCount = Object.keys(response.items).length;
       if (tempCount !== 0) {
@@ -27,8 +29,6 @@ function Header() {
       }
       console.log(response)
     }
-    getCart();
-  }, [navigate, totals, clientSecret])
 
   useEffect(() => {
     if (focusElement.current) {
@@ -36,20 +36,19 @@ function Header() {
     }
   }, [navigate]);
 
+  const logout=()=>{
+    localStorage.removeItem('token');
+    setCount(0)
+    navigate('/login')
+  }
+
 
   return (
     <>
       {/* Header Section with navigation bar */}
-      <header className='bg-white border-b-2 border-black/10 dark:bg-white dark:text-black' onMouseEnter={() => { setShowProducts(false) }}>
+      <header className='bg-white border-b-2 border-black/10 dark:bg-white/50 dark:text-black' onMouseEnter={() => { setShowProducts(false); setLoad(false) }} >
         <nav className=''>
           <div ref={focusElement} className='flex flex-row justify-between mt-0.5 p-2 md:ml-5 md:p-5'>
-            {/* <button onClick={() => navigate(-1)}
-              className="inline-flex items-center border-2 border-black px-0.5 py-0.5 rounded-md text-black hover:bg-indigo-50 relative md:-translate-x-5">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18">
-                </path>
-              </svg>
-            </button> */}
             <svg className="block md:hidden h-8 w-[2rem] cursor-pointer"
               onClick={() => { setMenu(!menu) }}
               viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,26 +118,35 @@ function Header() {
                 }
               </button>
 
-              <Link to={'/cart'} className=''>
+              <Link to={'/cart'} className='' onMouseEnter={()=>setLoad(false)}>
                 <svg className="md:w-12 md:h-8 w-6 hover:cursor-pointer md:-mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="9" cy="21" r="1"></circle>
                   <circle cx="20" cy="21" r="1"></circle>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
-                {loading && <span className="cart-count ">{count}</span>}
+                {loading && count>0 && <span className="cart-count ">{count}</span>}
               </Link>
-              <Link to={{ pathname: '/login' }}>
+              <div className="" onMouseEnter={() => { setLoad(true) }} >
                 <svg className="md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 5.5C5 4.11929 6.11929 3 7.5 3C8.88071 3 10 4.11929 10 5.5C10 6.88071 8.88071 8 7.5 8C6.11929 8 5 6.88071 5 5.5Z" fill="#000000" />
-                  <path fillRule="evenodd" clipRule="evenodd" d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0ZM1 7.5C1 3.91015 3.91015 1 7.5 1C11.0899 1 14 3.91015 14 7.5C14 9.34956 13.2275 11.0187 11.9875 12.2024C11.8365 10.4086 10.3328 9 8.5 9H6.5C4.66724 9 3.16345 10.4086 3.01247 12.2024C1.77251 11.0187 1 9.34956 1 7.5Z" fill="#000000" />
-                </svg>
-              </Link>
-              <Link to={'/contact'} className='w-10 md:mr-3'>
+                <path d="M5 5.5C5 4.11929 6.11929 3 7.5 3C8.88071 3 10 4.11929 10 5.5C10 6.88071 8.88071 8 7.5 8C6.11929 8 5 6.88071 5 5.5Z" fill="#000000" />
+                <path fillRule="evenodd" clipRule="evenodd" d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0ZM1 7.5C1 3.91015 3.91015 1 7.5 1C11.0899 1 14 3.91015 14 7.5C14 9.34956 13.2275 11.0187 11.9875 12.2024C11.8365 10.4086 10.3328 9 8.5 9H6.5C4.66724 9 3.16345 10.4086 3.01247 12.2024C1.77251 11.0187 1 9.34956 1 7.5Z" fill="#000000" />
+              </svg>
+              </div>
+              { load &&
+                <div className="absolute md:top-[4.5rem] w-[9rem] top-[3.3rem] right-0 bg-white/80 dark:bg-white/50 z-10  p-2" onMouseLeave={()=>{setLoad(false)}}>
+                  <ul className="flex items-start px-5 space-y-1 flex-col cursor-pointer">
+                    <Link to={'/login'} className="hover:text-red-500">Login</Link>
+                    <li className="hover:text-red-500"><button onClick={logout}>Logout</button></li>
+                  </ul>
+                </div>
+              }
+              
+              <Link to={'/contact'} className='w-10 md:mr-3' onMouseEnter={()=>setLoad(false)}>
                 <svg className="md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                   <defs>
 
                   </defs>
-                  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
                     <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -7319.000000)" fill="#000000">
                       <g id="icons" transform="translate(56.000000, 160.000000)">
                         <path d="M94,7167 L94,7169 L96,7169 C96,7167.895 95.105,7167 94,7167 M94,7163 L94,7165 C96.206,7165 98,7166.794 98,7169 L100,7169 C100,7165.686 97.314,7163 94,7163 M94,7159 L94,7161 C98.411,7161 102,7164.589 102,7169 L104,7169 C104,7163.477 99.523,7159 94,7159 M98.652,7177.234 C98.641,7177.265 98.64,7177.27 98.652,7177.234 M98.117,7174.578 C97.422,7174.204 96.719,7173.778 95.992,7173.481 C94.587,7172.908 94.682,7174.602 93.679,7175.151 C93.027,7175.508 92.107,7174.861 91.538,7174.503 C90.544,7173.877 89.663,7173.053 88.931,7172.1 C88.556,7171.613 87.728,7170.697 87.83,7170.014 C87.992,7168.93 89.274,7168.876 88.907,7167.55 C88.711,7166.84 88.36,7166.141 88.097,7165.457 C87.745,7164.54 87.6,7163.953 86.573,7164.003 C85.831,7164.039 85.339,7164.356 84.883,7164.951 C83.649,7166.558 83.835,7168.725 84.664,7170.488 C85.838,7172.983 87.85,7175.335 89.999,7176.855 C91.461,7177.889 93.387,7178.828 95.157,7178.987 C96.453,7179.104 98.266,7178.403 98.73,7176.996 C98.698,7177.094 98.667,7177.189 98.652,7177.234 C98.663,7177.199 98.687,7177.128 98.73,7176.996 C98.777,7176.854 98.8,7176.783 98.811,7176.751 C98.797,7176.793 98.765,7176.891 98.731,7176.993 C99.139,7175.753 99.189,7175.155 98.117,7174.578 M98.811,7176.751 C98.819,7176.727 98.819,7176.725 98.811,7176.751" id="call-[#191]">
@@ -150,13 +158,6 @@ function Header() {
                 </svg>
               </Link>
             </div>
-            {/* <button onClick={() => navigate(+1)}
-              className="inline-flex items-center border-2 border-black px-0.5 py-0.5 rounded-md text-black hover:bg-indigo-50">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
-                </path>
-              </svg>
-            </button> */}
           </div>
         </nav>
       </header>

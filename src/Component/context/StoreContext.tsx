@@ -18,6 +18,9 @@ export const StoreContextProvider = (props: any) => {
   const [car, setCar] = useState<Cars[]>([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
+  const [load,setLoad]=useState(false)
+
   
 
   const getTotal = async (cartDetails:any) => {
@@ -43,7 +46,9 @@ export const StoreContextProvider = (props: any) => {
         console.log(listOfCars)
         console.log(listOfCars[0].images)
         setCarsList(listOfCars);
+        setPageLoading(false); // stop loading after successful fetch
       } catch (error) {
+        setPageLoading(false); // stop loading even if failed
         console.error('Failed to fetch cars:', error);
       }
     };
@@ -60,7 +65,9 @@ export const StoreContextProvider = (props: any) => {
     customer,setCustomer,
     car,setCar,
     count,setCount,
-    loading,setLoading
+    loading,setLoading,
+    pageLoading, setPageLoading,
+    load,setLoad
   };
 
 // "props.children" means anything inside this provider will hava accesss the "contextValue"

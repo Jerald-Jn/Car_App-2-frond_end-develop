@@ -17,7 +17,7 @@ export const User = {
 }
 
 export interface Cars {
-    imageUrl: ""
+    // imageUrl: ""
     carId: '',
     make: '',
     year: '',

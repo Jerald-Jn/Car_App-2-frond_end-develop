@@ -57,10 +57,10 @@ function Checkout() {
                 }
 
                 {
-                    true &&
-                    <div className=" bg-gray-100 text-gray-900 flex justify-center min-h-screen md:w-full ">
+                    totals &&
+                    <div className=" bg-gray-100 dark:bg-white/50 text-gray-900 flex justify-center min-h-screen md:w-full ">
                         <form onSubmit={(event) => { event.preventDefault(); purchase(); }} className="min-h-lvh m-5">
-                            <div className="md:max-w-screen-xl bg-white shadow sm:rounded-lg flex justify-center  md:flex-row flex-col">
+                            <div className="md:max-w-screen-xl bg-white dark:bg-white/40 shadow sm:rounded-lg flex justify-center  md:flex-row flex-col">
                                 <div className="md:w-3/5 p-6 -mt-2 h-fit sm:p-12">
                                     <div className="bg-white/50 p-5 rounded-lg shadow-md border-2">
 

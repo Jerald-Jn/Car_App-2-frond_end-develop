@@ -54,7 +54,7 @@ function Login() {
     }
 
     return (
-        <div className="bg-[url('../src/assets/carPic/camry/camry-banner.jpg')] bg-cover bg-center min-h-screen">
+        <div className="bg-[url('../../camry-banner.jpg')] bg-cover bg-center min-h-screen">
             <div className="relative">
             {/* Menu bar for small screen */}
                         {menu && (

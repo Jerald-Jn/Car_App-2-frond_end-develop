@@ -74,7 +74,7 @@ function Explore() {
                 }
                 {
                     !token && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart, 
-                    <Link to={'/login'}>Please login</Link></h1>
+                    <Link to={'/login'} className="text-blue-500"><span className="text-red-500"> Please</span> login</Link></h1>
                 }
             </div>
             }

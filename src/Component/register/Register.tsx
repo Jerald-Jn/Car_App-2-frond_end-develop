@@ -4,6 +4,7 @@ import { userRegister } from "../../Api";
 import { StoreContext } from "../context/StoreContext";
 import Products from "../header/Products";
 import Menubar from "../menu_bar/Menubar";
+import { Eye, EyeOff } from "lucide-react";
 
 export function Register() {
 
@@ -25,6 +26,8 @@ export function Register() {
     const [invalid8, setInvalid8] = useState(false);
     const navigate = useNavigate();
     const [loading,setLoading]=useState(false)
+    const [passwordView1,setPasswordView1]=useState(false);
+    const [passwordView2,setPasswordView2]=useState(false);
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -145,16 +148,22 @@ export function Register() {
                     <div className="flex items-start flex-col justify-start">
                         <label htmlFor="password" className="text-sm text-black mr-2 dark:text-white">Password:</label>
                         {invalid5 && <span className="text-red-500 text-sm mx-auto">Password required</span>}
-                        <input type="password" id="password" name="password"
+                        <input type={passwordView1?'text':'password'} id="password" name="password"
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.password} onChange={(event) => onchangeHandler(event)} />
+                            <button type="button" onClick={()=>setPasswordView1(!passwordView1)} className="absolute border-none transform md:translate-x-[25rem] translate-x-[14.5rem] translate-y-8">
+                            {passwordView1 ? <EyeOff className="text-black" size={18} /> : <Eye className="text-black" size={18} />}
+                        </button>
                     </div>
 
                     <div className="flex items-start flex-col justify-start">
                         <label htmlFor="confirmPassword" className="text-sm text-black mr-2 dark:text-white">Confirm Password:</label>
                         {invalid6 && <span className="text-red-500 text-sm mx-auto">Confirm Password required</span>}
                         {invalid7 && <span className="text-red-500 text-sm mx-auto">Password not match</span>}
-                        <input type="password" id="confirmPassword" name="confirmPassword"
+                        <input type={passwordView2?'text':'password'} id="confirmPassword" name="confirmPassword"
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={confirmPassword} onChange={(event) => setConfirmPassword(() => event?.target.value)} />
+                            <button type="button" onClick={()=>setPasswordView2(!passwordView2)} className="absolute border-none transform md:translate-x-[25rem] translate-x-[14.5rem] translate-y-8">
+                            {passwordView2 ? <EyeOff className="text-black" size={18} /> : <Eye className="text-black" size={18} />}
+                        </button>
                     </div>
 
                     <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md shadow-sm">Register</button>
