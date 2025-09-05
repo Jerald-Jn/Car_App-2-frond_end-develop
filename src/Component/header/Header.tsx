@@ -1,22 +1,24 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 import { getUserCart } from "../../Api";
 import type { CartData } from "../../Interface/DataModel";
 
 function Header() {
 
-  const { setShowProducts, setMenu, menu, totals, setCount, count, setLoading, loading, load,setLoad } = useContext(StoreContext)
+  const { setShowProducts, setMenu, menu, totals, setCount, count, setLoading, loading, load, setLoad, logouting, setLogouting, pathCheck, setPathCheck } = useContext(StoreContext)
   const navigate = useNavigate();
   const focusElement = useRef<HTMLDivElement>(null)
-
+  const location = useLocation();
   const clientSecret = localStorage.getItem('clientSecret');
-  const [backgroundcolor, setBackgroundColor] = useState(false);
-
+  const [backgroundcolor, setBackgroundColor] = useState(true);
+  const [token, setToken] = useState(localStorage.getItem('token'))
+  console.log(location.pathname)
   useEffect(() => {
-    getCart();
-  }, [navigate, totals, clientSecret])
-   const getCart = async () => {
+    token && getCart();
+  }, [navigate, totals, clientSecret,count])
+  const getCart = async () => {
+    try {
       const response = await getUserCart();
       let tempCount = Object.keys(response.items).length;
       if (tempCount !== 0) {
@@ -28,20 +30,27 @@ function Header() {
         setLoading(false)
       }
       console.log(response)
+    } catch (error) {
+      console.log(error)
+      throw error;
     }
+
+  }
 
   useEffect(() => {
     if (focusElement.current) {
       focusElement.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    setToken(localStorage.getItem('token'));
+    setPathCheck(location.pathname)
   }, [navigate]);
 
-  const logout=()=>{
+  const logout = () => {
+    setLogouting(false)
     localStorage.removeItem('token');
     setCount(0)
     navigate('/login')
   }
-
 
   return (
     <>
@@ -49,34 +58,48 @@ function Header() {
       <header className='bg-white border-b-2 border-black/10 dark:bg-white/50 dark:text-black' onMouseEnter={() => { setShowProducts(false); setLoad(false) }} >
         <nav className=''>
           <div ref={focusElement} className='flex flex-row justify-between mt-0.5 p-2 md:ml-5 md:p-5'>
-            <svg className="block md:hidden h-8 w-[2rem] cursor-pointer"
-              onClick={() => { setMenu(!menu) }}
-              viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="24" height="24" fill="white" />
-              <path d="M6 12H18" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M6 15.5H18" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M6 8.5H18" stroke="#000000" strokeLinecap="round" strokeLinejoin="round" />
+            <svg
+              className={`block md:hidden h-8 w-[2rem] cursor-pointer`}
+              onClick={() => { setMenu(!menu); setLoad(false) }}
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path className={`${menu && 'stroke-blue-500'} hover:stroke-blue-500`} d="M6 12H18" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
+              <path className={`${menu && 'stroke-blue-500'} hover:stroke-blue-500`} d="M6 15.5H18" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
+              <path className={`${menu && 'stroke-blue-500'} hover:stroke-blue-500`} d="M6 8.5H18" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
+
             <svg
               onClick={() => navigate('/home')}
               className='w-1/3 mt-0.5 md:h-6 md:w-[12rem] hover:cursor-pointer' onMouseEnter={() => { setShowProducts(false) }} xmlns="http://www.w3.org/2000/svg" width="136" height="24" viewBox="0 0 136 24"><path fill="none" d="M0 0h158v48H0V0z" />
-              <path fill="#EB0A1E" d="M20.354.804H1.004v4.278h7.142v18.241h5.067V5.082h7.141V.804m18.921 14.874a6.206 6.206 0 0 1-4.678 3.826 6.807 6.807 0 0 1-1.175.104c-.399 0-.792-.038-1.172-.104a6.197 6.197 0 0 1-4.676-3.826 9.886 9.886 0 0 1-.682-3.614c0-1.276.243-2.498.682-3.617.791-2 2.56-3.447 4.676-3.825a6.474 6.474 0 0 1 2.347 0 6.203 6.203 0 0 1 4.678 3.824 9.95 9.95 0 0 1 0 7.232M33.421.127c-6.589 0-11.936 5.344-11.936 11.937 0 6.588 5.347 11.933 11.936 11.933 6.594 0 11.937-5.345 11.937-11.933 0-6.593-5.343-11.937-11.937-11.937zm12.017.677h5.968l5.573 9.682L62.552.804h5.966l-9.006 14.188v8.331h-5.066v-8.331L45.438.804M80.549 19.61c.398 0 .793-.04 1.172-.106a6.193 6.193 0 0 0 4.676-3.824 9.877 9.877 0 0 0 0-7.231 6.197 6.197 0 0 0-4.676-3.826 6.674 6.674 0 0 0-2.35 0 6.193 6.193 0 0 0-4.674 3.825 9.872 9.872 0 0 0-.684 3.615c0 1.276.243 2.495.684 3.616a6.188 6.188 0 0 0 4.674 3.824 6.72 6.72 0 0 0 1.178.107m-11.938-7.547c0-6.592 5.342-11.938 11.938-11.938 6.589 0 11.936 5.344 11.936 11.938C92.484 18.651 87.138 24 80.549 24c-6.596 0-11.938-5.349-11.938-11.937zm58.432 2.347l-3.316-8.897-3.32 8.897h6.636m1.47 3.94h-9.585l-1.844 4.959h-5.637L120.57.788h6.304L136 23.309h-5.63l-1.857-4.959zM112.936.804h-19.35v4.278h7.145l-.002 18.241h5.069l-.002-18.241h7.14V.804" />
+              <path className={` ${pathCheck == '/' || pathCheck == '/home' ? 'fill-blue-500 stroke-blue-500 hover:fill-red-500 hover:stroke-red-500' : 'hover:fill-blue-300 hover:stroke-blue-300'}`}
+                fill="#EB0A1E" d="M20.354.804H1.004v4.278h7.142v18.241h5.067V5.082h7.141V.804m18.921 14.874a6.206 6.206 0 0 1-4.678 3.826 6.807 6.807 0 0 1-1.175.104c-.399 0-.792-.038-1.172-.104a6.197 6.197 0 0 1-4.676-3.826 9.886 9.886 0 0 1-.682-3.614c0-1.276.243-2.498.682-3.617.791-2 2.56-3.447 4.676-3.825a6.474 6.474 0 0 1 2.347 0 6.203 6.203 0 0 1 4.678 3.824 9.95 9.95 0 0 1 0 7.232M33.421.127c-6.589 0-11.936 5.344-11.936 11.937 0 6.588 5.347 11.933 11.936 11.933 6.594 0 11.937-5.345 11.937-11.933 0-6.593-5.343-11.937-11.937-11.937zm12.017.677h5.968l5.573 9.682L62.552.804h5.966l-9.006 14.188v8.331h-5.066v-8.331L45.438.804M80.549 19.61c.398 0 .793-.04 1.172-.106a6.193 6.193 0 0 0 4.676-3.824 9.877 9.877 0 0 0 0-7.231 6.197 6.197 0 0 0-4.676-3.826 6.674 6.674 0 0 0-2.35 0 6.193 6.193 0 0 0-4.674 3.825 9.872 9.872 0 0 0-.684 3.615c0 1.276.243 2.495.684 3.616a6.188 6.188 0 0 0 4.674 3.824 6.72 6.72 0 0 0 1.178.107m-11.938-7.547c0-6.592 5.342-11.938 11.938-11.938 6.589 0 11.936 5.344 11.936 11.938C92.484 18.651 87.138 24 80.549 24c-6.596 0-11.938-5.349-11.938-11.937zm58.432 2.347l-3.316-8.897-3.32 8.897h6.636m1.47 3.94h-9.585l-1.844 4.959h-5.637L120.57.788h6.304L136 23.309h-5.63l-1.857-4.959zM112.936.804h-19.35v4.278h7.145l-.002 18.241h5.069l-.002-18.241h7.14V.804" />
             </svg >
 
             <div className='hidden md:block w-full pl-2'>
               <ul className='flex flex-row gap-5 items-center uppercase text-xs font-bold md:mt-3'>
-                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowProducts(true) }}>
+                <li className={`tracking-wider underline-offset-8 hover:underline hover:cursor-pointer hover:text-red-500`} onMouseEnter={() => { setShowProducts(true) }}>
                   <a >Products</a>
                 </li>
-                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer'
+                <li className={`tracking-wider underline-offset-8 hover:underline hover:cursor-pointer hover:text-red-500 ${pathCheck == '/service' && 'text-blue-500'}`}
                   onMouseEnter={() => { setShowProducts(false) }}>
                   <Link to={'/service'} >Service</Link>
                 </li>
-                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowProducts(false) }}>
+                <li className={`tracking-wider underline-offset-8 hover:underline hover:cursor-pointer hover:text-red-500 ${pathCheck == '/explore' && 'text-blue-500'}`}
+                  onMouseEnter={() => { setShowProducts(false) }}>
                   <Link to={'/explore'}  >Buy Online</Link></li>
-                <li className='tracking-wider underline-offset-8 hover:underline hover:cursor-pointer' onMouseEnter={() => { setShowProducts(false) }}>
+                <li className={`tracking-wider underline-offset-8 hover:underline hover:cursor-pointer hover:text-red-500 ${pathCheck == '/about' && 'text-blue-500'}`}
+                  onMouseEnter={() => { setShowProducts(false) }}>
                   <Link to={'/about'}  >About me</Link>
                 </li>
+                {
+                  token &&
+                  <li className={`tracking-wider underline-offset-8 hover:underline hover:cursor-pointer hover:text-red-500 ${pathCheck == '/my-payment' && 'text-blue-500'}`}
+                    onMouseEnter={() => { setShowProducts(false) }}>
+                    <Link to={'/my-payment'}  >My Payments</Link>
+                  </li>
+                }
               </ul>
             </div>
 
@@ -87,7 +110,14 @@ function Header() {
               }
               }>{
                   backgroundcolor ?
-                    <svg className="w-6 ml-2 md:mt-1" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
+                    <svg className='w-6 ml-2 md:mt-1 bg-none' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <g>
+                        <path className=" " fill="none" d="M0 0h24v24H0z" />
+                        <path className=" " d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z" />
+                      </g>
+                    </svg>
+                    :
+                    <svg className="w-6 ml-2 md:mt-1 hover:stroke-yellow-500 hover:fill-yellow-500" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
                       viewBox="0 0 292.548 292.548"
                       xmlSpace="preserve">
                       <g>
@@ -109,48 +139,41 @@ function Header() {
 		c3.987,0,7.224-3.23,7.224-7.224C292.548,142.833,289.312,139.606,285.324,139.606z"/>
                       </g>
                     </svg>
-                    : <svg className='w-6 ml-2 md:mt-1' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <g>
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z" />
-                      </g>
-                    </svg>
                 }
               </button>
 
-              <Link to={'/cart'} className='' onMouseEnter={()=>setLoad(false)}>
-                <svg className="md:w-12 md:h-8 w-6 hover:cursor-pointer md:-mb-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <Link to={'/cart'} className='' onMouseEnter={() => setLoad(false)}>
+                <svg className={`hover:stroke-red-500 md:w-12 md:h-8 w-6 hover:cursor-pointer md:-mb-2 ${pathCheck == '/cart' && 'stroke-blue-500'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                  stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="9" cy="21" r="1"></circle>
                   <circle cx="20" cy="21" r="1"></circle>
                   <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                 </svg>
-                {loading && count>0 && <span className="cart-count ">{count}</span>}
+                {loading && count > 0 && <span className={`cart-count`}>{count}</span>}
               </Link>
-              <div className="" onMouseEnter={() => { setLoad(true) }} >
-                <svg className="md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 5.5C5 4.11929 6.11929 3 7.5 3C8.88071 3 10 4.11929 10 5.5C10 6.88071 8.88071 8 7.5 8C6.11929 8 5 6.88071 5 5.5Z" fill="#000000" />
-                <path fillRule="evenodd" clipRule="evenodd" d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0ZM1 7.5C1 3.91015 3.91015 1 7.5 1C11.0899 1 14 3.91015 14 7.5C14 9.34956 13.2275 11.0187 11.9875 12.2024C11.8365 10.4086 10.3328 9 8.5 9H6.5C4.66724 9 3.16345 10.4086 3.01247 12.2024C1.77251 11.0187 1 9.34956 1 7.5Z" fill="#000000" />
-              </svg>
-              </div>
-              { load &&
-                <div className="absolute md:top-[4.5rem] w-[9rem] top-[3.3rem] right-0 bg-white/80 dark:bg-white/50 z-10  p-2" onMouseLeave={()=>{setLoad(false)}}>
-                  <ul className="flex items-start px-5 space-y-1 flex-col cursor-pointer">
+              <button className="" onMouseEnter={() => { setMenu(false); setLoad(!load) }} onClick={() => { setMenu(false); setLoad(!load) }}>
+                <svg className={`hover:stroke-red-500 hover:fill-red-500 md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2 ${pathCheck == '/login' && 'hover:stroke-red-300'}`}
+                  viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path className={`${pathCheck == '/login' && 'stroke-blue-500 fill-blue-500'} hover:stroke-red-500 hover:fill-red-500`} d="M5 5.5C5 4.11929 6.11929 3 7.5 3C8.88071 3 10 4.11929 10 5.5C10 6.88071 8.88071 8 7.5 8C6.11929 8 5 6.88071 5 5.5Z" fill="#000000" />
+                  <path className={`${pathCheck == '/login' && 'stroke-blue-500 fill-blue-500'} hover:stroke-red-500 hover:fill-red-500`} fillRule="evenodd" clipRule="evenodd" d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0ZM1 7.5C1 3.91015 3.91015 1 7.5 1C11.0899 1 14 3.91015 14 7.5C14 9.34956 13.2275 11.0187 11.9875 12.2024C11.8365 10.4086 10.3328 9 8.5 9H6.5C4.66724 9 3.16345 10.4086 3.01247 12.2024C1.77251 11.0187 1 9.34956 1 7.5Z" fill="#000000" />
+                </svg>
+              </button>
+              {load &&
+                <div className="absolute md:top-[4.5rem] w-[9rem] top-[3.2rem] right-0 bg-black/50 dark:bg-white/50 z-10  p-2" onMouseLeave={() => { setLoad(false) }}>
+                  <ul className="flex items-start px-5 space-y-1 flex-col cursor-pointer text-white dark:text-black">
                     <Link to={'/login'} className="hover:text-red-500">Login</Link>
-                    <li className="hover:text-red-500"><button onClick={logout}>Logout</button></li>
+                    {token && <li className="hover:text-red-500"><button onClick={() => { setLogouting(true) }}>Logout</button></li>}
                   </ul>
                 </div>
               }
-              
-              <Link to={'/contact'} className='w-10 md:mr-3' onMouseEnter={()=>setLoad(false)}>
-                <svg className="md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-                  <defs>
 
-                  </defs>
+              <Link to={'/contact'} className={`w-10 md:mr-3`} onMouseEnter={() => setLoad(false)}>
+                <svg className={`md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2 '}`}
+                  viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                   <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                    <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -7319.000000)" fill="#000000">
+                    <g className={`hover:stroke-red-500 hover:fill-red-500 ${pathCheck == '/contact' && 'stroke-blue-500 fill-blue-500'}`} id="Dribbble-Light-Preview" transform="translate(-140.000000, -7319.000000)" fill="#000000">
                       <g id="icons" transform="translate(56.000000, 160.000000)">
                         <path d="M94,7167 L94,7169 L96,7169 C96,7167.895 95.105,7167 94,7167 M94,7163 L94,7165 C96.206,7165 98,7166.794 98,7169 L100,7169 C100,7165.686 97.314,7163 94,7163 M94,7159 L94,7161 C98.411,7161 102,7164.589 102,7169 L104,7169 C104,7163.477 99.523,7159 94,7159 M98.652,7177.234 C98.641,7177.265 98.64,7177.27 98.652,7177.234 M98.117,7174.578 C97.422,7174.204 96.719,7173.778 95.992,7173.481 C94.587,7172.908 94.682,7174.602 93.679,7175.151 C93.027,7175.508 92.107,7174.861 91.538,7174.503 C90.544,7173.877 89.663,7173.053 88.931,7172.1 C88.556,7171.613 87.728,7170.697 87.83,7170.014 C87.992,7168.93 89.274,7168.876 88.907,7167.55 C88.711,7166.84 88.36,7166.141 88.097,7165.457 C87.745,7164.54 87.6,7163.953 86.573,7164.003 C85.831,7164.039 85.339,7164.356 84.883,7164.951 C83.649,7166.558 83.835,7168.725 84.664,7170.488 C85.838,7172.983 87.85,7175.335 89.999,7176.855 C91.461,7177.889 93.387,7178.828 95.157,7178.987 C96.453,7179.104 98.266,7178.403 98.73,7176.996 C98.698,7177.094 98.667,7177.189 98.652,7177.234 C98.663,7177.199 98.687,7177.128 98.73,7176.996 C98.777,7176.854 98.8,7176.783 98.811,7176.751 C98.797,7176.793 98.765,7176.891 98.731,7176.993 C99.139,7175.753 99.189,7175.155 98.117,7174.578 M98.811,7176.751 C98.819,7176.727 98.819,7176.725 98.811,7176.751" id="call-[#191]">
-
                         </path>
                       </g>
                     </g>
@@ -161,6 +184,35 @@ function Header() {
           </div>
         </nav>
       </header>
+
+      {
+        logouting &&
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+          <div className="bg-white dark:text-black w-[24rem] h-[8rem] px-10 py-5 rounded-2xl border shadow-lg">
+            <p className="text-xl">Are you sure you want to logout?</p>
+            <div className="mt-4 flex justify-end gap-4">
+              <button
+                className="bg-gray-400 hover:bg-gray-500 text-white rounded-md px-4 py-1"
+                onClick={() => {
+                  setLogouting(false);
+                }}
+              >
+                Close
+              </button>
+              <button
+                className="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-1"
+                onClick={() => {
+                  logout();
+                  setLogouting(false)
+                }}
+              >
+                Sure
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
     </>
   );
 }

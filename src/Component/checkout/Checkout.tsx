@@ -7,7 +7,7 @@ import Menubar from "../menu_bar/Menubar";
 
 function Checkout() {
 
-    const { showProducts, menu, totals, customer, setCustomer, car, getTotal, setMenu } = useContext(StoreContext);
+    const { showProducts, menu, totals, customer, setCustomer, car, getTotal, setMenu, load, pageLoad, setPageLoad, setHeaderLoad, setFooterLoad } = useContext(StoreContext);
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -32,13 +32,27 @@ function Checkout() {
         }
     }
 
-    useEffect(() => {
-        setMenu(false)
-        console.log(car)
-        const cartItems = async () => {
+    const cartItems = async () => {
+        try {
             const response = await getUserCart();
             getTotal(response.items);
+            setPageLoad(false)
+            setHeaderLoad(true)
+            setFooterLoad(true)
+        } catch (error) {
+            setHeaderLoad(false)
+            setFooterLoad(false)
         }
+
+    }
+
+    useEffect(() => {
+        setPageLoad(true)
+        setHeaderLoad(false)
+        setFooterLoad(false)
+        setMenu(false)
+        console.log(car)
+
         cartItems();
         inputRef.current?.focus();
     }, []);
@@ -46,106 +60,123 @@ function Checkout() {
 
     return (
         <>
-            <div className="relative">
-                {menu && (
-                    <Menubar />
-                )
-                }
-                {/* When we hover on Product is render "Products" component */}
-                {
-                    showProducts && (<Products />)
-                }
+            {
+                pageLoad ?
+                    <div id="loading-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60">
 
-                {
-                    totals &&
-                    <div className=" bg-gray-100 dark:bg-white/50 text-gray-900 flex justify-center min-h-screen md:w-full ">
-                        <form onSubmit={(event) => { event.preventDefault(); purchase(); }} className="min-h-lvh m-5">
-                            <div className="md:max-w-screen-xl bg-white dark:bg-white/40 shadow sm:rounded-lg flex justify-center  md:flex-row flex-col">
-                                <div className="md:w-3/5 p-6 -mt-2 h-fit sm:p-12">
-                                    <div className="bg-white/50 p-5 rounded-lg shadow-md border-2">
+                        <svg className="animate-spin h-8 w-8 text-white mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
 
-                                        <h1 className="text-2xl font-bold text-gray-800   mb-3">Shipping Address</h1>
+                        <span className="text-white text-3xl font-bold">Loading...</span>
 
-                                        <div className="mb-6">
-                                            <div className="grid md:grid-cols-2 gap-4">
-                                                <div>
-                                                    <label htmlFor="firstName" className="block text-gray-700   mb-1">First Name</label>
-                                                    <input ref={inputRef} required name="firstName" type="text" id="firstName" className="w-full rounded-lg py-2 px-3  border-2" value={customer.firstName} onChange={onChangeHandler} />
+                    </div> :
+                    <div className="relative">
+                        {menu && (
+                            <Menubar />
+                        )
+                        }
+                        {/* When we hover on Product is render "Products" component */}
+                        {
+                            showProducts && (<Products />)
+                        }
+
+                        {
+                            totals ?
+                                <div className={`bg-gray-100 dark:bg-white/50 text-gray-900 flex justify-center min-h-screen md:w-full ${showProducts | load | menu && 'blur-sm'} `}>
+                                    <form onSubmit={(event) => { event.preventDefault(); purchase(); }} className="min-h-lvh m-5">
+                                        <div className="md:max-w-screen-xl bg-white dark:bg-white/40 shadow sm:rounded-lg flex justify-center  md:flex-row flex-col">
+                                            <div className="md:w-3/5 p-6 -mt-2 h-fit sm:p-12">
+                                                <div className="bg-white/50 p-5 rounded-lg shadow-md border-2">
+
+                                                    <h1 className="text-2xl font-bold text-gray-800   mb-3">Shipping Address</h1>
+
+                                                    <div className="mb-6">
+                                                        <div className="grid md:grid-cols-2 gap-4">
+                                                            <div>
+                                                                <label htmlFor="firstName" className="block text-gray-700   mb-1">First Name</label>
+                                                                <input ref={inputRef} required name="firstName" type="text" id="firstName" className="w-full rounded-lg py-2 px-3  border-2" value={customer.firstName} onChange={onChangeHandler} />
+                                                            </div>
+                                                            <div>
+                                                                <label htmlFor="lastName" className="block text-grlastNameay-700   mb-1">Last Name</label>
+                                                                <input required name="lastName" type="text" id="lastName" className="w-full rounded-lg border py-2 px-3" value={customer.lastName} onChange={onChangeHandler} />
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="grid md:grid-cols-2 gap-4">
+                                                            <div>
+                                                                <label htmlFor="phoneNo" className="block text-gray-700   mb-1">Phone No</label>
+                                                                <input required name="phoneNo" type="text" id="phoneNo" className="w-full rounded-lg py-2 px-3  border-2" value={customer.phoneNo} onChange={onChangeHandler} />
+                                                            </div>
+                                                            <div>
+                                                                <label htmlFor="email" className="block text-gray-700   mb-1">Email</label>
+                                                                <input required name="email" type="email" id="email" className="w-full rounded-lg border py-2 px-3" value={customer.email} onChange={onChangeHandler} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="mt-4">
+                                                            <label htmlFor="address" className="block text-gray-700   mb-1">Address</label>
+                                                            <textarea required name="address" id="address" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.address} onChange={onChangeHandler} />
+                                                        </div>
+
+                                                        <div className="mt-4">
+                                                            <label htmlFor="city" className="block text-gray-700   mb-1">City</label>
+                                                            <input required name="city" type="text" id="city" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.city} onChange={onChangeHandler} />
+                                                        </div>
+
+                                                        <div className="grid md:grid-cols-2 gap-4 mt-4">
+                                                            <div>
+                                                                <label htmlFor="state" className="block text-gray-700   mb-1">State</label>
+                                                                <input required name="state" type="text" id="state" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.state} onChange={onChangeHandler} />
+                                                            </div>
+                                                            <div>
+                                                                <label htmlFor="pincode" className="block text-gray-700   mb-1">Pin Code</label>
+                                                                <input required name="pincode" type="text" id="pincode" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.pincode} onChange={onChangeHandler} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <label htmlFor="lastName" className="block text-grlastNameay-700   mb-1">Last Name</label>
-                                                    <input required name="lastName" type="text" id="lastName" className="w-full rounded-lg border py-2 px-3" value={customer.lastName} onChange={onChangeHandler} />
-                                                </div>
+
                                             </div>
-
-                                            <div className="grid md:grid-cols-2 gap-4">
-                                                <div>
-                                                    <label htmlFor="phoneNo" className="block text-gray-700   mb-1">Phone No</label>
-                                                    <input required name="phoneNo" type="text" id="phoneNo" className="w-full rounded-lg py-2 px-3  border-2" value={customer.phoneNo} onChange={onChangeHandler} />
-                                                </div>
-                                                <div>
-                                                    <label htmlFor="email" className="block text-gray-700   mb-1">Email</label>
-                                                    <input required name="email" type="email" id="email" className="w-full rounded-lg border py-2 px-3" value={customer.email} onChange={onChangeHandler} />
-                                                </div>
-                                            </div>
-                                            <div className="mt-4">
-                                                <label htmlFor="address" className="block text-gray-700   mb-1">Address</label>
-                                                <textarea required name="address" id="address" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.address} onChange={onChangeHandler} />
-                                            </div>
-
-                                            <div className="mt-4">
-                                                <label htmlFor="city" className="block text-gray-700   mb-1">City</label>
-                                                <input required name="city" type="text" id="city" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.city} onChange={onChangeHandler} />
-                                            </div>
-
-                                            <div className="grid md:grid-cols-2 gap-4 mt-4">
-                                                <div>
-                                                    <label htmlFor="state" className="block text-gray-700   mb-1">State</label>
-                                                    <input required name="state" type="text" id="state" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.state} onChange={onChangeHandler} />
-                                                </div>
-                                                <div>
-                                                    <label htmlFor="pincode" className="block text-gray-700   mb-1">Pin Code</label>
-                                                    <input required name="pincode" type="text" id="pincode" className="w-full rounded-lg  py-2 px-3 border-2" value={customer.pincode} onChange={onChangeHandler} />
+                                            <div className="flex-1 bg-red-200 text-center lg:flex">
+                                                <div className="m-12 xl:m-16 bg-contain bg-center bg-no-repeat">
+                                                    <h2 className="text-2xl font-bold text-gray-800 text-center">Checkout</h2>
+                                                    <p className="text-gray-500 text-center mt-1 text-lg">Complete your purchase</p>
+                                                    <div className="mt-6 space-y-3">
+                                                        <div className="flex justify-between font-semibold">
+                                                            <span>Subtotal</span>
+                                                            <span>{totals.subTotal}</span>
+                                                        </div>
+                                                        <div className="flex justify-between font-semibold">
+                                                            <span>Shipping</span>
+                                                            <span className="">{totals.shipping}</span>
+                                                        </div>
+                                                        <div className="flex justify-between font-semibold">
+                                                            <span>Tax</span>
+                                                            <span className="">{totals.tax}</span>
+                                                        </div>
+                                                        <div className="flex justify-between font-semibold text-gray-800">
+                                                            <span>Total</span>
+                                                            <span>{totals.total}</span>
+                                                        </div>
+                                                    </div>
+                                                    <button className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg shadow-md hover:shadow-lg transition duration-200">
+                                                        Complete Purchase
+                                                    </button>
+                                                    <p className="text-center text-gray-500 text-sm mt-4">🔒 Secure Payment. Your inhtmlFormation is encrypted.</p>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
+                                </div> : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+                        }
 
-                                </div>
-                                <div className="flex-1 bg-red-200 text-center lg:flex">
-                                    <div className="m-12 xl:m-16 bg-contain bg-center bg-no-repeat">
-                                        <h2 className="text-2xl font-bold text-gray-800 text-center">Checkout</h2>
-                                        <p className="text-gray-500 text-center mt-1 text-lg">Complete your purchase</p>
-                                        <div className="mt-6 space-y-3">
-                                            <div className="flex justify-between font-semibold">
-                                                <span>Subtotal</span>
-                                                <span>{totals.subTotal}</span>
-                                            </div>
-                                            <div className="flex justify-between font-semibold">
-                                                <span>Shipping</span>
-                                                <span className="">{totals.shipping}</span>
-                                            </div>
-                                            <div className="flex justify-between font-semibold">
-                                                <span>Tax</span>
-                                                <span className="">{totals.tax}</span>
-                                            </div>
-                                            <div className="flex justify-between font-semibold text-gray-800">
-                                                <span>Total</span>
-                                                <span>{totals.total}</span>
-                                            </div>
-                                        </div>
-                                        <button className="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg shadow-md hover:shadow-lg transition duration-200">
-                                            Complete Purchase
-                                        </button>
-                                        <p className="text-center text-gray-500 text-sm mt-4">🔒 Secure Payment. Your inhtmlFormation is encrypted.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                     </div>
-                }
+            }
 
-            </div>
         </>
     )
 }

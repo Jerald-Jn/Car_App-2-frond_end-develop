@@ -9,7 +9,7 @@ import { Eye, EyeOff } from "lucide-react";
 export function Register() {
 
     const inputRef = useRef<HTMLInputElement>(null);
-    const { menu, showProducts, setMenu } = useContext(StoreContext);
+    const { menu, showProducts, setMenu, load } = useContext(StoreContext);
     const [formData, setFormData] = useState({
         userName: '', password: '', userInfo: {
             firstName: '', lastName: '', email: ''
@@ -112,7 +112,8 @@ export function Register() {
                     showProducts && (<Products />)
                 }
             </div>
-            <div className="max-w-lg md:mx-auto mx-5 bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col items-center md:my-10 mb-10 dark:bg-white/30 dark:text-black">
+            <div className={`max-w-lg md:mx-auto mx-5 bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col 
+            items-center md:my-10 mb-10 dark:bg-white/30 dark:text-black ${showProducts | load | menu&&'blur-sm'}`}>
                 <h1 className="text-xl font-bold text-center mb-8">Welcome to Toyota</h1>
                 <form className="w-full flex flex-col gap-4" onSubmit={() => { event?.preventDefault(), register() }}>
                     { loading && <span className="text-red-600 text-center text-xl">Please regiter correctly</span>}

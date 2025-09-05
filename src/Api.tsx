@@ -149,3 +149,14 @@ export const IncreaseItemApi=async(carId:any)=>{
     console.log("increase cart -> ",respone)
     return respone;
 }
+
+export const loadPayment=async()=>{
+    const respone=(await(axios.get(`${API}/payments`,
+        {
+            headers:{
+                Authorization:`Bearer ${loadToken()}`
+            }
+        }
+    ))).data;
+    return respone;
+}

@@ -1,14 +1,17 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { StoreContext } from "../context/StoreContext";
 
 function Menubar() {
+  const{setMenu}=useContext(StoreContext)
   return (
     <>
-      <div className="md:hidden absolute top-0 pl-6 w-full bg-white dark:bg-white/50 border-black/10 border-b-2 z-10">
-        <ul className="flex flex-col space-y-5 my-3  uppercase font-sans text-lg font-semibold">
-          <li><Link to={'/explore'}>Products</Link></li>
-          <li><Link to={'/service'}>Service</Link></li>
-          <li><Link to={'/explore'}>Buy Online</Link></li>
-          <li><Link to={'/about'}>About Me</Link></li>
+      <div className="md:hidden absolute -top-[0.6px] pl-6 w-full bg-white dark:bg-white/50 border-black/10 border-b-2 z-10">
+        <ul className="flex flex-col space-y-5 my-3  uppercase font-sans text-lg font-semibold dark:text-black">
+          <li><Link to={'/explore'} onClick={()=>setMenu(false)}>Products</Link></li>
+          <li><Link to={'/service'} onClick={()=>setMenu(false)}>Service</Link></li>
+          <li><Link to={'/explore'} onClick={()=>setMenu(false)}>Buy Online</Link></li>
+          <li><Link to={'/about'} onClick={()=>setMenu(false)}>About Me</Link></li>
         </ul>
       </div>
     </>

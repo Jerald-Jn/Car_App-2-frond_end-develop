@@ -15,10 +15,11 @@ import Home from './Component/home/Home';
 import Login from './Component/login/Login';
 import { Register } from './Component/register/Register';
 import ServicePage from './Component/servicePage/ServicePage';
+import { Payment } from './Component/payment/Payment';
 
 function App() {
 
-  const { carsList, pageLoading, setLoad } = useContext(StoreContext);
+  const { carsList, pageLoading, setLoad, headerLoad, footrLoad } = useContext(StoreContext);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const navigate = useNavigate();
   
@@ -49,7 +50,7 @@ function App() {
               :
             Array.isArray(carsList) && carsList.length>0 ?
             <>
-              <Header></Header>
+              {headerLoad && <Header></Header>}
               <div onMouseEnter={() => { setLoad(false) }}>
               <Routes>
                 <Route path="/login" element={<Login />} />
@@ -66,11 +67,12 @@ function App() {
                 <Route path='/payment-success' element={token ? <Success /> : <Login />}></Route>
                 <Route path='/paymentPage' element={token ? <PaymentPage /> : <Login />}></Route>
                 <Route path="*" element={<h1 className="text-center mt-20 text-4xl font-bold">404 Not Found</h1>} />
+                <Route path='/my-payment' element={token?<Payment />:<Login/>}></Route>
               </Routes>
               </div>
 
               {/* Footer Section */}
-              <Footer />
+              {footrLoad && <Footer />}
             </> : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
         }
       </div>
