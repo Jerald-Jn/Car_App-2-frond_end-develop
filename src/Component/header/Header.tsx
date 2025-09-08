@@ -16,7 +16,7 @@ function Header() {
   console.log(location.pathname)
   useEffect(() => {
     token && getCart();
-  }, [navigate, totals, clientSecret,count])
+  }, [navigate, totals, clientSecret, count])
   const getCart = async () => {
     try {
       const response = await getUserCart();

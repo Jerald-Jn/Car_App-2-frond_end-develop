@@ -7,7 +7,7 @@ function Footer() {
     const navigate = useNavigate();
     const { setShowProducts, showProducts, menu, load, pathCheck, setPathCheck } = useContext(StoreContext);
     const location = useLocation();
-    let token=localStorage.getItem('token')
+    let token = localStorage.getItem('token')
 
     return (
         <>

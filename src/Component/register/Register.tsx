@@ -25,9 +25,9 @@ export function Register() {
     const [invalid7, setInvalid7] = useState(false);
     const [invalid8, setInvalid8] = useState(false);
     const navigate = useNavigate();
-    const [loading,setLoading]=useState(false)
-    const [passwordView1,setPasswordView1]=useState(false);
-    const [passwordView2,setPasswordView2]=useState(false);
+    const [loading, setLoading] = useState(false)
+    const [passwordView1, setPasswordView1] = useState(false);
+    const [passwordView2, setPasswordView2] = useState(false);
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -55,7 +55,7 @@ export function Register() {
     }
 
     useEffect(() => {
-        setInvalid1(false); setInvalid2(false); setInvalid3(false); setInvalid4(false); 
+        setInvalid1(false); setInvalid2(false); setInvalid3(false); setInvalid4(false);
         setInvalid5(false); setInvalid6(false); setInvalid7(false); setInvalid8(false); setLoading(false)
     }, [formData])
 
@@ -83,9 +83,9 @@ export function Register() {
                 console.log('correct')
                 const response = await userRegister(formData);
                 console.log(response);
-                if(response){
+                if (response) {
                     return navigate('/login')
-                }else{
+                } else {
                     setLoading(true)
                     return
                 }
@@ -113,10 +113,10 @@ export function Register() {
                 }
             </div>
             <div className={`max-w-lg md:mx-auto mx-5 bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col 
-            items-center md:my-10 mb-10 dark:bg-white/30 dark:text-black ${showProducts | load | menu&&'blur-sm'}`}>
+            items-center md:my-10 mb-10 dark:bg-white/30 dark:text-black ${showProducts | load | menu && 'blur-sm'}`}>
                 <h1 className="text-xl font-bold text-center mb-8">Welcome to Toyota</h1>
                 <form className="w-full flex flex-col gap-4" onSubmit={() => { event?.preventDefault(), register() }}>
-                    { loading && <span className="text-red-600 text-center text-xl">Please regiter correctly</span>}
+                    {loading && <span className="text-red-600 text-center text-xl">Please regiter correctly</span>}
                     <div className="flex items-start flex-col justify-start">
                         <label htmlFor="firstName" className="text-sm text-black mr-2 dark:text-white">First Name:</label>
                         {invalid1 && <span className="text-red-500 text-sm mx-auto">First Name required</span>}
@@ -149,9 +149,9 @@ export function Register() {
                     <div className="flex items-start flex-col justify-start">
                         <label htmlFor="password" className="text-sm text-black mr-2 dark:text-white">Password:</label>
                         {invalid5 && <span className="text-red-500 text-sm mx-auto">Password required</span>}
-                        <input type={passwordView1?'text':'password'} id="password" name="password"
+                        <input type={passwordView1 ? 'text' : 'password'} id="password" name="password"
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.password} onChange={(event) => onchangeHandler(event)} />
-                            <button type="button" onClick={()=>setPasswordView1(!passwordView1)} className="absolute border-none transform md:translate-x-[25rem] translate-x-[14.5rem] translate-y-8">
+                        <button type="button" onClick={() => setPasswordView1(!passwordView1)} className="absolute border-none transform md:translate-x-[25rem] translate-x-[14.5rem] translate-y-8">
                             {passwordView1 ? <EyeOff className="text-black" size={18} /> : <Eye className="text-black" size={18} />}
                         </button>
                     </div>
@@ -160,9 +160,9 @@ export function Register() {
                         <label htmlFor="confirmPassword" className="text-sm text-black mr-2 dark:text-white">Confirm Password:</label>
                         {invalid6 && <span className="text-red-500 text-sm mx-auto">Confirm Password required</span>}
                         {invalid7 && <span className="text-red-500 text-sm mx-auto">Password not match</span>}
-                        <input type={passwordView2?'text':'password'} id="confirmPassword" name="confirmPassword"
+                        <input type={passwordView2 ? 'text' : 'password'} id="confirmPassword" name="confirmPassword"
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={confirmPassword} onChange={(event) => setConfirmPassword(() => event?.target.value)} />
-                            <button type="button" onClick={()=>setPasswordView2(!passwordView2)} className="absolute border-none transform md:translate-x-[25rem] translate-x-[14.5rem] translate-y-8">
+                        <button type="button" onClick={() => setPasswordView2(!passwordView2)} className="absolute border-none transform md:translate-x-[25rem] translate-x-[14.5rem] translate-y-8">
                             {passwordView2 ? <EyeOff className="text-black" size={18} /> : <Eye className="text-black" size={18} />}
                         </button>
                     </div>

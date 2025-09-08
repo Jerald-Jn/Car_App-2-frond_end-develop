@@ -84,7 +84,6 @@ function Explore() {
         setFilterCars(carsList.filter((values: any) => {
             let newFuelType = newFilters.fuelType == '' || values.fuelType == newFilters.fuelType;
             let newTransmission = newFilters.transmission == '' || values.transmission == newFilters.transmission;
-            console.log(newFuelType, newTransmission)
             return newFuelType && newTransmission;
         }))
     }
@@ -107,7 +106,7 @@ function Explore() {
                     : carsList ?
                         <div>
                             {
-                                <div className="relative">
+                                <div className="relative lg:-translate-y-5 z-10 -translate-y-5">
                                     {menu && (
                                         <Menubar />
                                     )
@@ -122,7 +121,7 @@ function Explore() {
                                     }
                                 </div>
                             }
-                            <div className="flex flex-col mt-5 justify-center md:flex-row gap-3">
+                            <div className={`flex mt-5 items-center justify-center flex-row gap-3 ${showProducts | load | menu && 'blur-sm'}`}>
                                 <select id="fuelType" name="fuelType" onChange={() => carsfilter(event)}
                                     className="w-[8rem] h-10 border-2 dark:bg-black/10 dark:text-white focus:outline-none focus:border-black text-black rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
                                     <option className="dark:text-black" value="">All</option>
@@ -139,7 +138,7 @@ function Explore() {
                                 </select>
                             </div>
                             {
-                                filterCars?.length>0 ?
+                                filterCars?.length > 0 ?
                                     <div key={carsList} className={`grid-cols-1 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 md:mx-10 mx-3 ${showProducts | load | menu && 'blur-sm'}`}>
                                         {
 

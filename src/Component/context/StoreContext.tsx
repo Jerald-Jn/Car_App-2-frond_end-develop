@@ -9,39 +9,39 @@ export const StoreContext = createContext<any>(null);
 // Declare "Provider Component", it wraps the app and provides global state values to all children component via context
 export const StoreContextProvider = (props: any) => {
 
-// Declare "React State" variable and "Setter" function to update value and it's also update the "VIRTUAL DOM" 
+  // Declare "React State" variable and "Setter" function to update value and it's also update the "VIRTUAL DOM" 
   const [carsList, setCarsList] = useState<any[]>([]);
   const [showProducts, setShowProducts] = useState(false);
   const [menu, setMenu] = useState(false);
   const [totals, setTotals] = useState({ subTotal: 0, tax: 0, shipping: 0, total: 0 });
-  const[customer,setCustomer]=useState(PaymentRequest)
+  const [customer, setCustomer] = useState(PaymentRequest)
   const [car, setCar] = useState<Cars[]>([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
-  const [load,setLoad]=useState(false)
-  const [logouting,setLogouting]=useState(false);
-  const [headerLoad,setHeaderLoad]=useState(false);
-  const [footrLoad,setFooterLoad]=useState(false);
-  const [pageLoad,setPageLoad]=useState(true);
-  const [pathCheck,setPathCheck]=useState('')
+  const [load, setLoad] = useState(false)
+  const [logouting, setLogouting] = useState(false);
+  const [headerLoad, setHeaderLoad] = useState(false);
+  const [footrLoad, setFooterLoad] = useState(false);
+  const [pageLoad, setPageLoad] = useState(true);
+  const [pathCheck, setPathCheck] = useState('')
 
-  const getTotal = async (cartDetails:any) => {
-    let tempTotal=0;
-    let subTotal =0;
+  const getTotal = async (cartDetails: any) => {
+    let tempTotal = 0;
+    let subTotal = 0;
     for (let key in cartDetails) {
-			let item=cartDetails[key];
-			tempTotal=tempTotal+item.price*item.quantity;
-			
-		}
-    subTotal =subTotal+ tempTotal;
+      let item = cartDetails[key];
+      tempTotal = tempTotal + item.price * item.quantity;
+
+    }
+    subTotal = subTotal + tempTotal;
     let tax = Math.ceil(tempTotal * 0.1);
     const shipping = Math.ceil(tempTotal / 100);
     const totals = Math.ceil(subTotal + tax + shipping);
-    setTotals((prev) => ({...prev, subTotal: subTotal, tax: tax, shipping: shipping, total: totals }));
+    setTotals((prev) => ({ ...prev, subTotal: subTotal, tax: tax, shipping: shipping, total: totals }));
   };
 
-// useEffect runs based on dependency []
+  // useEffect runs based on dependency []
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -60,27 +60,27 @@ export const StoreContextProvider = (props: any) => {
     fetchCars();
   }, []);
 
-// Single object contains all states variable and functions
-// This will be provided globally so other components can use them with "useContext(StoreContext)"
+  // Single object contains all states variable and functions
+  // This will be provided globally so other components can use them with "useContext(StoreContext)"
   const contextValue = {
     carsList,
     showProducts, setShowProducts,
     menu, setMenu,
-    getTotal, totals,setTotals,
-    customer,setCustomer,
-    car,setCar,
-    count,setCount,
-    loading,setLoading,
+    getTotal, totals, setTotals,
+    customer, setCustomer,
+    car, setCar,
+    count, setCount,
+    loading, setLoading,
     pageLoading, setPageLoading,
-    load,setLoad,
-    logouting,setLogouting,
-    headerLoad,setHeaderLoad,
-    footrLoad,setFooterLoad,
-    pageLoad,setPageLoad,
-    pathCheck,setPathCheck
+    load, setLoad,
+    logouting, setLogouting,
+    headerLoad, setHeaderLoad,
+    footrLoad, setFooterLoad,
+    pageLoad, setPageLoad,
+    pathCheck, setPathCheck
   };
 
-// "props.children" means anything inside this provider will hava accesss the "contextValue"
+  // "props.children" means anything inside this provider will hava accesss the "contextValue"
   return (
     <StoreContext.Provider value={contextValue}>
       {props.children}

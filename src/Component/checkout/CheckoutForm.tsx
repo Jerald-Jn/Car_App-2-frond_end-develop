@@ -1,14 +1,12 @@
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useContext, useEffect, useState } from "react";
-import Menubar from "../menu_bar/Menubar";
-import Products from "../header/Products";
 import { StoreContext } from "../context/StoreContext";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
-  const { menu, showProducts, setMenu, load} = useContext(StoreContext)
+  const { menu, showProducts, setMenu, load } = useContext(StoreContext)
 
   const API = import.meta.env.VITE_PAYMENT_URL;
 
@@ -37,18 +35,8 @@ export default function CheckoutForm() {
   return (
     <>
       {
-          stripe? 
+        stripe ?
           <>
-            <div className="relative -top-5 z-10">
-              {menu && (
-                <Menubar />
-              )
-              }
-              {/* When we hover on Product is render "Products" component */}
-              {
-                showProducts && (<Products />)
-              }
-            </div>
             <div className={`${showProducts | load | menu && 'blur-sm'}`}>
               <div className="flex flex-col items-center gap-2">
                 <h6 className="text-blue-500 uppercase">Test to use</h6>
@@ -64,7 +52,7 @@ export default function CheckoutForm() {
                 </button>
               </form>
             </div>
-          </>:(<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+          </> : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
       }
 
     </>

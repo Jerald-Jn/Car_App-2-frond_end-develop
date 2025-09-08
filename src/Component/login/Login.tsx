@@ -80,7 +80,7 @@ function Login() {
                     </div>
                     : carsList ?
                         <>
-                            <div className="relative">
+                            <div className="relative lg:-translate-y-0.5 z-10">
                                 {/* Menu bar for small screen */}
                                 {menu && (
                                     <Menubar />

@@ -31,10 +31,10 @@ export interface Cars {
     color: '',
     carImage: '',
     carLogo: '',
-    images:any
+    images: any
 }
 
-export interface  CartData{
+export interface CartData {
     items: {
         [key: string]: {
             model: '',

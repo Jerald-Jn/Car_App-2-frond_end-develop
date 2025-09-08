@@ -89,7 +89,7 @@ function Home() {
                   }
                   {/* When we hover on Product is render "Products" component */}
                   {
-                    true && (<Products />)
+                    showProducts && (<Products />)
                   }
 
                   {/* Previous Button (only on medium+ screens) */}
