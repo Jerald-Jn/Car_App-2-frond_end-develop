@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
-import { PaymentRequest, type Cars } from '../../Interface/DataModel';
-import { getListOfCars } from '../../Api';
+import { PaymentRequest, type Cars } from '../Interface/DataModel';
+import { getListOfCars } from '../Api';
 
 // Create and export the "React Context" global store, this context will be used by components to access global data
 export const StoreContext = createContext<any>(null);
@@ -18,11 +18,8 @@ export const StoreContextProvider = (props: any) => {
   const [car, setCar] = useState<Cars[]>([]);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [pageLoading, setPageLoading] = useState(true);
   const [load, setLoad] = useState(false)
   const [logouting, setLogouting] = useState(false);
-  const [headerLoad, setHeaderLoad] = useState(false);
-  const [footrLoad, setFooterLoad] = useState(false);
   const [pageLoad, setPageLoad] = useState(true);
   const [pathCheck, setPathCheck] = useState('')
 
@@ -41,22 +38,19 @@ export const StoreContextProvider = (props: any) => {
     setTotals((prev) => ({ ...prev, subTotal: subTotal, tax: tax, shipping: shipping, total: totals }));
   };
 
+  async function fetchCars(){
+    try {
+      const listOfCars = await getListOfCars();
+      setCarsList(listOfCars);
+      setPageLoad(false); // stop loading after successful fetch         
+    } catch (error) {
+      setPageLoad(true); // stop loading even if failed
+      console.error('Failed to fetch cars:', error);
+    }
+  };
+
   // useEffect runs based on dependency []
   useEffect(() => {
-    const fetchCars = async () => {
-      try {
-        const listOfCars = await getListOfCars();
-        console.log(listOfCars)
-        console.log(listOfCars[0].images)
-        setCarsList(listOfCars);
-        setPageLoading(false); // stop loading after successful fetch
-        setHeaderLoad(true);
-        setFooterLoad(true)
-      } catch (error) {
-        setPageLoading(false); // stop loading even if failed
-        console.error('Failed to fetch cars:', error);
-      }
-    };
     fetchCars();
   }, []);
 
@@ -71,13 +65,11 @@ export const StoreContextProvider = (props: any) => {
     car, setCar,
     count, setCount,
     loading, setLoading,
-    pageLoading, setPageLoading,
     load, setLoad,
     logouting, setLogouting,
-    headerLoad, setHeaderLoad,
-    footrLoad, setFooterLoad,
     pageLoad, setPageLoad,
-    pathCheck, setPathCheck
+    pathCheck, setPathCheck,
+    fetchCars
   };
 
   // "props.children" means anything inside this provider will hava accesss the "contextValue"

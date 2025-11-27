@@ -16,8 +16,20 @@ export const User = {
     userInfo: UserInfo,
 }
 
+export const Car={
+    make:"Toyota",
+        year:"",
+        transmission:"",
+        engineCapacity:"",
+        mileage:"",
+        vin:"",
+        model:"",
+        fuelType:"",
+        price:"",
+        color:"",
+}
+
 export interface Cars {
-    // imageUrl: ""
     carId: '',
     make: '',
     year: '',

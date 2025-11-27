@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 import type { Cars } from "../../Interface/DataModel";
 import { Link } from "react-router-dom";
 

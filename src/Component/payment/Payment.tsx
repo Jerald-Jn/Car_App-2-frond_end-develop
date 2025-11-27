@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import { StoreContext } from "../context/StoreContext"
+import { StoreContext } from "../../store/StoreContext"
 import { loadPayment } from "../../Api";
 import { useNavigate } from "react-router-dom";
 import Menubar from "../menu_bar/Menubar";
@@ -7,22 +7,18 @@ import Products from "../header/Products";
 
 export function Payment() {
 
-    const { load, setHeaderLoad, setFooterLoad, setPageLoad, pageLoad, menu, showProducts } = useContext(StoreContext);
+    const { load , setPageLoad, pageLoad, menu, showProducts } = useContext(StoreContext);
     const [payments, setPayments] = useState<any>()
     const navigate = useNavigate();
     const [filterPayments, setfilterpayments] = useState<any>()
 
     useEffect(() => {
         setPageLoad(true);
-        setHeaderLoad(false);
-        setFooterLoad(false);
         loadUserPayment();
     }, [])
 
     useEffect(() => {
         setPageLoad(true);
-        setHeaderLoad(false);
-        setFooterLoad(false);
         loadUserPayment();
     }, [navigate])
 
@@ -42,13 +38,9 @@ export function Payment() {
             })
             setPayments(updatePayments)
             setPageLoad(false);
-            setHeaderLoad(true);
-            setFooterLoad(true);
             setfilterpayments(updatePayments)
         } catch (error) {
             setPageLoad(false);
-            setHeaderLoad(true);
-            setFooterLoad(true);
         }
     }
 

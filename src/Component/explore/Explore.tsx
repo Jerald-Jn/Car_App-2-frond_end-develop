@@ -2,12 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { addCartApi } from "../../Api";
 import { type Cars, type CartData } from "../../Interface/DataModel";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 import Products from "../header/Products";
 import Menubar from "../menu_bar/Menubar";
+import PageLoading from "../pageload/PageLoading";
 
 function Explore() {
-    const { carsList, menu, showProducts, setMenu, load, pageLoad, setPageLoad, setHeaderLoad, setFooterLoad } = useContext(StoreContext);
+    const { carsList, menu, showProducts, setMenu, load, pageLoad, setPageLoad, fetchCars } = useContext(StoreContext);
     let token = localStorage.getItem('token')
     const [cart, setCart] = useState<CartData>({ items: {} });
     const [filterCars, setFilterCars] = useState<any>();
@@ -35,7 +36,6 @@ function Explore() {
                     },
                 },
             };
-
             console.log(updateCart);
             return updateCart;
         });
@@ -61,18 +61,13 @@ function Explore() {
 
     useEffect(() => {
         setPageLoad(true)
-        setHeaderLoad(false)
-        setFooterLoad(false)
         setMenu(false)
-        setTimeout(() => {
-            if (Array.isArray(carsList)) {
-                setPageLoad(false)
-                setHeaderLoad(true)
-                setFooterLoad(true)
-            }
-        }, 500);
-        setFilterCars(carsList)
-    }, [])
+        if (Array.isArray(carsList) && carsList.length > 0) {
+            setFilterCars(carsList);
+            console.log('carlist => ', carsList)
+            setPageLoad(false)
+        }
+    }, []);
 
     const carsfilter = (event: any) => {
         const { name, value } = event.target
@@ -91,19 +86,9 @@ function Explore() {
     return (
         <>
             {
-                pageLoad ?
-                    <div id="loading-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60">
-                        <svg className="animate-spin h-8 w-8 text-white mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
 
-                        <span className="text-white text-3xl font-bold">Loading...</span>
-                    </div>
-                    : carsList ?
+                Array.isArray(carsList) && carsList.length > 0 ?
+                    (
                         <div>
                             {
                                 <div className="relative lg:-translate-y-5 z-10 -translate-y-5">
@@ -122,14 +107,14 @@ function Explore() {
                                 </div>
                             }
                             <div className={`flex mt-5 items-center justify-center flex-row gap-3 ${showProducts | load | menu && 'blur-sm'}`}>
-                                <select id="fuelType" name="fuelType" onChange={() => carsfilter(event)}
+                                <select id="fuelType" name="fuelType" onChange={carsfilter}
                                     className="w-[8rem] h-10 border-2 dark:bg-black/10 dark:text-white focus:outline-none focus:border-black text-black rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
                                     <option className="dark:text-black" value="">All</option>
                                     <option className="dark:text-black" value="petrol">Petrol</option>
                                     <option className="dark:text-black" value="diesel">Diesel</option>
                                     <option className="dark:text-black" value="electric">Electric</option>
                                 </select>
-                                <select id="transmission" name="transmission" onChange={() => carsfilter(event)}
+                                <select id="transmission" name="transmission" onChange={carsfilter}
                                     className="w-[8rem] h-10 border-2 focus:outline-none dark:bg-black/10 dark:text-white focus:border-black text-black rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
                                     <option className="dark:text-black" value="">All</option>
                                     <option className="dark:text-black" value="manual">Manual</option>
@@ -139,7 +124,7 @@ function Explore() {
                             </div>
                             {
                                 filterCars?.length > 0 ?
-                                    <div key={carsList} className={`grid-cols-1 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 md:mx-10 mx-3 ${showProducts | load | menu && 'blur-sm'}`}>
+                                    <div className={`grid-cols-1 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 md:mx-10 mx-3 ${showProducts | load | menu && 'blur-sm'}`}>
                                         {
 
                                             (filterCars.map((car: Cars) => (
@@ -201,7 +186,9 @@ function Explore() {
                                     </div> : <h1 className="w-full text-center text-3xl h-[24rem] mt-10">No car available</h1>
                             }
                         </div>
-                        : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+                    )
+                    :
+                    pageLoad && <PageLoading />
             }
 
         </>

@@ -1,13 +1,14 @@
 import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserCart } from "../../Api";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 import Products from "../header/Products";
 import Menubar from "../menu_bar/Menubar";
+import PageLoading  from "../pageload/PageLoading";
 
 function Checkout() {
 
-    const { showProducts, menu, totals, customer, setCustomer, car, getTotal, setMenu, load, pageLoad, setPageLoad, setHeaderLoad, setFooterLoad } = useContext(StoreContext);
+    const { showProducts, menu, totals, customer, setCustomer, car, getTotal, setMenu, load, pageLoad, setPageLoad  } = useContext(StoreContext);
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -37,22 +38,15 @@ function Checkout() {
             const response = await getUserCart();
             getTotal(response.items);
             setPageLoad(false)
-            setHeaderLoad(true)
-            setFooterLoad(true)
-        } catch (error) {
-            setHeaderLoad(false)
-            setFooterLoad(false)
+        } catch (error) {   
         }
 
     }
 
     useEffect(() => {
         setPageLoad(true)
-        setHeaderLoad(false)
-        setFooterLoad(false)
         setMenu(false)
         console.log(car)
-
         cartItems();
         inputRef.current?.focus();
     }, []);
@@ -61,20 +55,7 @@ function Checkout() {
     return (
         <>
             {
-                pageLoad ?
-                    <div id="loading-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60">
-
-                        <svg className="animate-spin h-8 w-8 text-white mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-
-                        <span className="text-white text-3xl font-bold">Loading...</span>
-
-                    </div> :
+                pageLoad ?<PageLoading /> :
                     <div className="relative">
                         {menu && (
                             <Menubar />

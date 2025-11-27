@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 
 function Menubar() {
   const { setMenu } = useContext(StoreContext)

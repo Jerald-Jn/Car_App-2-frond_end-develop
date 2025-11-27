@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userRegister } from "../../Api";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 import Products from "../header/Products";
 import Menubar from "../menu_bar/Menubar";
 import { Eye, EyeOff } from "lucide-react";

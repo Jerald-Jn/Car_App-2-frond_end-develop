@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { clearCart, verifyPayment } from "../../Api";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 import Menubar from "../menu_bar/Menubar";
 import Products from "../header/Products";
 

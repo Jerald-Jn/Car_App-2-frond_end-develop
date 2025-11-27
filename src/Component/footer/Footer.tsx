@@ -1,18 +1,16 @@
 import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 
 function Footer() {
 
     const navigate = useNavigate();
-    const { setShowProducts, showProducts, menu, load, pathCheck, setPathCheck } = useContext(StoreContext);
+    const { setShowProducts, showProducts, menu, load, pathCheck, setPathCheck, carsList } = useContext(StoreContext);
     const location = useLocation();
-    let token = localStorage.getItem('token')
+    let token = localStorage.getItem('token');    
 
     return (
-        <>
-
-            <footer className={`bg-gray-900 text-white relative overflow-hidden ${showProducts | menu | load && 'blur-sm'}`}>
+            <footer className={`bg-gray-900 absolute ${carsList.length==0 && 'mt-[30%]'} text-white  w-full overflow-hidden ${showProducts | menu | load && 'blur-sm'}`}>
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
                     <div className="grid grid-cols-1 md:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
@@ -102,7 +100,6 @@ function Footer() {
                     </div>
                 </div>
             </footer>
-        </>
     )
 }
 export default Footer;

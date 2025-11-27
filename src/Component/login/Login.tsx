@@ -2,7 +2,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginApi } from "../../Api";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 import Products from "../header/Products";
 import Menubar from "../menu_bar/Menubar";
 
@@ -14,20 +14,20 @@ function Login() {
     const [invalid3, setInvalid3] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const { showProducts, setMenu, menu, load, carsList, pageLoad, setPageLoad, setHeaderLoad, setFooterLoad } = useContext(StoreContext)
+    const { showProducts, setMenu, menu, load, carsList, pageLoad, setPageLoad  } = useContext(StoreContext)
     const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         setPageLoad(true)
-        setHeaderLoad(false)
-        setFooterLoad(false)
+         
+         
         inputRef.current?.focus();
         setMenu(false)
         setTimeout(() => {
             if (Array.isArray(carsList)) {
                 setPageLoad(false)
-                setHeaderLoad(true)
-                setFooterLoad(true)
+                 
+                 
             }
         }, 100);
     }, [])

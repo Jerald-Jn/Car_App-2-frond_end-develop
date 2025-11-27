@@ -1,17 +1,19 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import type { Cars } from '../../Interface/DataModel';
-import { StoreContext } from '../context/StoreContext';
+import { StoreContext } from '../../store/StoreContext';
 import Products from '../header/Products';
 import Menubar from '../menu_bar/Menubar';
+import PageLoading from '../pageload/PageLoading';
 
 
 
 function Home() {
 
   const [index, setIndex] = useState(0);
+  const navigate = useNavigate();
 
-  const { carsList, showProducts, setMenu, menu, load, pageLoad, setPageLoad, setHeaderLoad, setFooterLoad } = useContext(StoreContext);
+  const { carsList, showProducts, setMenu, menu, load, pageLoad, setPageLoad } = useContext(StoreContext);
 
   useEffect(() => {
     if (carsList.length === 0) return; // don’t start until data is loaded
@@ -39,35 +41,31 @@ function Home() {
   }
 
   useEffect(() => {
-    setPageLoad(true)
-    setHeaderLoad(false)
-    setFooterLoad(false)
     setMenu(false)
-    setTimeout(() => {
-      if (Array.isArray(carsList)) {
-        setPageLoad(false)
-        setHeaderLoad(true)
-        setFooterLoad(true)
+    const interval = setInterval(() => {
+      if (Array.isArray(carsList) && carsList.length>0) {
+        setPageLoad(false);
+        clearInterval(interval);
+      }else {
+        window.addEventListener('online',()=>{
+          navigate('/')
+        });
+        window.addEventListener('offline',()=>{
+          console.log('offline')
+          navigate('/not-found')
+        });
       }
-    }, 2000);
+      console.log(pageLoad);
+    }, 5000);
   }, [])
 
   return (
     <>
       {
         pageLoad ?
-          <div id="loading-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60">
-            <svg className="animate-spin h-8 w-8 text-white mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
-              viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-              </path>
-            </svg>
-
-            <span className="text-white text-3xl font-bold">Loading...</span>
-          </div> :
-          carsList ?
+          (<PageLoading />) :
+          Array.isArray(carsList) && carsList.length>0 ?
+            (
             <>
               {/* Hero section */}
               <div className=''>
@@ -93,7 +91,7 @@ function Home() {
                   }
 
                   {/* Previous Button (only on medium+ screens) */}
-                  <div className={`hidden md:block absolute top-1/2 left-5 -translate-y-1/2 ${showProducts | load | menu && 'blur-sm'}`}>
+                  <div className={`hidden md:block absolute top-[24rem] left-5 ${showProducts | load | menu && 'blur-sm'}`}>
                     <button
                       className={`bg-white/70 rounded-full p-2 hover:bg-white`}
                       onClick={() => changeImage("previous")}
@@ -110,7 +108,7 @@ function Home() {
                   </div>
 
                   {/* Next Button (only on medium+ screens) */}
-                  <div className={`hidden md:block absolute top-1/2 right-5 -translate-y-1/2 ${showProducts | load | menu && 'blur-sm'}`}>
+                  <div className={`hidden md:block absolute top-[24rem] right-5 ${showProducts | load | menu && 'blur-sm'}`}>
                     <button
                       className={`bg-white/70 rounded-full p-2 hover:bg-white`}
                       onClick={() => changeImage("next")}
@@ -161,7 +159,8 @@ function Home() {
                   )}
               </section>
 
-            </> : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+            </>
+            ) : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
       }
 
     </>

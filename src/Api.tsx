@@ -3,163 +3,209 @@ import type { CartData } from "./Interface/DataModel";
 
 const API = import.meta.env.VITE_API_URL;
 
-const loadToken = () => {
-    return localStorage.getItem('token')
+const getToken = () => {
+    let jwt = localStorage.getItem('token');
+    return jwt ? `Bearer ${jwt}` : ''
 }
 
-// Users Api
+/************************ USER API *************************************/
+// Login Api
 export const loginApi = async (userName: string, password: string) => {
-    const response = (await axios.post(`${API}/login?userName=${userName}&password=${password}`)).data;
-    localStorage.setItem('token', response)
-    return response;
-}
-
-//Car Api
-export const getListOfCars = async () => {
     try {
-        const response = await (await axios.get(`${API}/cars`)).data;
+        const response = (await axios.post(`${API}/login?userName=${userName}&password=${password}`)).data;
+        localStorage.setItem('token', response)
         return response;
     } catch (error) {
-        console.error(error)
-        throw error;
-    }
-}
-export const getCarByCarName = async (model: any) => {
-    try {
-        const response = (await axios.get(`${API}/cars/get/${model}`)).data;
-        console.log(response)
-        return response;
-    } catch (error) {
-        console.error(error)
-        throw error;
-    }
-}
-export const getCarImage = async () => {
-    try {
-        return (await axios.get(`${API}/cars/getImage/Glanza`)).data
-    } catch (error) {
-        throw error;
-    }
-};
-
-export const createPayment = async (customerDetail: any) => {
-    try {
-        const response = (await axios.post(`${API}/payments/create-payment`, customerDetail, {
-            headers: {
-                Authorization: `Bearer ${loadToken()}`
-            }
-        })).data;
-        console.log(response);
-        localStorage.setItem('clientSecret', response);
-        return response;
-    } catch (error) {
-
+        console.error('loginApi Error ', error);
     }
 }
 
-export const getUserCart = async () => {
-    try {
-        const response = (await axios.get(`${API}/cart`,
-            {
-                headers: {
-                    Authorization: `Bearer ${loadToken()}`
-                }
-            })).data;
-        return response;
-    } catch (error) {
-        throw error;
-    }
-}
-
-export const addCartApi = async (model: CartData) => {
-    try {
-        console.log(model)
-        const response = (await axios.post(`${API}/cart/create`, model, {
-            headers: {
-                Authorization: `Bearer ${loadToken()}`
-            }
-        })).data;
-        return response;
-    } catch (error) {
-        throw error;
-    }
-}
-
-export const verifyPayment = async (clientSecret: any) => {
-    try {
-        console.log(clientSecret)
-        const response = (await axios.get(`${API}/payments/verify-payment/${clientSecret}`, {
-            headers: {
-                Authorization: `Bearer ${loadToken()}`
-            }
-        })).data;
-        console.log(response);
-        return response;
-    } catch (error) {
-        throw error;
-    }
-}
-
-export const clearCart = async () => {
-    try {
-        const response = (await axios.delete(`${API}/cart/clear-cart`, {
-            headers: {
-                Authorization: `Bearer ${loadToken()}`
-            }
-        })).data
-        console.log(response)
-        return response;
-    } catch (error) {
-        throw error;
-    }
-}
-
+// User Register API
 export const userRegister = async (registerData: any) => {
     try {
         const response = (await axios.post(`${API}/user/add`, registerData)).data;
         console.log(response, registerData);
         return response;
     } catch (error) {
-
+        console.error('userRegister Error ', error);
     }
 }
 
-export const removeCart = async (carId: any) => {
-    const respone = (await (axios.delete(`${API}/cart/remove/${carId}`, {
-        headers: {
-            Authorization: `Bearer ${loadToken()}`
-        }
-    }))).data
-    console.log(respone);
-    return respone;
+/*************************** CAR API  **********************************/
+//Get All Cars API
+export const getListOfCars = async () => {
+    try {
+        const response = (await axios.get(`${API}/cars`)).data;
+        return response;
+    } catch (error) {
+        console.error('getListOfCars Error ', error);
+    }
 }
 
-export const deleteItemApi = async (carId: any) => {
-    const respone = (await (axios.delete(`${API}/cart/delete/${carId}`, {
-        headers: {
-            Authorization: `Bearer ${loadToken()}`
-        }
-    }))).status;
-    return respone;
+// Add Car API
+export const addCar_Api = async (formData: FormData) => {
+    try {
+        return (await axios.post(`${API}/admin/car/add`, formData,
+            {
+                headers: {
+                    Authorization: getToken(),
+                    "Content-Type": "multipart/form-data"
+                }
+            }
+        )).data;
+    } catch (error) {
+        console.error('addCar_Api Error ', error);
+    }
 }
 
-export const IncreaseItemApi = async (carId: any) => {
-    const respone = (await (axios.get(`${API}/cart/increase/${carId}`, {
-        headers: {
-            Authorization: `Bearer ${loadToken()}`
-        }
-    }))).data;
-    console.log("increase cart -> ", respone)
-    return respone;
+// Get Car API 
+export const getCarByCarName = async (model: any) => {
+    try {
+        const response = (await axios.get(`${API}/cars/get/${model}`)).data;
+        console.log(response)
+        return response;
+    } catch (error) {
+        console.error('getCarByCarName Error ', error);
+    }
 }
 
-export const loadPayment = async () => {
-    const respone = (await (axios.get(`${API}/payments`,
-        {
+/************************* CART API ***************************************/
+// Get User Cart API
+export const getUserCart = async () => {
+    try {
+        const response = (await axios.get(`${API}/cart`,
+            {
+                headers: {
+                    Authorization: getToken()
+                }
+            })).data;
+        return response;
+    } catch (error) {
+        console.error('getUserCart Error ', error);
+    }
+}
+
+// Add Cart API
+export const addCartApi = async (model: CartData) => {
+    try {
+        console.log(model)
+        const response = (await axios.post(`${API}/cart/create`, model, {
             headers: {
-                Authorization: `Bearer ${loadToken()}`
+                Authorization: getToken()
+            }
+        })).data;
+        return response;
+    } catch (error) {
+        console.error('addCartApi Error ', error);
+    }
+}
+
+// Clear Cart API
+export const clearCart = async () => {
+    try {
+        const response = (await axios.delete(`${API}/cart/clear-cart`, {
+            headers: {
+                Authorization: getToken()
             }
         }
-    ))).data;
-    return respone;
+        )).data
+        console.log(response)
+        return response;
+    } catch (error) {
+        console.error('clearCart Error ', error);
+    }
+}
+
+// Remove Cart API
+export const removeCart = async (carId: any) => {
+    try {
+        const respone = (await axios.delete(`${API}/cart/remove/${carId}`, {
+            headers: {
+                Authorization: getToken()
+            }
+        }
+        )).data
+        return respone;
+    } catch (error) {
+        console.error('removeCart Error ', error);
+    }
+}
+
+// Delete Item in Cart API
+export const deleteItemApi = async (carId: any) => {
+    try {
+        const respone = (await axios.delete(`${API}/cart/delete/${carId}`, {
+            headers: {
+                Authorization: getToken()
+            }
+        }
+        )).status;
+        return respone;
+    } catch (error) {
+        console.error('deleteItemApi Error ', error);
+    }
+}
+
+// Increase Item in Cart API
+export const IncreaseItemApi = async (carId: any) => {
+    try {
+        const respone = (await axios.get(`${API}/cart/increase/${carId}`, {
+            headers: {
+                Authorization: getToken()
+            }
+        })).data;
+        console.log("increase cart -> ", respone)
+        return respone;
+    } catch (error) {
+        console.error('IncreaseItemApi Error ', error);
+    }
+}
+
+/********************** PAYMENT API ******************************************/
+// Create Payment API
+export const createPayment = async (customerDetail: any) => {
+    try {
+        const response = (await axios.post(`${API}/payments/create-payment`, customerDetail, {
+            headers: {
+                Authorization: getToken()
+            }
+        })).data;
+        console.log(response);
+        localStorage.setItem('clientSecret', response);
+        return response;
+    } catch (error) {
+        console.error('createPayment Error ', error);
+    }
+}
+
+// Verfify Payment API
+export const verifyPayment = async (clientSecret: any) => {
+    try {
+        console.log(clientSecret)
+        const response = (await axios.get(`${API}/payments/verify-payment/${clientSecret}`, {
+            headers: {
+                Authorization: getToken()
+            }
+        })).data;
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error('verifyPayment Error ', error);
+    }
+}
+
+// Get User All Payments API
+export const loadPayment = async () => {
+    try {
+        const respone = (await axios.get(`${API}/payments`,
+            {
+                headers: {
+                    Authorization: getToken()
+                }
+            }
+        )).data;
+        return respone;
+    } catch (error) {
+        console.error('loadPayment Error ', error);
+    }
 }

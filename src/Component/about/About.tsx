@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 import Products from "../header/Products";
 import Menubar from "../menu_bar/Menubar";
 

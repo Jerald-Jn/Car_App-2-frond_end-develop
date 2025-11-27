@@ -1,6 +1,6 @@
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useContext, useEffect, useState } from "react";
-import { StoreContext } from "../context/StoreContext";
+import { StoreContext } from "../../store/StoreContext";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
