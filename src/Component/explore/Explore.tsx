@@ -8,7 +8,7 @@ import Menubar from "../menu_bar/Menubar";
 import PageLoading from "../pageload/PageLoading";
 
 function Explore() {
-    const { carsList, menu, showProducts, setMenu, load, pageLoad, setPageLoad, fetchCars } = useContext(StoreContext);
+    const { carsList, menu, showProducts, setMenu, load, pageLoad, setPageLoad } = useContext(StoreContext);
     let token = localStorage.getItem('token')
     const [cart, setCart] = useState<CartData>({ items: {} });
     const [filterCars, setFilterCars] = useState<any>();

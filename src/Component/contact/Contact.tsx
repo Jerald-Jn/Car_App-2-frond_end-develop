@@ -5,7 +5,7 @@ import Menubar from "../menu_bar/Menubar";
 
 
 function Contact() {
-    const { showProducts, menu, setMenu, load, pageLoad, setPageLoad  } = useContext(StoreContext);
+    const { showProducts, menu, setMenu, load, setPageLoad  } = useContext(StoreContext);
 
     useEffect(() => {
         setPageLoad(true)
