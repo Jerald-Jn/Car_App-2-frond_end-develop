@@ -8,7 +8,7 @@ import PageLoading from "../pageload/PageLoading";
 
 function Checkout() {
 
-    const { showProducts, menu, totals, customer, setCustomer, car, getTotal, setMenu, load, pageLoad, setPageLoad } = useContext(StoreContext);
+    const { showProducts, menu, totals, customer, setCustomer, getTotal, setMenu, load, pageLoad, setPageLoad } = useContext(StoreContext);
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null);
 
