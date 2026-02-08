@@ -21,7 +21,6 @@ function Add_Car(){
         formData.append('car_logo',car_logo);
         formData.append("car_Image",car_Image);
         const response=addCar_Api(formData);
-        console.log(response)
     }
     return (
         <>

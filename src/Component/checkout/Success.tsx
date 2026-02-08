@@ -35,8 +35,7 @@ export default function Success() {
     const response: any = await verifyPayment(paymentIntentId);
     if (response !== undefined) {
       setPaymentResponse(response)
-      const res = clearCart();
-      console.log(res);
+      clearCart();
       setCount(0);
       setLoading(false);
     }

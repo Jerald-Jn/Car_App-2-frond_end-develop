@@ -25,7 +25,6 @@ export function Payment() {
     const loadUserPayment = async () => {
         try {
             const response = await loadPayment();
-            console.log(response.paymentDetailsMap)
             const updatePayments = Object.values(response.paymentDetailsMap).map((value: any) => {
                 return {
                     ...payments,
@@ -94,7 +93,7 @@ export function Payment() {
                                     </select>
                                 </div>
                                 {
-                                    filterPayments?.length > 0 &&
+                                    filterPayments?.length > 0 ?
                                     <div className={`shadow-lg rounded-lg overflow-hidden my-10 md:mx-10 mx-2 overflow-y-auto max-h-[500px]`}>
                                         <table className="w-full border-2" >
                                             <thead>
@@ -132,12 +131,27 @@ export function Payment() {
                                             </tbody>
                                         </table>
                                     </div>
+                                    :
+                                    <h1 className="h-80 text-center text-5xl font-semibold mt-5">No payments</h1>
                                 }
                             </div>
 
                         </>
                         : payments == undefined ?
-                            <h1 className="h-80 text-center text-5xl font-semibold mt-5">No payments Fount</h1>
+                            <>
+                                <div className="relative -translate-y-5 z-10">
+                                    {/* Menu bar for small screen */}
+                                    {menu && (
+                                        <Menubar />
+                                    )
+                                    }
+                                    {/* When we hover on Product is render "Products" component */}
+                                    {
+                                        true && (<Products />)
+                                    }
+                                </div>
+                                <h1 className="h-80 text-center text-5xl font-semibold mt-5">No payments Fount</h1>
+                            </>
                             : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
             }
 

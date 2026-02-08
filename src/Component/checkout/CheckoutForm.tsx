@@ -13,7 +13,6 @@ export default function CheckoutForm() {
   async function handleSubmit(event: any) {
     event.preventDefault();
     if (!stripe || !elements) return;
-    console.log("URL -> ", API)
     setLoading(true);
     // It calls the "stripe" confirmPayment "API", it confirmed it return url
     const { error } = await stripe.confirmPayment({

@@ -24,7 +24,6 @@ export const loginApi = async (userName: string, password: string) => {
 export const userRegister = async (registerData: any) => {
     try {
         const response = (await axios.post(`${API}/user/add`, registerData)).data;
-        console.log(response, registerData);
         return response;
     } catch (error) {
         console.error('userRegister Error ', error);
@@ -62,7 +61,6 @@ export const addCar_Api = async (formData: FormData) => {
 export const getCarByCarName = async (model: any) => {
     try {
         const response = (await axios.get(`${API}/cars/get/${model}`)).data;
-        console.log(response)
         return response;
     } catch (error) {
         console.error('getCarByCarName Error ', error);
@@ -88,7 +86,6 @@ export const getUserCart = async () => {
 // Add Cart API
 export const addCartApi = async (model: CartData) => {
     try {
-        console.log(model)
         const response = (await axios.post(`${API}/cart/create`, model, {
             headers: {
                 Authorization: getToken()
@@ -109,7 +106,6 @@ export const clearCart = async () => {
             }
         }
         )).data
-        console.log(response)
         return response;
     } catch (error) {
         console.error('clearCart Error ', error);
@@ -154,7 +150,6 @@ export const IncreaseItemApi = async (carId: any) => {
                 Authorization: getToken()
             }
         })).data;
-        console.log("increase cart -> ", respone)
         return respone;
     } catch (error) {
         console.error('IncreaseItemApi Error ', error);
@@ -170,7 +165,6 @@ export const createPayment = async (customerDetail: any) => {
                 Authorization: getToken()
             }
         })).data;
-        console.log(response);
         localStorage.setItem('clientSecret', response);
         return response;
     } catch (error) {
@@ -181,13 +175,11 @@ export const createPayment = async (customerDetail: any) => {
 // Verfify Payment API
 export const verifyPayment = async (clientSecret: any) => {
     try {
-        console.log(clientSecret)
         const response = (await axios.get(`${API}/payments/verify-payment/${clientSecret}`, {
             headers: {
                 Authorization: getToken()
             }
         })).data;
-        console.log(response);
         return response;
     } catch (error) {
         console.error('verifyPayment Error ', error);

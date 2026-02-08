@@ -18,7 +18,6 @@ function Cart() {
 
 	async function increaseCart(carId: any) {
 		const response: any = await IncreaseItemApi(carId);
-		console.log("remove cart -> " + response.items)
 		if (response.items) {
 			getCart();
 		}
@@ -26,7 +25,6 @@ function Cart() {
 
 	async function decreaseCart(carId: any) {
 		const response: any = await removeCart(carId);
-		console.log("remove cart -> " + response.items)
 		if (response.items) {
 			getCart();
 		}
@@ -48,36 +46,20 @@ function Cart() {
 	}
 
 	const getCart = async () => {
-		try {
-			const response = await getUserCart();
-			console.log(Object.keys(response.items).length)
-			await getTotal(response.items);
-			setCart(response.items);
-
-			console.log(pageLoad)
-			if (Object.keys(response.items).length !== 0) {
-				setLoading(true);
-				 
-				 
-				setPageLoad(false)
-			} else {
-				setLoading(false)
-				setPageLoad(false)
-				 
-				 
-			}
-			console.log(response)
-		} catch (error) {
-			 
-			 
+		const response = await getUserCart();
+		await getTotal(response.items);
+		setCart(response.items);
+		if (Object.keys(response.items).length !== 0) {
+			setLoading(true);
+			setPageLoad(false)
+		} else {
+			setLoading(false)
+			setPageLoad(false)
 		}
-
 	}
 
 	useEffect(() => {
 		setPageLoad(true)
-		 
-		 
 		setMenu(false)
 		getCart();
 	}, []);

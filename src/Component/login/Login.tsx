@@ -46,13 +46,11 @@ function Login() {
         if (userName && password) {
             try {
                 const response = (await loginApi(userName, password));
-                console.log("response data ->", response)
                 if (response) {
                     localStorage.setItem('token', response)
                     navigate('/home')
                 }
             } catch (err) {
-                console.log('error -> ', err)
                 setInvalid3(true)
             }
 

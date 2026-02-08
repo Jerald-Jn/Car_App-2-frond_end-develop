@@ -37,7 +37,6 @@ export function Register() {
     const onchangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setFormData((pre) => ({ ...pre, [name]: value }))
-        console.log(name, value)
     }
 
     const onchangeHandlerForUserInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +50,6 @@ export function Register() {
                     [name]: value
                 }
             }))
-        console.log(name, value)
     }
 
     useEffect(() => {
@@ -67,22 +65,17 @@ export function Register() {
         setInvalid5(formData.password ? false : true)
         setInvalid6(confirmPassword ? false : true);
 
-        console.log(formData.userInfo.email.includes('@gmail.com'))
         try {
             if (formData.userName && formData.password && formData.userInfo.email && formData.userInfo.firstName && formData.userInfo.lastName && confirmPassword) {
                 if (!formData.userInfo.email.includes('@gmail.com')) {
                     setInvalid8(true);
-                    console.log('email wrong ')
                     return;
                 } else
                     if (formData.password !== confirmPassword) {
-                        console.log('password wromg')
                         setInvalid7(true);
                         return;
                     }
-                console.log('correct')
                 const response = await userRegister(formData);
-                console.log(response);
                 if (response) {
                     return navigate('/login')
                 } else {
@@ -90,7 +83,6 @@ export function Register() {
                     return
                 }
             }
-            console.log('wrong')
             return;
 
         } catch (error) {

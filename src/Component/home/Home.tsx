@@ -21,7 +21,6 @@ function Home() {
     const intervalId = setInterval(() => {
       setIndex((pre) => {
         const nextIndex = pre === carsList.length - 1 ? 0 : pre + 1;
-        // console.log("Next:", nextIndex, "Prev:", pre);
         return nextIndex;
       });
     }, 10000);
@@ -51,11 +50,9 @@ function Home() {
           navigate('/')
         });
         window.addEventListener('offline',()=>{
-          console.log('offline')
           navigate('/not-found')
         });
       }
-      console.log(pageLoad);
     }, 5000);
   }, [])
 

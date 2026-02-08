@@ -18,7 +18,6 @@ export default function PaymentPage() {
   async function initPayment() {
     try {
       const response: any = await createPayment(customer);
-      console.log('client secret -> ', response)
       setClientSecret(response)
       setPageLoad(false)
     } catch (error) {

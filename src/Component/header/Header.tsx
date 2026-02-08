@@ -11,9 +11,8 @@ function Header() {
   const focusElement = useRef<HTMLDivElement>(null)
   const location = useLocation();
   const clientSecret = localStorage.getItem('clientSecret');
-  const [backgroundcolor, setBackgroundColor] = useState(true);
+  // const [backgroundcolor, setBackgroundColor] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'))
-  console.log(location.pathname)
   useEffect(() => {
     token && getCart();
   }, [navigate, totals, clientSecret, count])
@@ -29,10 +28,8 @@ function Header() {
       } else {
         setLoading(false)
       }
-      console.log(response)
     } catch (error) {
-      console.log(error)
-      throw error;
+      console.error(error);
     }
 
   }
@@ -104,7 +101,7 @@ function Header() {
             </div>
 
             <div className="flex flex-row md:w-[20rem] md:gap-x-4 gap-x-2 justify-evenly w-[10rem] items-center ">
-              <button className="rounded-md w-8 h-6 ml-3" onClick={() => {
+              {/* <button className="rounded-md w-8 h-6 ml-3" onClick={() => {
                 document.documentElement.classList.toggle("dark")
                 setBackgroundColor(!backgroundcolor);
               }
@@ -140,7 +137,7 @@ function Header() {
                       </g>
                     </svg>
                 }
-              </button>
+              </button> */}
 
               <Link to={'/cart'} className='' onMouseEnter={() => setLoad(false)}>
                 <svg className={`hover:stroke-red-500 md:w-12 md:h-8 w-6 hover:cursor-pointer md:-mb-2 ${pathCheck == '/cart' && 'stroke-blue-500'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"

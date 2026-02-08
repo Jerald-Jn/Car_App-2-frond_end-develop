@@ -59,7 +59,6 @@ function Car() {
         try {
             const tempCar = await (await getCarByCarName(model));
             setCar(tempCar[0])
-            console.log(tempCar[0].images)
             setData((pre) => ({
                 ...pre,
                 color: tempCar[0].color,
@@ -80,7 +79,6 @@ function Car() {
 
         setCart((prev: any) => {
             const existingItem = prev.items[car.carId];
-            console.log("existingItem -> ", existingItem)
             updateCart = {
                 ...prev,
                 items: {
@@ -92,19 +90,15 @@ function Car() {
                     },
                 },
             };
-
-            console.log(updateCart);
             return updateCart;
         });
     }
 
     useEffect(() => {
         if (cart?.items && Object.keys(cart.items).length > 0) {
-            console.log(cart)
             const addCart = async () => {
                 try {
                     const response = await addCartApi(cart);
-                    console.log("Cart synced:", response);
                     response ? navigate('/cart') : navigate('/explore')
                 } catch (error) {
                     throw error;
@@ -113,7 +107,6 @@ function Car() {
             }
             addCart();
         }
-        console.log("cart")
     }, [updateCart]);
 
 

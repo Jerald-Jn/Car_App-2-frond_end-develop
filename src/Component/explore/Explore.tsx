@@ -24,7 +24,6 @@ function Explore() {
 
         setCart((prev: any) => {
             const existingItem = prev.items[car.carId];
-            console.log("existingItem -> ", existingItem)
             updateCart = {
                 ...prev,
                 items: {
@@ -36,18 +35,15 @@ function Explore() {
                     },
                 },
             };
-            console.log(updateCart);
             return updateCart;
         });
     }
 
     useEffect(() => {
         if (cart?.items && Object.keys(cart.items).length > 0) {
-            console.log(cart)
             const addCart = async () => {
                 try {
                     const response = await addCartApi(cart);
-                    console.log("Cart synced:", response);
                     response ? navigate('/cart') : navigate('/explore')
                 } catch (error) {
                     throw error;
@@ -56,7 +52,6 @@ function Explore() {
             }
             addCart();
         }
-        console.log("cart")
     }, [cart]);
 
     useEffect(() => {
@@ -64,7 +59,6 @@ function Explore() {
         setMenu(false)
         if (Array.isArray(carsList) && carsList.length > 0) {
             setFilterCars(carsList);
-            console.log('carlist => ', carsList)
             setPageLoad(false)
         }
     }, []);

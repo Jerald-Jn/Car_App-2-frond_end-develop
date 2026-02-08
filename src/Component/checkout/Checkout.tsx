@@ -4,11 +4,11 @@ import { getUserCart } from "../../Api";
 import { StoreContext } from "../../store/StoreContext";
 import Products from "../header/Products";
 import Menubar from "../menu_bar/Menubar";
-import PageLoading  from "../pageload/PageLoading";
+import PageLoading from "../pageload/PageLoading";
 
 function Checkout() {
 
-    const { showProducts, menu, totals, customer, setCustomer, car, getTotal, setMenu, load, pageLoad, setPageLoad  } = useContext(StoreContext);
+    const { showProducts, menu, totals, customer, setCustomer, car, getTotal, setMenu, load, pageLoad, setPageLoad } = useContext(StoreContext);
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -28,7 +28,6 @@ function Checkout() {
     function purchase() {
         if (customer) {
             setCustomer((pre: any) => ({ ...pre, amount: totals.total }))
-            console.log("customer -> ", customer)
             navigate('/paymentPage')
         }
     }
@@ -38,7 +37,7 @@ function Checkout() {
             const response = await getUserCart();
             getTotal(response.items);
             setPageLoad(false)
-        } catch (error) {   
+        } catch (error) {
         }
 
     }
@@ -46,7 +45,6 @@ function Checkout() {
     useEffect(() => {
         setPageLoad(true)
         setMenu(false)
-        console.log(car)
         cartItems();
         inputRef.current?.focus();
     }, []);
@@ -55,7 +53,7 @@ function Checkout() {
     return (
         <>
             {
-                pageLoad ?<PageLoading /> :
+                pageLoad ? <PageLoading /> :
                     <div className="relative">
                         {menu && (
                             <Menubar />
