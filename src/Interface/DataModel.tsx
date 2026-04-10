@@ -76,3 +76,24 @@ export const Payment_Resp = {
     id: '',
     paymentDetails: PaymentDetails,
 }
+
+export const aboutMe = {
+    Birthday : '09 June 2001',
+    Degree : 'MCA',
+    Location : 'Bengaluru'
+}
+
+export const skils = [
+    'Java / Spring Boot', 'Rest API / JWT', 'React / Tailwind', 'MongoDB / Cloudinary', 'Postman', 'Docker Desktop', 'Stripe'
+]
+
+export const technologies = {
+    Backend: 'Java, Spring Boot',
+    API : 'REST API',
+    Authentication: 'JWT',
+    Frontend: 'React, Tailwind.CSS',
+    Database: 'MongoDB',
+    Cloud: 'Cloudinary',
+    Payment_Gateway: 'Stripe',
+    Deploy: 'Docker, Render'
+}

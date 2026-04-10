@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { userRegister } from "../../Api";
 import { StoreContext } from "../../store/StoreContext";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "react-toastify";
 
 function Register() {
 
@@ -75,6 +76,7 @@ function Register() {
                     }
                 const response = await userRegister(formData);
                 if (response) {
+                    toast.success('Registered successfully.');
                     return navigate('/login')
                 } else {
                     setLoading(true)
@@ -83,7 +85,9 @@ function Register() {
             }
             return;
 
-        } catch (error) {
+        } catch (error:any) {
+            let message = String(error?.response?.data ?? error?.message);
+            toast.error(message);
             navigate('/register')
         }
 
@@ -91,7 +95,7 @@ function Register() {
 
     return (
         <div>
-            <div className={`max-w-lg md:mx-auto mx-5 bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col 
+            <div className={`max-w-lg md:mx-auto m-5 bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col 
             items-center md:my-10 mb-10 dark:bg-white/30 dark:text-black ${showProducts | load | menu && 'blur-sm'}`}>
                 <h1 className="text-xl font-bold text-center mb-8">Welcome to Toyota</h1>
                 <form className="w-full flex flex-col gap-4" onSubmit={() => { event?.preventDefault(), register() }}>
@@ -100,13 +104,15 @@ function Register() {
                         <label htmlFor="firstName" className="text-sm text-black mr-2 dark:text-white">First Name:</label>
                         {invalid1 && <span className="text-red-500 text-sm mx-auto">First Name required</span>}
                         <input type="text" id="firstName" name="firstName" ref={inputRef}
-                            className="w-full px-3 bg-white/80 py-2 rounded-md border focus " value={formData.userInfo.firstName} onChange={(event) => onchangeHandlerForUserInfo(event)} />
+                        required
+                        className="w-full px-3 bg-white/80 py-2 rounded-md border focus " value={formData.userInfo.firstName} onChange={(event) => onchangeHandlerForUserInfo(event)} />
                     </div>
 
                     <div className="flex items-start flex-col justify-start ">
                         <label htmlFor="lastName" className="text-sm text-black mr-2 dark:text-white">Last Name:</label>
                         {invalid2 && <span className="text-red-500 text-sm mx-auto">Last Name required</span>}
                         <input type="text" id="lastName" name="lastName"
+                            required
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.userInfo.lastName} onChange={(event) => onchangeHandlerForUserInfo(event)} />
                     </div>
 
@@ -114,6 +120,7 @@ function Register() {
                         <label htmlFor="userName" className="text-sm text-black mr-2 dark:text-white">Username:</label>
                         {invalid3 && <span className="text-red-500 text-sm mx-auto">userName required</span>}
                         <input type="text" id="userName" name="userName"
+                            required
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.userName} onChange={(event) => onchangeHandler(event)} />
                     </div>
 
@@ -122,6 +129,7 @@ function Register() {
                         {invalid4 && <span className="text-red-500 text-sm mx-auto">Email required</span>}
                         {invalid8 && <span className="text-red-500 text-sm mx-auto">Email id should be like @gmail.com required</span>}
                         <input type="email" id="email" name="email"
+                            required
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.userInfo.email} onChange={(event) => onchangeHandlerForUserInfo(event)} />
                     </div>
 
@@ -129,6 +137,7 @@ function Register() {
                         <label htmlFor="password" className="text-sm text-black mr-2 dark:text-white">Password:</label>
                         {invalid5 && <span className="text-red-500 text-sm mx-auto">Password required</span>}
                         <input type={passwordView1 ? 'text' : 'password'} id="password" name="password"
+                            required
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={formData.password} onChange={(event) => onchangeHandler(event)} />
                         <button type="button" onClick={() => setPasswordView1(!passwordView1)} className="absolute border-none transform md:translate-x-[25rem] translate-x-[14.5rem] translate-y-8">
                             {passwordView1 ? <EyeOff className="text-black" size={18} /> : <Eye className="text-black" size={18} />}
@@ -140,6 +149,7 @@ function Register() {
                         {invalid6 && <span className="text-red-500 text-sm mx-auto">Confirm Password required</span>}
                         {invalid7 && <span className="text-red-500 text-sm mx-auto">Password not match</span>}
                         <input type={passwordView2 ? 'text' : 'password'} id="confirmPassword" name="confirmPassword"
+                            required
                             className="w-full px-3 bg-white/80 py-2 rounded-md border" value={confirmPassword} onChange={(event) => setConfirmPassword(() => event?.target.value)} />
                         <button type="button" onClick={() => setPasswordView2(!passwordView2)} className="absolute border-none transform md:translate-x-[25rem] translate-x-[14.5rem] translate-y-8">
                             {passwordView2 ? <EyeOff className="text-black" size={18} /> : <Eye className="text-black" size={18} />}

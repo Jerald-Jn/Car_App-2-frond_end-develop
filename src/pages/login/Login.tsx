@@ -13,7 +13,7 @@ function Login() {
     const [invalid3, setInvalid3] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const { showProducts, setMenu, menu, load, carsList, setPageLoad, token, setPopDetails } = useContext(StoreContext)
+    const { showProducts, setMenu, menu, load, carsList, setPageLoad, token } = useContext(StoreContext)
     const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
@@ -55,14 +55,8 @@ function Login() {
             } catch (err:any) {
                 let msg = !!err?.response?.data ? err?.response?.data : (err?.message);
                 let message = String(msg);
-                let temptitle = String(err?.code).replace('ERR_','');
                 toast.error(message);
-                setPopDetails({
-                    title : temptitle,
-                    msg: message
-                });
                 setInvalid3(true)
-                navigate('not-found')
             }
 
         }
@@ -88,7 +82,7 @@ function Login() {
                                         }}>
                                         <h1 className="p-2 font-medium font-mono text-2xl tracking-wide text-white">Login</h1>
                                         {
-                                            invalid3 && (<span className="text-red-700 text-center text-sm">Please enter correct username and password</span>)
+                                            invalid3 && (<span className="text-orange-600 text-center text-sm">Please enter correct username and/or password</span>)
                                         }
                                         <div className="flex flex-col space-y-2 my-3 md:mt-4 items-center">
                                             <label className="text-white" htmlFor="userName">Username</label>

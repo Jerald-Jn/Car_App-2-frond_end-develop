@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
 import { StoreContext } from "../../store/StoreContext";
+import { aboutMe, skils, technologies } from "../../Interface/DataModel";
 
 function About() {
 
@@ -7,12 +8,12 @@ function About() {
 
     useEffect(() => {
         setMenu(false)
-    }, [])
+    }, []);
 
     return (
         <>
             {
-                <div className={`w-full flex items-cente dark:bg-black ${showProducts | load | menu && 'blur-sm'}`}>
+                <div className={`w-full flex items-center font-mono dark:bg-black ${showProducts | load | menu && 'blur-sm'}`}>
                     <div className="w-full lg:w-[80%] mx-auto px-4 sm:px-10 lg:px-0 flex flex-col gap-4 pt-10 pb-20 dark:text-white">
                         {/* <!-- Title --> */}
                         <div className="flex flex-col gap-2 mb-2 md:mb-4">
@@ -21,59 +22,69 @@ function About() {
                             <span className="w-8 h-[4px] bg-rose-500 rounded"></span>
                         </div>
 
-                        <h4 className="capitalize text-xl font-semibold">I'm <span className="text-red-500">jerald scooty</span></h4>
-                        <p className="text-base">I am a dedicated and innovative Web Developer passionate about building dynamic, user-friendly,
-                            and responsive websites. With a strong focus on clean code and seamless user experience,
-                            I specialize in creating modern web solutions that blend creativity with functionality.</p>
+                        {/* <h4 className="capitalize text-xl font-semibold">I'm <span className="text-red-500">jerald scooty</span></h4> */}
+                        <p className="text-lg">
+                            Hi, I’m <span className="font-bold font-mono text-xl" >Jerald Scooty J, a Software Engineer with 1+ year of experience in Java, Spring Boot, React.js, and MongoDB.</span>
+                            I build scalable web applications and enjoy working across both backend and frontend.
+                            I’m looking for an opportunity to contribute and grow with a strong team.
+                        </p>
 
                         <div className="w-full flex flex-col lg:flex-row gap-6 sm:gap-4 lg:gap-6 justify-between">
 
                             <div className="w-full flex flex-col items-stretch gap-4">
 
-                                <div className="flex flex-col sm:flex-row gap-2 md:gap-6 items-center justify-between font-serif">
+                                <div className="flex flex-col sm:flex-row gap-2 md:gap-6 items-start justify-between">
 
                                     <ul className="w-full text-gray-900 dark:text-gray-200">
-                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600"><span className="font-bold">Birthday :</span> 09
-                                            Jun 2001</li>
-                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600"><span className="font-bold">Degree :</span> Master of
-                                            Computer Applications</li>
-                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600"><span className="font-bold">Location :</span>
-                                            Ariyalur</li>
+                                        {
+                                            
+                                            Object.entries(aboutMe).map((data)=>(
+                                                <li className="py-2 border-b border-gray-200 dark:border-gray-600 flex flex-col gap-2">
+                                                    <span className="font-bold text-lg">{data[0]}</span>
+                                                    <span className="">{data[1]}</span>
+                                                </li>
+                                            ))
+                                        }
                                     </ul>
 
                                     <ul className="w-full text-gray-900 dark:text-gray-200">
-                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600"><span className="font-bold">Email :</span>
+                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600 flex flex-col gap-2">
+                                            <span className="font-bold text-lg">Email</span>
                                             <a href="mailto:jjerald2000@gmail.com" className="text-red-500 underline"> jjerald2000@gmail.com</a>
                                         </li>
-                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600"><span className="font-bold">Phone No :</span>
-                                            +91 7094949563</li>
-                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600"><span className="font-bold">Employment :</span>
-                                            Remote</li>
+                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600 flex flex-col gap-2">
+                                            <span className="font-bold text-lg">Phone No</span>
+                                            <a href="tel:+91 7094949563" className="text-red-500 font-mono">7094949563</a>
+                                        </li>
+                                        <li className="py-2 border-b border-gray-200 dark:border-gray-600 flex flex-col gap-2">
+                                            <span className="font-bold text-lg">Employment</span>
+                                            <span className="font-mono">Remote, Onsite</span>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
 
                             <div className="w-full flex flex-col gap-2 md:ml-10">
-                                <h1 className="text-base font-semibold uppercase text-blue-500 md:ml-10">Skills</h1>
+                                <h1 className="font-semibold uppercase text-blue-500 md:ml-10 text-lg">Skills</h1>
                                 <div className="flex flex-col gap-2 font-semibold md:ml-10">
-                                    <span>Html/Tailwind</span>
-                                    <span>React.Js</span>
-                                    <span>Java/Spring boot</span>
-                                    <span>Postman</span>
-                                    <span>Docker Desktop</span>
-                                    <span>Stripe</span>
+                                    {
+                                        skils.map((skill)=>(
+                                            <span>{skill}</span>
+                                        ))
+                                    }
                                 </div>
                             </div>
                             <div className="w-full flex flex-col gap-2">
-                                <h1 className="text-base font-semibold uppercase text-blue-500">Tools & Technologies:</h1>
-                                <div className="flex flex-col gap-2 font-semibold">
-                                    <span>Frontend: <span className="text-red-500">React.js, Tailwind.CSS</span></span>
-                                    <span>Backend: <span className="text-red-500">Spring Boot (Java), REST APIs</span></span>
-                                    <span>Database: <span className="text-red-500">MongoDB</span></span>
-                                    <span>Authentication: <span className="text-red-500">JWT</span></span>
-                                    <span>Cloud: <span className="text-red-500">Cloudinary</span></span>
-                                    <span>Payment Gateway: <span className="text-red-500">Stripe</span></span>
-                                    <span>Deploy: <span className="text-red-500">Docker, Render</span></span>
+                                <h1 className="text-lg font-semibold uppercase text-blue-500">Tools & Technologies:</h1>
+                                <div className="grid md:grid-cols-2 grid-cols-1 gap-1 font-semibold">
+                                    {
+                                        Object.entries(technologies).map((tech)=>(
+                                            <li className="border-b border-gray-200 dark:border-gray-600 flex flex-col gap-1">
+                                                    <span className="font-bold">{tech[0]}</span>
+                                                    <span className="text-red-500 font-mono">{tech[1]}</span>
+                                                </li>
+                                        ))
+                                    }
                                 </div>
                             </div>
                         </div>

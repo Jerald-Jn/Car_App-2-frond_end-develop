@@ -50,8 +50,10 @@ function Cart() {
 			await getTotal(response.items);
 			setPageLoad(false);
 			setCart(response.items);
-			if (Object.keys(response.items).length !== 0) {
+			if (Object.keys(response.items).length > 0) {
 				setLoading(true);
+			} else {
+				setLoading(false);
 			}
 		} catch (error) {
 			setLoading(false);
@@ -101,7 +103,7 @@ function Cart() {
 							<h1 className={`text-2xl font-semibold mb-4 
 							${loading ? 'text-left' : 'text-center text-3xl'}`}>Shopping Cart</h1>
 							{
-								loading && cart ?
+								loading ?
 
 									<div className="flex flex-col md:flex-row gap-4 ">
 										<div className="md:w-3/4">

@@ -32,7 +32,7 @@ function Popup(){
                         <div className="flex flex-row justify-center lg:translate-y-2 items-center w-full">
                             {/* <h1 className="text-3xl text-center">{  popDetails.title?? popDetails.title }</h1> */}
                             { 
-                                popDetails.title && <X className="absolute transform md:translate-x-32 translate-y-3 md:-translate-y-2 lg:translate-x-32 translate-x-32 cursor-pointer h-10 w-10" onClick={close}/>
+                                popDetails.title && <X className="absolute transform md:translate-x-32 translate-y-3 md:-translate-y-2 lg:translate-x-32 translate-x-36 cursor-pointer h-10 w-10" onClick={close}/>
                             }
                         </div>
                         {

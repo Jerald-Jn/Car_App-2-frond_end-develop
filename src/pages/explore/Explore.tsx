@@ -86,7 +86,7 @@ function Explore() {
                     (
                         <div>
                             {
-                                <div className="relative lg:-translate-y-5 z-10 -translate-y-5">
+                                <div className="relative">
                                     {
                                         !token.current && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart,
                                             <Link to={'/login'} className="text-blue-500"><span className="text-red-500"> Please</span> login</Link></h1>

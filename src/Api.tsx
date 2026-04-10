@@ -11,37 +11,25 @@ const API = import.meta.env.VITE_API_URL;
 /************************ USER API *************************************/
 // Login Api
 export const loginApi = async (userName: string, password: string) => {
-    // try {
-        const response = (await axios.post(`${API}/login`,{
-            userName,
-            password
-        })).data;
-        // sessionStorage.setItem('token', response)
-        return response;
-    // } catch (error) {
-    //     console.error('loginApi Error ', error);
-    // }
+    const response = (await axios.post(`${API}/login`, {
+        userName,
+        password
+    })).data;
+    return response;
 }
 
 // User Register API
 export const userRegister = async (registerData: any) => {
-    try {
-        const response = (await axios.post(`${API}/user/add`, registerData)).data;
-        return response;
-    } catch (error) {
-        console.error('userRegister Error ', error);
-    }
+    const response = (await axios.post(`${API}/user/add`, registerData)).data;
+    return response;
+
 }
 
 /*************************** CAR API  **********************************/
 //Get All Cars API
 export const getListOfCars = async () => {
-    // try {
-        const response = (await axios.get(`${API}/cars`)).data;
-        return response;
-    // } catch (error) {
-    //     console.error('getListOfCars Error ', error);
-    // }
+    const response = (await axios.get(`${API}/cars`)).data;
+    return response;
 }
 
 // Add Car API
@@ -83,17 +71,14 @@ export const getUserCart = async (token:string) => {
 }
 
 // Add Cart API
-export const addCartApi = async (model: CartData, token:string) => {
-    // try {
-        const response = (await axios.post(`${API}/cart/create`, model, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })).data;
-        return response;
-    // } catch (error) {
-    //     console.error('addCartApi Error ', error);
-    // }
+export const addCartApi = async (model: CartData, token: string) => {
+    const response = (await axios.post(`${API}/cart/create`, model, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })).data;
+    return response;
+
 }
 
 // Clear Cart API

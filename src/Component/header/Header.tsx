@@ -115,7 +115,7 @@ function Header() {
                 <ShoppingCart className={`md:w-8 md:h-8 w-6 ${pathCheck == '/cart' && 'stroke-blue-500'}`} />
                 { count>0 && <span className={`cart-count`}>{count}</span>}
               </Link>
-              <button className="" onMouseEnter={() => { setMenu(false); setLoad(!load) }} onClick={() => { setMenu(false); setLoad(!load) }}>
+              <button className="" onClick={() => { setMenu(false); setLoad(!load) }}>
                 <CircleUserRound className={`md:w-8 md:h-8 w-6 ${pathCheck == '/login' && 'stroke-blue-500'}`} />
               </button>
               {load &&
