@@ -2,13 +2,11 @@ import { useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserCart } from "../../Api";
 import { StoreContext } from "../../store/StoreContext";
-import Products from "../header/Products";
-import Menubar from "../menu_bar/Menubar";
-import PageLoading from "../pageload/PageLoading";
+import { toast } from "react-toastify";
 
 function Checkout() {
 
-    const { showProducts, menu, totals, customer, setCustomer, getTotal, setMenu, load, pageLoad, setPageLoad } = useContext(StoreContext);
+    const { showProducts, menu, totals, customer, setCustomer, getTotal, setMenu, load, setPageLoad, token } = useContext(StoreContext);
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -27,17 +25,19 @@ function Checkout() {
 
     function purchase() {
         if (customer) {
-            setCustomer((pre: any) => ({ ...pre, amount: totals.total }))
+            setCustomer((pre: any) => ({ ...pre, amount: totals.total }));
             navigate('/paymentPage')
         }
     }
 
     const cartItems = async () => {
         try {
-            const response = await getUserCart();
+            const response = await getUserCart(token.current);
             getTotal(response.items);
             setPageLoad(false)
         } catch (error) {
+            toast.warning('Plsease check network.');
+            navigate('not-found');
         }
 
     }
@@ -53,19 +53,9 @@ function Checkout() {
     return (
         <>
             {
-                pageLoad ? <PageLoading /> :
                     <div className="relative">
-                        {menu && (
-                            <Menubar />
-                        )
-                        }
-                        {/* When we hover on Product is render "Products" component */}
                         {
-                            showProducts && (<Products />)
-                        }
-
-                        {
-                            totals ?
+                            totals &&
                                 <div className={`bg-gray-100 dark:bg-white/50 text-gray-900 flex justify-center min-h-screen md:w-full ${showProducts | load | menu && 'blur-sm'} `}>
                                     <form onSubmit={(event) => { event.preventDefault(); purchase(); }} className="min-h-lvh m-5">
                                         <div className="md:max-w-screen-xl bg-white dark:bg-white/40 shadow sm:rounded-lg flex justify-center  md:flex-row flex-col">
@@ -150,7 +140,7 @@ function Checkout() {
                                             </div>
                                         </div>
                                     </form>
-                                </div> : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+                                </div>
                         }
 
                     </div>

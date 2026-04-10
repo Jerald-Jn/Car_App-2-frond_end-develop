@@ -5,9 +5,8 @@ import { StoreContext } from "../../store/StoreContext";
 function Footer() {
 
     const navigate = useNavigate();
-    const { setShowProducts, showProducts, menu, load, pathCheck, setPathCheck, carsList } = useContext(StoreContext);
-    const location = useLocation();
-    let token = localStorage.getItem('token');    
+    const { setShowProducts, showProducts, menu, token, load, pathCheck, setPathCheck, carsList } = useContext(StoreContext);
+    const location = useLocation();   
 
     return (
             <footer className={`bg-gray-900 absolute ${carsList.length==0 && 'mt-[30%]'} text-white  w-full overflow-hidden ${showProducts | menu | load && 'blur-sm'}`}>
@@ -67,7 +66,7 @@ function Footer() {
                                         className={`${pathCheck == '/explore' ? 'text-blue-500' : 'text-gray-300'} hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block`}>Explore</Link>
                                 </li>
                                 {
-                                    token &&
+                                    token.current &&
                                     <li>
                                         <Link to={'/my-payment'}
                                             className={`${pathCheck == '/my-payment' ? 'text-blue-500' : 'text-gray-300'} hover:text-white transition-colors duration-200 hover:translate-x-1 transform inline-block`}>My Payments</Link>

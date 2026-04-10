@@ -1,26 +1,24 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { StoreContext } from "../../store/StoreContext";
 import { getUserCart } from "../../Api";
 import type { CartData } from "../../Interface/DataModel";
+import { CircleUserRound, PhoneCall, ShoppingCart } from "lucide-react";
+import { toast } from "react-toastify";
+import Menubar from "../menu_bar/Menubar";
+import Products from "./Products";
 
 function Header() {
 
-  const { setShowProducts, setMenu, menu, totals, setCount, count, setLoading, loading, load, setLoad, logouting, setLogouting, pathCheck, setPathCheck } = useContext(StoreContext)
+  const { setShowProducts, setMenu, menu, totals, token, setCount, count, setLoading, load, setLoad, logouting, setLogouting, pathCheck, setPathCheck, showProducts } = useContext(StoreContext)
   const navigate = useNavigate();
   const focusElement = useRef<HTMLDivElement>(null)
   const location = useLocation();
-  const clientSecret = localStorage.getItem('clientSecret');
-  // const [backgroundcolor, setBackgroundColor] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem('token'))
-  useEffect(() => {
-    token && getCart();
-  }, [navigate, totals, clientSecret, count])
   const getCart = async () => {
     try {
-      const response = await getUserCart();
+      const response = await getUserCart(token.current);
       let tempCount = Object.keys(response.items).length;
-      if (tempCount !== 0) {
+      if (tempCount !== -1) {
         let tempItems: CartData["items"] = response.items;
         tempCount = Object.values(tempItems).reduce((acc, item) => acc + item.quantity, 0);
         setCount(tempCount);
@@ -29,30 +27,42 @@ function Header() {
         setLoading(false)
       }
     } catch (error) {
-      console.error(error);
+      console.error(error); 
     }
-
   }
+  useEffect(() => {
+    token.current && getCart();
+  }, [count, token.current, totals]);
+
+  useEffect(() => {
+    token.current && getCart();
+  },[]);
 
   useEffect(() => {
     if (focusElement.current) {
       focusElement.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    setToken(localStorage.getItem('token'));
     setPathCheck(location.pathname)
   }, [navigate]);
 
   const logout = () => {
-    setLogouting(false)
-    localStorage.removeItem('token');
+    setLogouting(false);
+    token.current = null;
+    sessionStorage.removeItem('token');
+    toast.success('logged out successfuly')
     setCount(0)
     navigate('/login')
+  }
+  const leave = ()=> {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }
 
   return (
     <>
       {/* Header Section with navigation bar */}
-      <header className='bg-white border-b-2 border-black/10 dark:bg-white/50 dark:text-black' onMouseEnter={() => { setShowProducts(false); setLoad(false) }} >
+      <header className='bg-white border-b-2 md:h-[4.6rem] h-12 border-black/10 dark:bg-white/50 dark:text-black' onMouseEnter={() => { setShowProducts(false); setLoad(false) }} >
         <nav className=''>
           <div ref={focusElement} className='flex flex-row justify-between mt-0.5 p-2 md:ml-5 md:p-5'>
             <svg
@@ -91,7 +101,7 @@ function Header() {
                   <Link to={'/about'}  >About me</Link>
                 </li>
                 {
-                  token &&
+                  token.current &&
                   <li className={`tracking-wider underline-offset-8 hover:underline hover:cursor-pointer hover:text-red-500 ${pathCheck == '/my-payment' && 'text-blue-500'}`}
                     onMouseEnter={() => { setShowProducts(false) }}>
                     <Link to={'/my-payment'}  >My Payments</Link>
@@ -101,81 +111,24 @@ function Header() {
             </div>
 
             <div className="flex flex-row md:w-[20rem] md:gap-x-4 gap-x-2 justify-evenly w-[10rem] items-center ">
-              {/* <button className="rounded-md w-8 h-6 ml-3" onClick={() => {
-                document.documentElement.classList.toggle("dark")
-                setBackgroundColor(!backgroundcolor);
-              }
-              }>{
-                  backgroundcolor ?
-                    <svg className='w-6 ml-2 md:mt-1 bg-none' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <g>
-                        <path className=" " fill="none" d="M0 0h24v24H0z" />
-                        <path className=" " d="M11.38 2.019a7.5 7.5 0 1 0 10.6 10.6C21.662 17.854 17.316 22 12.001 22 6.477 22 2 17.523 2 12c0-5.315 4.146-9.661 9.38-9.981z" />
-                      </g>
-                    </svg>
-                    :
-                    <svg className="w-6 ml-2 md:mt-1 hover:stroke-yellow-500 hover:fill-yellow-500" fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
-                      viewBox="0 0 292.548 292.548"
-                      xmlSpace="preserve">
-                      <g>
-                        <path d="M221.253,146.83c0,39.842-32.396,72.231-72.223,72.231c-39.839,0-72.238-32.401-72.238-72.231
-		c0-39.833,32.405-72.231,72.238-72.231C188.851,74.598,221.253,107.002,221.253,146.83z M149.03,47.105
-		c3.984,0,7.221-3.239,7.221-7.224V9.776c0-3.996-3.23-7.224-7.221-7.224c-3.996,0-7.23,3.233-7.23,7.224v30.105
-		C141.8,43.866,145.028,47.105,149.03,47.105z M220.917,83.821c1.849,0,3.698-0.703,5.104-2.114l25.881-25.875
-		c2.822-2.832,2.822-7.41,0-10.226c-2.822-2.811-7.386-2.811-10.208,0l-25.881,25.887c-2.822,2.828-2.822,7.397,0,10.214
-		C217.224,83.119,219.067,83.821,220.917,83.821z M60.504,81.708c1.414,1.405,3.267,2.114,5.104,2.114
-		c1.853,0,3.702-0.703,5.116-2.114c2.822-2.822,2.822-7.386,0-10.214L44.832,45.607c-2.822-2.811-7.386-2.811-10.208,0
-		c-2.822,2.822-2.822,7.395,0,10.226L60.504,81.708z M143.263,245.447c-3.99,0-7.218,3.242-7.218,7.224v30.102
-		c0,3.987,3.233,7.224,7.218,7.224s7.232-3.23,7.232-7.224V252.67C150.495,248.689,147.253,245.447,143.263,245.447z M66.26,210.847
-		l-25.88,25.88c-2.822,2.822-2.822,7.398,0,10.208c1.414,1.412,3.267,2.12,5.116,2.12c1.852,0,3.69-0.702,5.104-2.12l25.881-25.88
-		c2.822-2.822,2.822-7.398,0-10.208C73.658,208.031,69.082,208.031,66.26,210.847z M231.785,210.847
-		c-2.822-2.816-7.392-2.816-10.214,0c-2.822,2.822-2.822,7.386,0,10.208l25.881,25.88c1.41,1.412,3.26,2.12,5.115,2.12
-		c1.85,0,3.688-0.702,5.099-2.12c2.822-2.822,2.822-7.386,0-10.208L231.785,210.847z M46.96,146.83c0-3.996-3.249-7.224-7.233-7.224
-		H7.218c-3.99,0-7.218,3.228-7.218,7.224c0,3.993,3.233,7.224,7.218,7.224h32.51C43.718,154.053,46.96,150.823,46.96,146.83z
-		 M285.324,139.606h-38.527c-3.987,0-7.218,3.228-7.218,7.224c0,3.993,3.23,7.224,7.218,7.224h38.527
-		c3.987,0,7.224-3.23,7.224-7.224C292.548,142.833,289.312,139.606,285.324,139.606z"/>
-                      </g>
-                    </svg>
-                }
-              </button> */}
-
               <Link to={'/cart'} className='' onMouseEnter={() => setLoad(false)}>
-                <svg className={`hover:stroke-red-500 md:w-12 md:h-8 w-6 hover:cursor-pointer md:-mb-2 ${pathCheck == '/cart' && 'stroke-blue-500'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                  stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                {loading && count > 0 && <span className={`cart-count`}>{count}</span>}
+                <ShoppingCart className={`md:w-8 md:h-8 w-6 ${pathCheck == '/cart' && 'stroke-blue-500'}`} />
+                { count>0 && <span className={`cart-count`}>{count}</span>}
               </Link>
               <button className="" onMouseEnter={() => { setMenu(false); setLoad(!load) }} onClick={() => { setMenu(false); setLoad(!load) }}>
-                <svg className={`hover:stroke-red-500 hover:fill-red-500 md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2 ${pathCheck == '/login' && 'hover:stroke-red-300'}`}
-                  viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path className={`${pathCheck == '/login' && 'stroke-blue-500 fill-blue-500'} hover:stroke-red-500 hover:fill-red-500`} d="M5 5.5C5 4.11929 6.11929 3 7.5 3C8.88071 3 10 4.11929 10 5.5C10 6.88071 8.88071 8 7.5 8C6.11929 8 5 6.88071 5 5.5Z" fill="#000000" />
-                  <path className={`${pathCheck == '/login' && 'stroke-blue-500 fill-blue-500'} hover:stroke-red-500 hover:fill-red-500`} fillRule="evenodd" clipRule="evenodd" d="M7.5 0C3.35786 0 0 3.35786 0 7.5C0 11.6421 3.35786 15 7.5 15C11.6421 15 15 11.6421 15 7.5C15 3.35786 11.6421 0 7.5 0ZM1 7.5C1 3.91015 3.91015 1 7.5 1C11.0899 1 14 3.91015 14 7.5C14 9.34956 13.2275 11.0187 11.9875 12.2024C11.8365 10.4086 10.3328 9 8.5 9H6.5C4.66724 9 3.16345 10.4086 3.01247 12.2024C1.77251 11.0187 1 9.34956 1 7.5Z" fill="#000000" />
-                </svg>
+                <CircleUserRound className={`md:w-8 md:h-8 w-6 ${pathCheck == '/login' && 'stroke-blue-500'}`} />
               </button>
               {load &&
-                <div className="absolute md:top-[4.5rem] w-[9rem] top-[3.2rem] right-0 bg-black/50 dark:bg-white/50 z-10  p-2" onMouseLeave={() => { setLoad(false) }}>
+                <div className="absolute md:top-[4.5rem] mx-5 rounded-2xl w-[9rem] top-[3.2rem] right-0 bg-black/50 dark:bg-white/50 z-10  p-2" onMouseLeave={leave}>
                   <ul className="flex items-start px-5 space-y-1 flex-col cursor-pointer text-white dark:text-black">
                     <Link to={'/login'} className="hover:text-red-500">Login</Link>
-                    {token && <li className="hover:text-red-500"><button onClick={() => { setLogouting(true) }}>Logout</button></li>}
+                    {token.current && <li className="hover:text-red-500"><button onClick={() => { setLogouting(true) }}>Logout</button></li>}
                   </ul>
                 </div>
               }
 
               <Link to={'/contact'} className={`w-10 md:mr-3`} onMouseEnter={() => setLoad(false)}>
-                <svg className={`md:w-10 md:h-8 w-6 hover:cursor-pointer md:-mb-2 '}`}
-                  viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-                  <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                    <g className={`hover:stroke-red-500 hover:fill-red-500 ${pathCheck == '/contact' && 'stroke-blue-500 fill-blue-500'}`} id="Dribbble-Light-Preview" transform="translate(-140.000000, -7319.000000)" fill="#000000">
-                      <g id="icons" transform="translate(56.000000, 160.000000)">
-                        <path d="M94,7167 L94,7169 L96,7169 C96,7167.895 95.105,7167 94,7167 M94,7163 L94,7165 C96.206,7165 98,7166.794 98,7169 L100,7169 C100,7165.686 97.314,7163 94,7163 M94,7159 L94,7161 C98.411,7161 102,7164.589 102,7169 L104,7169 C104,7163.477 99.523,7159 94,7159 M98.652,7177.234 C98.641,7177.265 98.64,7177.27 98.652,7177.234 M98.117,7174.578 C97.422,7174.204 96.719,7173.778 95.992,7173.481 C94.587,7172.908 94.682,7174.602 93.679,7175.151 C93.027,7175.508 92.107,7174.861 91.538,7174.503 C90.544,7173.877 89.663,7173.053 88.931,7172.1 C88.556,7171.613 87.728,7170.697 87.83,7170.014 C87.992,7168.93 89.274,7168.876 88.907,7167.55 C88.711,7166.84 88.36,7166.141 88.097,7165.457 C87.745,7164.54 87.6,7163.953 86.573,7164.003 C85.831,7164.039 85.339,7164.356 84.883,7164.951 C83.649,7166.558 83.835,7168.725 84.664,7170.488 C85.838,7172.983 87.85,7175.335 89.999,7176.855 C91.461,7177.889 93.387,7178.828 95.157,7178.987 C96.453,7179.104 98.266,7178.403 98.73,7176.996 C98.698,7177.094 98.667,7177.189 98.652,7177.234 C98.663,7177.199 98.687,7177.128 98.73,7176.996 C98.777,7176.854 98.8,7176.783 98.811,7176.751 C98.797,7176.793 98.765,7176.891 98.731,7176.993 C99.139,7175.753 99.189,7175.155 98.117,7174.578 M98.811,7176.751 C98.819,7176.727 98.819,7176.725 98.811,7176.751" id="call-[#191]">
-                        </path>
-                      </g>
-                    </g>
-                  </g>
-                </svg>
+                <PhoneCall className={`md:w-7 md:h-8 w-6 ${pathCheck == '/contact' && 'stroke-blue-500'}`} />
               </Link>
             </div>
           </div>
@@ -208,6 +161,16 @@ function Header() {
             </div>
           </div>
         </div>
+      }
+
+      {/* Menu bar for small screen */}
+      {menu && (
+        <Menubar />
+      )
+      }
+      {/* When we hover on Product is render "Products" component */}
+      {
+        showProducts && (<Products />)
       }
 
     </>

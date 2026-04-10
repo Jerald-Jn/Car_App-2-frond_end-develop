@@ -1,9 +1,7 @@
 import { useContext, useEffect } from "react";
 import { StoreContext } from "../../store/StoreContext";
-import Products from "../header/Products";
-import Menubar from "../menu_bar/Menubar";
 
-export function About() {
+function About() {
 
     const { menu, showProducts, setMenu, load } = useContext(StoreContext);
 
@@ -13,17 +11,6 @@ export function About() {
 
     return (
         <>
-            <div className="relative">
-                {menu && (
-                    <Menubar />
-                )
-                }
-                {/* When we hover on Product is render "Products" component */}
-                {
-                    showProducts && (<Products />)
-                }
-            </div>
-
             {
                 <div className={`w-full flex items-cente dark:bg-black ${showProducts | load | menu && 'blur-sm'}`}>
                     <div className="w-full lg:w-[80%] mx-auto px-4 sm:px-10 lg:px-0 flex flex-col gap-4 pt-10 pb-20 dark:text-white">
@@ -97,3 +84,4 @@ export function About() {
         </>
     );
 }
+export default About;

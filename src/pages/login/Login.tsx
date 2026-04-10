@@ -3,8 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginApi } from "../../Api";
 import { StoreContext } from "../../store/StoreContext";
-import Products from "../header/Products";
-import Menubar from "../menu_bar/Menubar";
+import { toast } from "react-toastify";
 
 function Login() {
     const [userName, setUserName] = useState('');
@@ -14,20 +13,20 @@ function Login() {
     const [invalid3, setInvalid3] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-    const { showProducts, setMenu, menu, load, carsList, pageLoad, setPageLoad  } = useContext(StoreContext)
+    const { showProducts, setMenu, menu, load, carsList, setPageLoad, token, setPopDetails } = useContext(StoreContext)
     const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
         setPageLoad(true)
-         
-         
         inputRef.current?.focus();
         setMenu(false)
+        if(token.current) {
+            toast.success('Already loggedIn');
+            navigate(-1);
+        }
         setTimeout(() => {
             if (Array.isArray(carsList)) {
-                setPageLoad(false)
-                 
-                 
+                setPageLoad(false)   
             }
         }, 100);
     }, [])
@@ -47,11 +46,23 @@ function Login() {
             try {
                 const response = (await loginApi(userName, password));
                 if (response) {
-                    localStorage.setItem('token', response)
+                    // setToken(response);
+                    token.current = response;
+                    sessionStorage.setItem('token',response);
+                    toast.success('loggedIn successfuly')
                     navigate('/home')
                 }
-            } catch (err) {
+            } catch (err:any) {
+                let msg = !!err?.response?.data ? err?.response?.data : (err?.message);
+                let message = String(msg);
+                let temptitle = String(err?.code).replace('ERR_','');
+                toast.error(message);
+                setPopDetails({
+                    title : temptitle,
+                    msg: message
+                });
                 setInvalid3(true)
+                navigate('not-found')
             }
 
         }
@@ -64,35 +75,12 @@ function Login() {
     return (
         <>
             {
-                pageLoad ?
-                    <div id="loading-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60">
-                        <svg className="animate-spin h-8 w-8 text-white mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-
-                        <span className="text-white text-3xl font-bold">Loading...</span>
-                    </div>
-                    : carsList ?
+                Array.isArray(carsList) && !token.current &&
                         <>
-                            <div className="relative lg:-translate-y-0.5 z-10">
-                                {/* Menu bar for small screen */}
-                                {menu && (
-                                    <Menubar />
-                                )
-                                }
-                                {/* When we hover on Product is render "Products" component */}
-                                {
-                                    showProducts && (<Products />)
-                                }
-                            </div>
                             <div className={`bg-[url('../../camry-banner.jpg')] bg-cover bg-center min-h-screen ${showProducts | load | menu && 'blur-sm'}`}>
 
                                 <h1 className="text-white text-4xl uppercase tracking-widest font-serif text-center p-5  md:text-6xl">Toyota</h1>
-                                <div className="flex flex-col absolute bg-black/50 w-2/3 mx-16 h-3/5 md:w-1/5 md:h-3/5 md:right-20 top-1/4">
+                                <div className="flex flex-col absolute bg-black/50 w-2/3 mx-16 h-3/5 md:w-1/5 md:h-3/5 md:right-20">
                                     <form className="flex flex-col  md:w-4/5 md:h-4/5 mx-auto my-8 items-center"
                                         onSubmit={(e) => {
                                             e.preventDefault();
@@ -134,7 +122,7 @@ function Login() {
                                     </form>
                                 </div>
                             </div>
-                        </> : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+                        </>
             }
 
         </>

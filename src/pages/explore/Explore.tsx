@@ -3,13 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { addCartApi } from "../../Api";
 import { type Cars, type CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../../store/StoreContext";
-import Products from "../header/Products";
-import Menubar from "../menu_bar/Menubar";
-import PageLoading from "../pageload/PageLoading";
+import { toast } from "react-toastify";
 
 function Explore() {
-    const { carsList, menu, showProducts, setMenu, load, pageLoad, setPageLoad } = useContext(StoreContext);
-    let token = localStorage.getItem('token')
+    const { carsList, menu, showProducts, setMenu, load, setPageLoad, token } = useContext(StoreContext);
+    // let token = sessionStorage.getItem('token')
     const [cart, setCart] = useState<CartData>({ items: {} });
     const [filterCars, setFilterCars] = useState<any>();
     const [filters, setFilters] = useState({
@@ -43,10 +41,14 @@ function Explore() {
         if (cart?.items && Object.keys(cart.items).length > 0) {
             const addCart = async () => {
                 try {
-                    const response = await addCartApi(cart);
+                    const response = await addCartApi(cart, token.current);
+                    if(response?.id) {
+                        toast.success('Product add to cart')
+                    }
                     response ? navigate('/cart') : navigate('/explore')
                 } catch (error) {
-                    throw error;
+                    toast.error('check network.');
+                    navigate('not-found');
                 }
 
             }
@@ -80,22 +82,13 @@ function Explore() {
     return (
         <>
             {
-
-                Array.isArray(carsList) && carsList.length > 0 ?
+                Array.isArray(carsList) && carsList.length > 0 &&
                     (
                         <div>
                             {
                                 <div className="relative lg:-translate-y-5 z-10 -translate-y-5">
-                                    {menu && (
-                                        <Menubar />
-                                    )
-                                    }
-                                    {/* When we hover on Product is render "Products" component */}
                                     {
-                                        showProducts && (<Products />)
-                                    }
-                                    {
-                                        !token && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart,
+                                        !token.current && <h1 className="text-center mt-5 font-semibold text-2xl text-red-500">Before add Cart,
                                             <Link to={'/login'} className="text-blue-500"><span className="text-red-500"> Please</span> login</Link></h1>
                                     }
                                 </div>
@@ -117,13 +110,13 @@ function Explore() {
                                 </select>
                             </div>
                             {
-                                filterCars?.length > 0 ?
+                                filterCars?.length > 0 &&
                                     <div className={`grid-cols-1 grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 md:mx-10 mx-3 ${showProducts | load | menu && 'blur-sm'}`}>
                                         {
 
                                             (filterCars.map((car: Cars) => (
-                                                <div key={car.carId} className="my-5 md:mx-2 scale-90 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full *
-                                    hover:scale-100 duration-1000  hover:shadow-2xl hover:rounded-2xl hover:border-2 dark:text-white dark:bg-black/30">
+                                                <div key={car.carId} className="my-5 md:mx-2 scale-75 bg-white rounded-lg shadow-md overflow-hidden max-w-sm w-full *
+                                    hover:scale-90 duration-1000  hover:shadow-2xl hover:rounded-2xl hover:border-2 dark:text-white dark:bg-black/30">
                                                     <div className="relative">
                                                         <Link to={`/car/${car.model}`}>
                                                             <img src={car.carImage} alt="Product image" className="w-full h-64 object-cover object-center" />
@@ -151,7 +144,7 @@ function Explore() {
                                                             </div>
                                                             <span className="text-gray-600 text-sm ml-2 dark:text-white">(4.5/5)</span>
                                                         </div>
-                                                        <p className="text-gray-600 text-sm mb-4 dark:text-white">A stylish and practical hatchback with a premium feel, known for fuel efficiency, comfort, and Toyota’s reliability.</p>
+                                                        {/* <p className="text-gray-600 text-sm mb-4 dark:text-white">A stylish and practical hatchback with a premium feel, known for fuel efficiency, comfort, and Toyota’s reliability.</p> */}
                                                         <div className="flex items-center justify-between mb-4">
                                                             <div className="flex items-center">
                                                                 <i className="fas fa-clock text-blue-500 mr-2"></i>
@@ -177,14 +170,11 @@ function Explore() {
                                                 </div>
                                             )))
                                         }
-                                    </div> : <h1 className="w-full text-center text-3xl h-[24rem] mt-10">No car available</h1>
+                                    </div>
                             }
                         </div>
                     )
-                    :
-                    pageLoad && <PageLoading />
             }
-
         </>
     )
 }

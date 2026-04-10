@@ -1,35 +1,19 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import { About } from './Component/about/About';
-import Car from './Component/car/Car';
-import Cart from './Component/cart/Cart';
-import Checkout from './Component/checkout/Checkout';
-import PaymentPage from './Component/checkout/PaymentPage';
-import Success from './Component/checkout/Success';
-import Contact from './Component/contact/Contact';
+import { About, Add_Car, Car, Cart, Checkout, Contact, Explore, Home, Login, NotFound, Payment, PaymentPage, Register, ServicePage, Success } from './pages/index';
+import { Footer, Header, PageLoading, Popup, ProtectedRoute } from "./Component/index";
 import { StoreContext } from './store/StoreContext';
-import Explore from './Component/explore/Explore';
-import Footer from './Component/footer/Footer';
-import Header from './Component/header/Header';
-import Home from './Component/home/Home';
-import Login from './Component/login/Login';
-import { Register } from './Component/register/Register';
-import ServicePage from './Component/servicePage/ServicePage';
-import { Payment } from './Component/payment/Payment';
-import Add_Car from './Component/addCar/addCar';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
-  const { carsList, setLoad } = useContext(StoreContext);
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const {  setLoad, popDetails, pageLoad } = useContext(StoreContext);
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    setToken(localStorage.getItem('token'));
     setLoad(false)
-  }, [navigate, carsList])
-
+  }, [navigate]);
+  
   return (
     <div className='dark:text-white dark:bg-black/80 h-full w-full'>
       <Header></Header>
@@ -42,19 +26,59 @@ function App() {
             <Route path="/home" element={<Home />}></Route>
             <Route path="/addCar" element={<Add_Car />}></Route>
             <Route path="/about" element={<About />} />
-            <Route path='/car/:id' element={<Car></Car>}></Route>
-            <Route path='/cart' element={token ? <Cart /> : <Login />} />
-            <Route path='/service' element={<ServicePage></ServicePage>}></Route>
+            <Route path='/car/:id' element={<Car />}></Route>
+            <Route path='/cart'
+              element={
+                <ProtectedRoute>
+                  <Cart />
+                </ProtectedRoute>
+              } />
+            <Route path='/service' element={<ServicePage />}></Route>
             <Route path='/contact' element={<Contact />} ></Route>
             <Route path='/explore' element={<Explore />}></Route>
-            <Route path='/checkout' element={token ? <Checkout /> : <Login />} ></Route>
-            <Route path='/payment-success' element={token ? <Success /> : <Login />}></Route>
-            <Route path='/paymentPage' element={token ? <PaymentPage /> : <Login />}></Route>
-            <Route path="/not-found" element={<h1 className="text-center mt-20 text-4xl font-bold">404 Not Found</h1>} />
-            <Route path='/my-payment' element={token ? <Payment /> : <Login />}></Route>
+            <Route path='/checkout'
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route path='/payment-success'
+              element={
+                <ProtectedRoute>
+                  <Success />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route path='/paymentPage'
+              element={
+                <ProtectedRoute>
+                  <PaymentPage />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route path="/not-found" element={<NotFound />} />
+            <Route path='/my-payment'
+              element={
+                <ProtectedRoute>
+                  <Payment />
+                </ProtectedRoute>
+              }
+            ></Route>
           </Routes>
         </div>
       }
+      {
+        (!!String(popDetails.title).trim() && !!String(popDetails.msg).trim()) && <Popup />
+      }
+      {
+        pageLoad && <PageLoading />
+      }
+      <ToastContainer
+          position="top-right"
+          autoClose={3000} 
+          closeOnClick
+          />
       {/* Footer Section */}
       <Footer />
     </div>

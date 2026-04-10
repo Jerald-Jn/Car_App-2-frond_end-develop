@@ -1,6 +1,6 @@
 function PageLoading(){
     return (
-        <div id="loading-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60">
+        <div id="loading-overlay" className="fixed inset-0 z-40 flex items-center justify-center bg-gray-900 bg-opacity-60">
             <svg className="animate-spin h-8 w-8 text-white mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>

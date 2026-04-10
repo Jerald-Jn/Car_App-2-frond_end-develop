@@ -1,12 +1,13 @@
 import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../store/StoreContext";
+import { toast } from "react-toastify";
 
 export default function CheckoutForm() {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
-  const { menu, showProducts, setMenu, load } = useContext(StoreContext)
+  const { menu, showProducts, setMenu, load, setPageLoad } = useContext(StoreContext)
 
   const API = import.meta.env.VITE_PAYMENT_URL;
 
@@ -14,6 +15,7 @@ export default function CheckoutForm() {
     event.preventDefault();
     if (!stripe || !elements) return;
     setLoading(true);
+    setPageLoad(false);
     // It calls the "stripe" confirmPayment "API", it confirmed it return url
     const { error } = await stripe.confirmPayment({
       elements,
@@ -23,18 +25,19 @@ export default function CheckoutForm() {
     });
 
     if (error) {
+      toast.warning(error.message);
       console.error(error.message);
     }
   }
 
   useEffect(() => {
-    setMenu(false)
+    setMenu(false);
   }, [])
 
   return (
     <>
       {
-        stripe ?
+        stripe &&
           <>
             <div className={`${showProducts | load | menu && 'blur-sm'}`}>
               <div className="flex flex-col items-center gap-2">
@@ -43,7 +46,7 @@ export default function CheckoutForm() {
                 <p className="uppercase font-bold text-base">MM/YY - <span className="text-red-500">{`MM/YY>${new Date().getFullYear()}`}</span></p>
                 <p className="uppercase font-bold text-base">CVC - <span className="text-red-500">123</span></p>
               </div>
-              <form onSubmit={handleSubmit} className="h-full w-3/4 md:w-2/5 mx-auto flex flex-col rounded-2xl justify-center p-10 bg-slate-400/50 my-10">
+              <form onSubmit={()=>handleSubmit(event)} className="h-full w-3/4 md:w-2/5 mx-auto flex flex-col rounded-2xl justify-center p-10 bg-slate-400/50 my-10">
 
                 <PaymentElement />
                 <button disabled={!stripe || loading} className="bg-blue-500 hover:bg-red-500/50 text-white px-4 py-2 rounded mt-4">
@@ -51,7 +54,7 @@ export default function CheckoutForm() {
                 </button>
               </form>
             </div>
-          </> : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+          </>
       }
 
     </>

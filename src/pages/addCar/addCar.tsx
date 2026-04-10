@@ -1,11 +1,13 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useContext, useState, type ChangeEvent, type FormEvent } from "react";
 import { addCar_Api } from "../../Api";
 import { Car } from "../../Interface/DataModel";
+import { StoreContext } from "../../store/StoreContext";
 
 function Add_Car(){
     const [car,setCar]=useState(Car);
     const [car_Image,setCar_Image]=useState('');
     const [car_logo,setCar_logo]=useState('');
+    const { token } = useContext(StoreContext);
 
 
     function changeHandler(event: ChangeEvent<HTMLInputElement>) {
@@ -20,7 +22,7 @@ function Add_Car(){
         formData.append("car",JSON.stringify(car));
         formData.append('car_logo',car_logo);
         formData.append("car_Image",car_Image);
-        addCar_Api(formData);
+        addCar_Api(formData, token.current);
     }
     return (
         <>

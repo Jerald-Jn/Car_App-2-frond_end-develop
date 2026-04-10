@@ -2,12 +2,10 @@ import { useContext, useEffect, useState } from "react"
 import { StoreContext } from "../../store/StoreContext"
 import { loadPayment } from "../../Api";
 import { useNavigate } from "react-router-dom";
-import Menubar from "../menu_bar/Menubar";
-import Products from "../header/Products";
 
-export function Payment() {
+function Payment() {
 
-    const { load , setPageLoad, pageLoad, menu, showProducts } = useContext(StoreContext);
+    const { load , setPageLoad, menu, showProducts, token } = useContext(StoreContext);
     const [payments, setPayments] = useState<any>()
     const navigate = useNavigate();
     const [filterPayments, setfilterpayments] = useState<any>()
@@ -24,7 +22,7 @@ export function Payment() {
 
     const loadUserPayment = async () => {
         try {
-            const response = await loadPayment();
+            const response = await loadPayment(token.current);
             const updatePayments = Object.values(response.paymentDetailsMap).map((value: any) => {
                 return {
                     ...payments,
@@ -56,33 +54,8 @@ export function Payment() {
     return (
         <>
             {
-                pageLoad ?
-                    <div id="loading-overlay" className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60">
-
-                        <svg className="animate-spin h-8 w-8 text-white mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                            </path>
-                        </svg>
-
-                        <span className="text-white text-3xl font-bold">Loading...</span>
-
-                    </div> :
                     payments != undefined ?
                         <>
-                            <div className="relative -translate-y-5 z-10">
-                                {/* Menu bar for small screen */}
-                                {menu && (
-                                    <Menubar />
-                                )
-                                }
-                                {/* When we hover on Product is render "Products" component */}
-                                {
-                                    showProducts && (<Products />)
-                                }
-                            </div>
                             <div className={`${showProducts | load | menu && 'blur-sm'}`}>
                                 <div className="flex mt-5 justify-center items-center flex-row gap-3">
                                     <select id="status" name="status" onChange={() => paymentsFilter(event)}
@@ -137,24 +110,13 @@ export function Payment() {
                             </div>
 
                         </>
-                        : payments == undefined ?
+                        : payments == undefined &&
                             <>
-                                <div className="relative -translate-y-5 z-10">
-                                    {/* Menu bar for small screen */}
-                                    {menu && (
-                                        <Menubar />
-                                    )
-                                    }
-                                    {/* When we hover on Product is render "Products" component */}
-                                    {
-                                        true && (<Products />)
-                                    }
-                                </div>
                                 <h1 className="h-80 text-center text-5xl font-semibold mt-5">No payments Fount</h1>
                             </>
-                            : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
             }
 
         </>
     )
 }
+export default Payment;

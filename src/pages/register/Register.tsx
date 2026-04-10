@@ -2,11 +2,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userRegister } from "../../Api";
 import { StoreContext } from "../../store/StoreContext";
-import Products from "../header/Products";
-import Menubar from "../menu_bar/Menubar";
 import { Eye, EyeOff } from "lucide-react";
 
-export function Register() {
+function Register() {
 
     const inputRef = useRef<HTMLInputElement>(null);
     const { menu, showProducts, setMenu, load } = useContext(StoreContext);
@@ -93,17 +91,6 @@ export function Register() {
 
     return (
         <div>
-            <div className="relative h-10">
-                {/* Menu bar for small screen */}
-                {menu && (
-                    <Menubar />
-                )
-                }
-                {/* When we hover on Product is render "Products" component */}
-                {
-                    showProducts && (<Products />)
-                }
-            </div>
             <div className={`max-w-lg md:mx-auto mx-5 bg-black/10 rounded-lg shadow-md px-8 py-10 flex flex-col 
             items-center md:my-10 mb-10 dark:bg-white/30 dark:text-black ${showProducts | load | menu && 'blur-sm'}`}>
                 <h1 className="text-xl font-bold text-center mb-8">Welcome to Toyota</h1>
@@ -170,3 +157,4 @@ export function Register() {
         </div>
     )
 }
+export default Register;

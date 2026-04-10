@@ -1,15 +1,14 @@
 // Success.tsx
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { clearCart, verifyPayment } from "../../Api";
 import { StoreContext } from "../../store/StoreContext";
-import Menubar from "../menu_bar/Menubar";
-import Products from "../header/Products";
+import { toast } from "react-toastify";
 
 export default function Success() {
 
   // destructure the StoreContext variable
-  const { setCount, setLoading, menu, showProducts, setMenu, load } = useContext(StoreContext);
+  const { setCount, setLoading, menu, showProducts, setMenu, load, token } = useContext(StoreContext);
   const location = useLocation();
   const navigate = useNavigate();
   const [paymentResponse, setPaymentResponse] = useState({
@@ -17,27 +16,32 @@ export default function Success() {
     status: '',
     receiptURL: '',
     id: ''
-  })
-
-
-  // Stripe API ?payment_intent=pi_123&payment_intent_client_secret=...
-  // It means the currrent API to get query data  
+  });
+  const hasFetched = useRef<any>(null);
+ 
   const query = new URLSearchParams(location.search);
   const paymentIntentId = query.get("payment_intent");
 
   useEffect(() => {
-    setMenu(false)
+    setMenu(false);
     verify();
   }, [])
 
   const verify = async () => {
-    if (!paymentIntentId) return;
-    const response: any = await verifyPayment(paymentIntentId);
+    if (!paymentIntentId || hasFetched.current) return;
+    try {
+      const response: any = await verifyPayment(paymentIntentId, token.current);
     if (response !== undefined) {
-      setPaymentResponse(response)
-      clearCart();
+      setPaymentResponse(response);
+      clearCart(token.current);
       setCount(0);
       setLoading(false);
+      hasFetched.current=response;
+    }
+    toast.success('Payemnt Success.');
+    } catch (error) {
+      toast.error('Payemnt Failed.');
+      navigate('not-found');
     }
   }
 
@@ -45,18 +49,8 @@ export default function Success() {
   return (
     <>
       {
-        paymentResponse.status ?
+        hasFetched.current &&
           <>
-            <div className="relative -translate-y-[2rem] z-10">
-              {menu && (
-                <Menubar />
-              )
-              }
-              {/* When we hover on Product is render "Products" component */}
-              {
-                showProducts && (<Products />)
-              }
-            </div>
             <div className={`min-h-full flex items-center justify-center px-4 my-8 ${showProducts | load | menu && 'blur-sm'}`}>
               <div className=" bg-opacity-10 border border-white/10 dark:bg-slate-50/50 border-opacity-20 rounded-3xl p-8 md:p-6 max-w-md w-full text-center shadow-2xl">
                 {/* <!-- Success Icon --> */}
@@ -109,11 +103,11 @@ export default function Success() {
                 {/* <!-- Action Buttons --> */}
                 <div className="space-y-4" style={{ animationDelay: "0.6s" }}>
                   <button className="w-full text-black font-semibold py-2 rounded-2xl hover:bg-opacity-90 transition-all hover:bg-green-200
-      duration-300 transform hover:scale-105 shadow-lg">
+                    duration-300 transform hover:scale-105 shadow-lg">
                     <a href={paymentResponse.receiptURL} target="_blank">View Receipt</a>
                   </button>
                   <button className="w-full bg-transparent border-2 border-opacity-30 text-black font-semibold py-2 rounded-2xl
-      hover:bg-red-200 transition-all duration-300 transform hover:scale-105"
+                  hover:bg-red-200 transition-all duration-300 transform hover:scale-105"
                     onClick={() => navigate('/explore')}>
                     Continue Shopping
                   </button>
@@ -129,7 +123,8 @@ export default function Success() {
                 </div>
               </div>
             </div>
-          </> : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+          </> 
+          
       }
 
 

@@ -1,32 +1,34 @@
-import { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { Cars } from '../../Interface/DataModel';
 import { StoreContext } from '../../store/StoreContext';
-import Products from '../header/Products';
-import Menubar from '../menu_bar/Menubar';
-import PageLoading from '../pageload/PageLoading';
-
-
 
 function Home() {
 
   const [index, setIndex] = useState(0);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const { carsList, showProducts, setMenu, menu, load, pageLoad, setPageLoad } = useContext(StoreContext);
-
+  const { carsList, showProducts, setMenu, menu, load, setPageLoad } = useContext(StoreContext);
+  
+  // const timer = useRef<ReturnType<typeof setInterval> | null>(null); 
+  const intervalId = useRef<ReturnType<typeof setInterval> | null>(null); 
+  
   useEffect(() => {
-    if (carsList.length === 0) return; // don’t start until data is loaded
-
-    const intervalId = setInterval(() => {
+    const success = Array.isArray(carsList) && carsList.length>0;
+    intervalId.current = setInterval(() => {
       setIndex((pre) => {
         const nextIndex = pre === carsList.length - 1 ? 0 : pre + 1;
         return nextIndex;
       });
     }, 10000);
-
-    return () => clearInterval(intervalId); // cleanup
-  }, [carsList.length]);
+    if (success) {
+      setPageLoad(false);
+      return;
+    }
+    return () => {
+      if (intervalId.current) { clearInterval(intervalId.current); }
+    };
+  }, [carsList]);
 
   function changeImage(changeIndex: string) {
     setIndex((pre) => {
@@ -41,27 +43,15 @@ function Home() {
 
   useEffect(() => {
     setMenu(false)
-    const interval = setInterval(() => {
-      if (Array.isArray(carsList) && carsList.length>0) {
-        setPageLoad(false);
-        clearInterval(interval);
-      }else {
-        window.addEventListener('online',()=>{
-          navigate('/')
-        });
-        window.addEventListener('offline',()=>{
-          navigate('/not-found')
-        });
-      }
-    }, 5000);
+    if (Array.isArray(carsList) && carsList.length > 0) {
+      setPageLoad(false);
+    }
   }, [])
 
   return (
     <>
       {
-        pageLoad ?
-          (<PageLoading />) :
-          Array.isArray(carsList) && carsList.length>0 ?
+          Array.isArray(carsList) && carsList.length>0 &&
             (
             <>
               {/* Hero section */}
@@ -77,16 +67,6 @@ function Home() {
                       </a>
                     )
                   )}
-                  {/* Menu bar for small screen */}
-                  {menu && (
-                    <Menubar />
-                  )
-                  }
-                  {/* When we hover on Product is render "Products" component */}
-                  {
-                    showProducts && (<Products />)
-                  }
-
                   {/* Previous Button (only on medium+ screens) */}
                   <div className={`hidden md:block absolute top-[24rem] left-5 ${showProducts | load | menu && 'blur-sm'}`}>
                     <button
@@ -157,7 +137,7 @@ function Home() {
               </section>
 
             </>
-            ) : (<h1 className='translate-y-52 tracking-wide text-center font-bold text-4xl'>404 Not Found</h1>)
+            )
       }
 
     </>

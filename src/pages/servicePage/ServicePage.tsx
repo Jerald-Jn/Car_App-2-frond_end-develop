@@ -1,7 +1,5 @@
 import { useContext, useEffect } from "react";
 import { StoreContext } from "../../store/StoreContext";
-import Products from "../header/Products";
-import Menubar from "../menu_bar/Menubar";
 
 function ServicePage() {
 
@@ -14,20 +12,6 @@ function ServicePage() {
     return (
         <>
             <div className="relative">
-                {menu && (
-                    <div className="-translate-y-[10rem]">
-                        <Menubar />
-                    </div>
-                )
-                }
-                {/* When we hover on Product is render "Products" component */}
-                {/* Products floating on top */}
-                <div className="absolute inset-0 z-20">
-                    <div className="-translate-y-[10rem]">
-                        <Products />
-                    </div>
-                </div>
-
                 <div className={`relative z-10 my-40 mx-auto max-w-5xl flex gap-12 flex-wrap items-start justify-center ${showProducts | load | menu && 'blur-md'}  transition-all duration-300`}>
                     <div className="grid gap-4 justify-items-center text-center md:flex-1">
                         <div className="rounded-full border-8 border-amber-400 p-4">
