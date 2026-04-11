@@ -18,7 +18,7 @@ function Products() {
                             (carsList.length > 0 && Array.isArray(carsList)) &&
                                 (
                                     carsList.map((car: Cars) =>
-                                        <Link to={`/car/${car.model}`} key={car.carId} className="m-5 hover:underline scale-75 hover:scale-95 duration-700 hover:underline-offset-4"
+                                        <Link to={`/car/${car.model}`} key={car.carId} className="m-5 scale-75 hover:scale-95 duration-700 hover:underline-offset-4"
                                             onClick={() => { setShowProducts(false) }}>
                                             <li className="flex flex-col items-center">
                                                 <img className="h-3/4 w-2/4 mix-blend-multiply" src={car.carLogo} alt={car.model} />

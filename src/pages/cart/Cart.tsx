@@ -4,6 +4,7 @@ import { deleteItemApi, getUserCart, IncreaseItemApi, removeCart } from "../../A
 import { type CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../../store/StoreContext";
 import { toast } from "react-toastify";
+import { Minus, Plus, Trash2 } from "lucide-react";
 
 function Cart() {
 
@@ -13,28 +14,45 @@ function Cart() {
 	const { totals, getTotal, menu, showProducts, setMenu, load, setPageLoad, token } = useContext(StoreContext)
 	const [deletePop, setDeletePop] = useState(false);
 	const [tempCarId, setTempCarId] = useState("");
+	let errorMsg;
 
 	async function increaseCart(carId: any) {
-		const response: any = await IncreaseItemApi(carId, token.current);
-		if (response.items) {
-			getCart();
+		try {
+			const response: any = await IncreaseItemApi(carId, token.current);
+			if (response.items) {
+				getCart();
+			}
+		} catch (error:any) {
+			errorMsg =  String(error?.response?.message)
+			toast.error(errorMsg);
 		}
 	}
 
 	async function decreaseCart(carId: any) {
-		const response: any = await removeCart(carId, token.current);
-		if (response.items) {
-			getCart();
+		try {
+			const response: any = await removeCart(carId, token.current);
+			if (response.items) {
+				getCart();
+			}
+		} catch (error:any) {
+			errorMsg =  String(error?.response?.message)
+			toast.error(errorMsg);
 		}
 	}
 
 	async function deleteItem(carId: any) {
+		try {
 		setDeletePop(true);
 		setTempCarId(carId);
 		return;
+		} catch (error:any) {
+			errorMsg =  String(error?.response?.message)
+			toast.error(errorMsg);
+		}
 	}
 
 	async function deleteItemConfirm() {
+		try {
 		setDeletePop(false)
 		const respone: any = await deleteItemApi(tempCarId, token.current);
 		if (respone == 200) {
@@ -42,6 +60,10 @@ function Cart() {
 			getCart();
 		}
 		return;
+		} catch (error:any) {
+			errorMsg =  String(error?.response?.message)
+			toast.error(errorMsg);
+		}
 	}
 
 	const getCart = async () => {
@@ -136,10 +158,7 @@ function Cart() {
 																				className="border hover:bg-black/20 rounded-md mx-2 dark:border-white/60 my-2 md:my-0"
 																				onClick={() => increaseCart(id)}
 																			>
-																				<svg className="md:h-6 h-5" viewBox="0 0 24 24" fill="none">
-																					<path d="M12 6V18" stroke="#000" strokeLinecap="round" strokeLinejoin="round" />
-																					<path d="M6 12H18" stroke="#000" strokeLinecap="round" strokeLinejoin="round" />
-																				</svg>
+																				<Plus className="hover:text-blue-600" />
 																			</button>
 																		)}
 
@@ -151,9 +170,7 @@ function Cart() {
 																				className="border hover:bg-black/20 rounded-md mx-2 dark:border-white/60"
 																				onClick={() => decreaseCart(id)}
 																			>
-																				<svg className="md:h-6 h-5" viewBox="0 0 24 24" fill="none">
-																					<path d="M6 12H18" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-																				</svg>
+																				<Minus className="hover:text-blue-600" />
 																			</button>
 																		)}
 																	</td>
@@ -169,13 +186,7 @@ function Cart() {
 																			className="hover:bg-black/20 rounded-md md:p-0.5 -ml-1"
 																			onClick={() => deleteItem(id)}
 																		>
-																			<svg className="h-6" viewBox="0 0 24 24" fill="none">
-																				<path d="M10 12V17" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-																				<path d="M14 12V17" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-																				<path d="M4 7H20" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-																				<path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-																				<path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-																			</svg>
+																			<Trash2 className="hover:text-red-600" />
 																		</button>
 																	</td>
 																</tr>

@@ -40,7 +40,7 @@ function About() {
                                             
                                             Object.entries(aboutMe).map((data)=>(
                                                 <li className="py-2 border-b border-gray-200 dark:border-gray-600 flex flex-col gap-2">
-                                                    <span className="font-bold text-lg">{data[0]}</span>
+                                                    <span className="font-bold text-lg text-red-500">{data[0]}</span>
                                                     <span className="">{data[1]}</span>
                                                 </li>
                                             ))
@@ -49,15 +49,15 @@ function About() {
 
                                     <ul className="w-full text-gray-900 dark:text-gray-200">
                                         <li className="py-2 border-b border-gray-200 dark:border-gray-600 flex flex-col gap-2">
-                                            <span className="font-bold text-lg">Email</span>
-                                            <a href="mailto:jjerald2000@gmail.com" className="text-red-500 underline"> jjerald2000@gmail.com</a>
+                                            <span className="font-bold text-lg text-red-500">Email</span>
+                                            <a href="mailto:jjerald2000@gmail.com" className=""> jjerald2000@gmail.com</a>
                                         </li>
                                         <li className="py-2 border-b border-gray-200 dark:border-gray-600 flex flex-col gap-2">
-                                            <span className="font-bold text-lg">Phone No</span>
-                                            <a href="tel:+91 7094949563" className="text-red-500 font-mono">7094949563</a>
+                                            <span className="font-bold text-lg text-red-500">Phone No</span>
+                                            <a href="tel:+91 7094949563" className="font-mono">7094949563</a>
                                         </li>
                                         <li className="py-2 border-b border-gray-200 dark:border-gray-600 flex flex-col gap-2">
-                                            <span className="font-bold text-lg">Employment</span>
+                                            <span className="font-bold text-lg text-red-500">Employment</span>
                                             <span className="font-mono">Remote, Onsite</span>
                                         </li>
                                     </ul>
@@ -65,7 +65,7 @@ function About() {
                             </div>
 
                             <div className="w-full flex flex-col gap-2 md:ml-10">
-                                <h1 className="font-semibold uppercase text-blue-500 md:ml-10 text-lg">Skills</h1>
+                                <h1 className="font-semibold uppercase text-red-500 md:ml-10 text-lg">Skills</h1>
                                 <div className="flex flex-col gap-2 font-semibold md:ml-10">
                                     {
                                         skils.map((skill)=>(
@@ -75,13 +75,13 @@ function About() {
                                 </div>
                             </div>
                             <div className="w-full flex flex-col gap-2">
-                                <h1 className="text-lg font-semibold uppercase text-blue-500">Tools & Technologies:</h1>
+                                <h1 className="text-lg font-semibold uppercase text-red-500">Tools & Technologies:</h1>
                                 <div className="grid md:grid-cols-2 grid-cols-1 gap-1 font-semibold">
                                     {
                                         Object.entries(technologies).map((tech)=>(
                                             <li className="border-b border-gray-200 dark:border-gray-600 flex flex-col gap-1">
-                                                    <span className="font-bold">{tech[0]}</span>
-                                                    <span className="text-red-500 font-mono">{tech[1]}</span>
+                                                    <span className=" text-blue-500 font-bold">{tech[0]}</span>
+                                                    <span className="font-mono">{tech[1]}</span>
                                                 </li>
                                         ))
                                     }

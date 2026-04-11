@@ -3,6 +3,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { addCartApi, getCarByCarName } from "../../Api";
 import type { Cars, CartData } from "../../Interface/DataModel";
 import { StoreContext } from "../../store/StoreContext";
+import { toast } from "react-toastify";
+import { StarIcon } from "lucide-react";
 
 function Car() {
     const { menu, showProducts, setMenu, load, setPageLoad, token } = useContext(StoreContext);
@@ -17,6 +19,7 @@ function Car() {
     const [data, setData] = useState({
         color: "", fuelType: "", transmission: ""
     });
+    let message;
 
     useEffect(() => {
         setPageLoad(true)
@@ -54,10 +57,11 @@ function Car() {
                 fuelType: tempCar[0].fuelType,
                 transmission: tempCar[0].transmission
             }))
-            setPageLoad(false)
-        } catch (error) {
             setPageLoad(false);
-            
+        } catch (error:any) {
+            setPageLoad(false);
+            message = String(error?.response?.data ?? error?.message)
+            toast.error(message);
         }
 
     }
@@ -86,9 +90,14 @@ function Car() {
             const addCart = async () => {
                 try {
                     const response = await addCartApi(cart, token.current);
-                    response ? navigate('/cart') : navigate('/explore')
-                } catch (error) {
-                    throw error;
+                    if (response) {
+                        toast.success(response);
+                        navigate('/cart');
+                    }
+                } catch (error:any) {
+                    message = String(error?.response?.message ?? error?.message);
+                    toast.error(message);
+                    navigate('/explore');
                 }
 
             }
@@ -156,36 +165,11 @@ function Car() {
                                                     <span className="text-gray-500  line-through"><span className="text-black/80 text-sm font-bold">$</span>{car.price * 1.5}</span>
                                                 </div>
                                                 <div className="flex items-center mb-4">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                                        className="size-6 text-yellow-500">
-                                                        <path fillRule="evenodd"
-                                                            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                            clipRule="evenodd" />
-                                                    </svg>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                                        className="size-6 text-yellow-500">
-                                                        <path fillRule="evenodd"
-                                                            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                            clipRule="evenodd" />
-                                                    </svg>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                                        className="size-6 text-yellow-500">
-                                                        <path fillRule="evenodd"
-                                                            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                            clipRule="evenodd" />
-                                                    </svg>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                                        className="size-6 text-yellow-500">
-                                                        <path fillRule="evenodd"
-                                                            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                            clipRule="evenodd" />
-                                                    </svg>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                                        className="size-6 text-yellow-500">
-                                                        <path fillRule="evenodd"
-                                                            d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                                                            clipRule="evenodd" />
-                                                    </svg>
+                                                    <StarIcon className="text-yellow-500 fill-yellow-500" />
+                                                    <StarIcon className="text-yellow-500 fill-yellow-500" />
+                                                    <StarIcon className="text-yellow-500 fill-yellow-500" />
+                                                    <StarIcon className="text-yellow-500" />
+                                                    <StarIcon className="text-yellow-500" />
                                                     <span className="ml-2 text-gray-600">4.5 (120 reviews)</span>
                                                 </div>
                                                 <p className="text-gray-700 mb-6 dark:text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
@@ -205,7 +189,7 @@ function Car() {
                                                             className="bg-black/20 rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 dark:bg-white/50">Electric</button>
                                                     </div>
                                                     {
-                                                        data.fuelType != car.fuelType && <span className="mt-3 text-red-500">Not available</span>
+                                                        data.fuelType != car.fuelType && <span className="absolute mt-1 text-red-500">Not available</span>
                                                     }
                                                 </div>
                                                 {/* transmission */}
@@ -221,13 +205,13 @@ function Car() {
 
                                                     </div>
                                                     {
-                                                        data.transmission != car.transmission && <span className="mt-3 text-red-500">Not available</span>
+                                                        data.transmission != car.transmission && <span className="absolute mt-1 text-red-500">Not available</span>
                                                     }
                                                 </div>
                                                 {/* color */}
                                                 <div className="mb-6">
                                                     <h3 className="text-lg font-semibold mb-2">Color:</h3>
-                                                    <div className="flex space-x-2">
+                                                    <div className="flex gap-2 items-center">
                                                         <button value={'black'} onClick={() => onClickHandler(event)} name="color"
                                                             className="w-8 h-8 bg-black rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"></button>
                                                         <button value={'white'} onClick={() => onClickHandler(event)} name="color"
@@ -239,17 +223,17 @@ function Car() {
                                                         <button value={'red'} onClick={() => onClickHandler(event)} name="color"
                                                             className="w-8 h-8 bg-red-500 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"></button>
                                                         <button value={'orange'} onClick={() => onClickHandler(event)} name="color"
-                                                            className="w-8 h-8 bg-orange-600 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"></button>
-
+                                                            className="w-8 h-8 bg-orange-600 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                                                        </button>
                                                     </div>
                                                     {
-                                                        data.color !== car.color && <span className=" text-red-500 mt-3">Not available</span>
+                                                        data.color !== car.color && <span className="text-red-500 absolute mt-1">Not available</span>
                                                     }
                                                 </div>
 
                                                 <div className="flex space-x-4 mb-6">
                                                     {
-                                                        data.color === car.color && data.fuelType === car.fuelType && data.transmission === car.transmission && token &&
+                                                        data.color === car.color && data.fuelType === car.fuelType && data.transmission === car.transmission && token.current &&
                                                         <button onClick={() => addToCart(car)}
                                                             className="bg-indigo-600 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -261,7 +245,7 @@ function Car() {
                                                         </button>
                                                     }
 
-                                                    <button
+                                                    {/* <button
                                                         className="bg-gray-200 flex gap-2 items-center  text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                             strokeWidth="1.5" stroke="currentColor" className="size-6">
@@ -269,7 +253,7 @@ function Car() {
                                                                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
                                                         </svg>
                                                         Wishlist
-                                                    </button>
+                                                    </button> */}
                                                 </div>
 
                                                 <div>

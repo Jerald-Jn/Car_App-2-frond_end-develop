@@ -22,7 +22,6 @@ export const loginApi = async (userName: string, password: string) => {
 export const userRegister = async (registerData: any) => {
     const response = (await axios.post(`${API}/user/add`, registerData)).data;
     return response;
-
 }
 
 /*************************** CAR API  **********************************/
@@ -50,12 +49,8 @@ export const addCar_Api = async (formData: FormData, token:string) => {
 
 // Get Car API 
 export const getCarByCarName = async (model: any) => {
-    try {
-        const response = (await axios.get(`${API}/cars/get/${model}`)).data;
-        return response;
-    } catch (error) {
-        console.error('getCarByCarName Error ', error);
-    }
+    const response = (await axios.get(`${API}/cars/get/${model}`)).data;
+    return response;
 }
 
 /************************* CART API ***************************************/
@@ -70,7 +65,7 @@ export const getUserCart = async (token:string) => {
     return response;
 }
 
-// Add Cart API
+//************************* Add Cart API
 export const addCartApi = async (model: CartData, token: string) => {
     const response = (await axios.post(`${API}/cart/create`, model, {
         headers: {
@@ -81,9 +76,8 @@ export const addCartApi = async (model: CartData, token: string) => {
 
 }
 
-// Clear Cart API
+//************************* Clear Cart API
 export const clearCart = async ( token:string) => {
-    try {
         const response = (await axios.delete(`${API}/cart/clear-cart`, {
             headers: {
                 Authorization: `Bearer ${token}`
@@ -91,14 +85,10 @@ export const clearCart = async ( token:string) => {
         }
         )).data
         return response;
-    } catch (error) {
-        console.error('clearCart Error ', error);
-    }
 }
 
-// Remove Cart API
+//************************* Remove Cart API
 export const removeCart = async (carId: any,  token:string) => {
-    try {
         const respone = (await axios.delete(`${API}/cart/remove/${carId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -106,14 +96,10 @@ export const removeCart = async (carId: any,  token:string) => {
         }
         )).data
         return respone;
-    } catch (error) {
-        console.error('removeCart Error ', error);
-    }
 }
 
-// Delete Item in Cart API
+//************************* Delete Item in Cart API
 export const deleteItemApi = async (carId: any, token:string) => {
-    try {
         const respone = (await axios.delete(`${API}/cart/delete/${carId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -121,23 +107,16 @@ export const deleteItemApi = async (carId: any, token:string) => {
         }
         )).status;
         return respone;
-    } catch (error) {
-        console.error('deleteItemApi Error ', error);
-    }
 }
 
-// Increase Item in Cart API
+//************************* Increase Item in Cart API
 export const IncreaseItemApi = async (carId: any, token:string) => {
-    try {
         const respone = (await axios.get(`${API}/cart/increase/${carId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
         })).data;
         return respone;
-    } catch (error) {
-        console.error('IncreaseItemApi Error ', error);
-    }
 }
 
 /********************** PAYMENT API ******************************************/
@@ -151,23 +130,18 @@ export const createPayment = async (customerDetail: any, token:string) => {
         return response;
 }
 
-// Verfify Payment API
+//************************* Verfify Payment API
 export const verifyPayment = async (clientSecret: any, token:string) => {
-    // try {
         const response = (await axios.get(`${API}/payments/verify-payment/${clientSecret}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
         })).data;
         return response;
-    // } catch (error) {
-    //     console.error('verifyPayment Error ', error);
-    // }
 }
 
-// Get User All Payments API
+//************************* Get User All Payments API
 export const loadPayment = async (token:string) => {
-    try {
         const respone = (await axios.get(`${API}/payments`,
             {
                 headers: {
@@ -176,7 +150,4 @@ export const loadPayment = async (token:string) => {
             }
         )).data;
         return respone;
-    } catch (error) {
-        console.error('loadPayment Error ', error);
-    }
 }

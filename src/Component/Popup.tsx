@@ -28,7 +28,7 @@ function Popup(){
         <>
         {
                 <div className="fixed bg-black/60 inset-0 z-50 w-full flex flex-col justify-start items-center h-full backdrop-blur-sm">
-                    <div className="flex flex-col text-white rounded-3xl bg-black justify-evenly transform translate-y-24 max-w-[24rem] min-w-[20rem] lg:h-[18rem] mx-4 p-3 items-center gap-5">
+                    <div className="flex flex-col text-white rounded-3xl bg-black border-white border-2 justify-evenly transform translate-y-24 max-w-[24rem] min-w-[20rem] lg:h-[18rem] mx-4 p-3 items-center gap-5">
                         <div className="flex flex-row justify-center lg:translate-y-2 items-center w-full">
                             {/* <h1 className="text-3xl text-center">{  popDetails.title?? popDetails.title }</h1> */}
                             { 

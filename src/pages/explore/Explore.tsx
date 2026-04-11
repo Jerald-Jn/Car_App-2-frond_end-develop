@@ -153,7 +153,7 @@ function Explore() {
                                                         </div>
                                                         <div className="flex space-x-2">
                                                             {
-                                                                token &&
+                                                                token.current &&
                                                                 <button onClick={() => addToCart(car)} className="flex bg-blue-500 text-white py-2 px-4 rounded-full font-semibold hover:bg-blue-600 transition-colors duration-200 cursor-pointer">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24"
                                                                         stroke="currentColor">
